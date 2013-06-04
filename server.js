@@ -23,12 +23,13 @@ app.configure(function() {
 });
 
 //Security
+app.hasher = require("./app_modules/security/hasher");
 app.tokenAuth = require("./app_modules/security/authToken");
 app.rolesAuth = require("./app_modules/security/authRoles");
 
 //Database
 app.db = require('./app_modules/db');
-console.log(app.db);
+//console.log(app.db);
 
 // Routes
 require('./routes')(app);

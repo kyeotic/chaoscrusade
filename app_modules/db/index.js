@@ -5,5 +5,6 @@ var models = {};
 
 //Setup Schema
 require('./models/users')(mongoose, models);
+require('./models/rules')(mongoose, models);
 
 module.exports = models;

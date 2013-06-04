@@ -1,4 +1,4 @@
-chaoscrusade
+ChaosCrusade
 ============
 
 A personal project
