@@ -6,13 +6,14 @@ function (router, app, serviceBase) {
 			return serviceBase.post('/login', { credentials: credentials });
 		},
 		isUsernameAvailable: function(username) {
+            app.log(username);
 			return serviceBase.get('/checkUsernameAvailable/' + username);
 		},
 		createLogin: function(user) {
 			return serviceBase.put('/login', user);  
 		},
 		setAuthToken: function(token) {
-		serviceBase.setAuthToken(token);
+		    serviceBase.setAuthToken(token);
 	},
 		logout: function(){
 			//clear the cookie, when we are using one

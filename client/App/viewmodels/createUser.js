@@ -1,5 +1,5 @@
-define(['models/user'],
-function(User) {
+define(['models/user', 'modules/loginService'],
+function(User, loginService) {
     
     var CreateUser = function() {
         var self = this;
@@ -9,13 +9,13 @@ function(User) {
         
         self.checkUser = ko.qCommand({
             execute: function() {
-                return loginService.isUsernameAvailable(self.usernameAvailability())
+                return loginService.isUsernameAvailable(self.user.username())
                 .then(function(response) {
                     self.usernameAvailability(response ? "Yes" : "No");
                 }).fail(function(error){
                     app.log(error);
                     self.usernameAvailability("No");
-                }).done();
+                });
             }
         });
         
