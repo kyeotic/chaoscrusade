@@ -4,9 +4,9 @@ module.exports = function(db, models) {
         //id and _id are creatd by the system
         firstName: String,
         lastName: String,
-        userName: String,
+        username: String,
         passwordHash: String
-    });
+    }, {id: true} );
     
     //add the models to our simplified models collection
     models.Users = db.model('Users', users);

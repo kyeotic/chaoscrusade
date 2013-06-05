@@ -1,0 +1,26 @@
+<!-- Outer Div to eat the transition css -->
+<div>
+    <div data-bind="ifnot: showingCreateLogin">
+        <form class="form-signin" data-bind="submit: login">
+            <h2 class="form-signin-heading">Please sign in</h2>
+            <input type="text" class="input-block-level" placeholder="Username" data-bind="value: username">
+            <input type="password" class="input-block-level" placeholder="Password" data-bind="value: password">
+            <label class="checkbox">
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+            <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+            <button class="btn btn-large" data-bind="click: showCreateLogin">Register</button>
+        </form>
+    </div>
+    <div data-bind="if: showingCreateLogin">
+        <form class="form-signin" data-bind="submit: createLogin">
+            <h2 class="form-signin-heading">Create an account</h2>
+            <input type="text" class="input-block-level" placeholder="First Name" data-bind="value: user().firstName">
+            <input type="text" class="input-block-level" placeholder="Last Name" data-bind="value: user().lastName">
+            <input type="text" class="input-block-level" placeholder="Username" data-bind="value: user().username">
+            <input type="password" class="input-block-level" placeholder="Password" data-bind="value: user().password">
+            <button class="btn btn-large btn-primary" type="submit">Create Account</button>
+            <button class="btn btn-large" data-bind="click: cancelCreateLogin">Cancel</button>
+        </form>
+    <div>
+</div>

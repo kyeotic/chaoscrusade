@@ -13,6 +13,26 @@ function(app, viewLocator, system, router) {
     //>>excludeStart("build", true);
     system.debug(true);
     //>>excludeEnd("build");
+  
+    //This changes Durandal's default promise from jQuery to Q
+    system.defer = function (action) {
+      var deferred = Q.defer();
+      action.call(deferred, deferred);
+      var promise = deferred.promise;
+      deferred.promise = function () {
+        return promise;
+      };
+      return deferred;
+    };
+    
+    system.delay = function (ms) {
+      return Q.delay(ms);
+    };
+    
+    
+    app.defer = system.defer;
+    app.delay = system.delay;
+    app.log = system.log;
 
     app.title = 'ShiftWise Durandal';
     app.start().then(function () {

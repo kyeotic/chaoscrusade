@@ -39,6 +39,7 @@ function makeBackwardCompatible(hashedPassword) {
 }
 
 module.exports.generate = function(password) {
+    //console.log(typeof password);
     if (typeof password != 'string') 
         throw new Error('Invalid password');
     

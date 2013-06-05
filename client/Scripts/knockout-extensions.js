@@ -1,5 +1,3 @@
-var ko = ko;
-
 ko.observableArray.fn.map = function(data, constructor, purge) {
     if (purge)
         this.removeAll();

@@ -12,26 +12,11 @@ function(router, app) {
     };
     
     var roles = {
-        swAdmin: [
+        user: [
             //Navs
-            new Route('home', 'viewmodels/welcome', true),
-            new Route('hdoadmin', 'viewmodels/adminhdoPage', true),
-            new Route('msvadmin', 'viewmodels/adminmsv', true)
+            new Route('home', 'viewmodels/welcome', true)
+            
             //Routes
-        ],
-        hdoAdmin:[
-            //Navs
-            new Route('home', 'viewmodels/welcome', true),
-            new Route('facilities', 'viewmodels/facilities', true),
-            //Routes
-            new Route('facilityedit', 'viewmodels/facilityEdit', false)
-        ],
-        hdoUser: [
-        ],
-        msvAdmin: [
-        
-        ],
-        msvUser: [
         ]
     };
     
