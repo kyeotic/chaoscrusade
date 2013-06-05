@@ -1,0 +1,17 @@
+<form class="form-signin" data-bind="submit: createLogin">
+    <h2 class="form-signin-heading">Create an account</h2>
+    <input type="text" class="input-block-level" placeholder="First Name" data-bind="value: user.firstName">
+    <input type="text" class="input-block-level" placeholder="Last Name" data-bind="value: user.lastName">
+    
+    <div class="control-group" data-bind="css: { 'error' : usernameAvailability == 'No', 'info' : usernameAvailability == 'Yes' }">
+        <input type="text" placeholder="Username" data-bind="value: user.username, activity: checkUser.isExecuting">
+        <span class="help-inline">
+            <!-- ko if: usernameAvailability == 'No' -->Username is taken<!-- /ko -->
+            <!-- ko if: usernameAvailability == 'Yes' --><i class="icon-ok"></i><!-- /ko -->
+        </span>
+    </div>
+    
+    <input type="password" class="input-block-level" placeholder="Password" data-bind="value: user.password">
+    <button class="btn btn-large btn-primary" type="submit">Create Account</button>
+    <button class="btn btn-large" data-bind="click: cancel">Cancel</button>
+</form>

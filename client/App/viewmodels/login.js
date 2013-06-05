@@ -1,5 +1,5 @@
-define(['durandal/plugins/router', 'durandal/app', 'modules/loginService', 'modules/cookie', 'modules/userRole', 'models/user'], 
-function (router, app, loginService, cookie, userRole, User) {
+define(['durandal/plugins/router', 'durandal/app', 'modules/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
+function (router, app, loginService, cookie, userRole, User, createUser) {
     
     var authToken = "ccAuthToken";
     
@@ -43,27 +43,13 @@ function (router, app, loginService, cookie, userRole, User) {
                 self.modal.close(true);
         };
         
-        self.showingCreateLogin = ko.observable(false);
-        self.showCreateLogin = function() { self.showingCreateLogin(true); };
-        self.cancelCreateLogin = function() { self.showingCreateLogin(false); };
-        
-        self.usernameAvailability = ko.observable("unchecked");
-        self.user().username.subscribe(function(newValue) {
-            loginService.isUsernameAvailable(newValue)
-            .then(function(response) {
-                self.usernameAvailability(response ? "yes" : "no");
-            }).fail(function(error){
-                app.log(error);
-                self.usernameAvailability("no");
-            }).done()
-        });
-        
-        self.createLogin = function() {
-            self.user().keepPassword = true;
-            loginService.createLogin(self.user())
-            .then(function(response) {
-                cookie.set(authToken, response);
-                self.setLogin(response);
+        self.showCreateLogin = function() {
+            app.showModal(createUser)
+            .then(function(result) {
+                if (!result) //cancelled or failed
+                    return;
+                cookie.set(authToken, result);
+                self.setLogin(result);
             }).fail(function(error) {
                 app.log(error);
             }).done();
