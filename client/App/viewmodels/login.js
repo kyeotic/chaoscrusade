@@ -28,7 +28,7 @@ function (router, app, loginService, cookie, userRole, User, createUser) {
             }).done();
         };
         
-        self.setLogin = function(resposne) {
+        self.setLogin = function(response) {
             //Set User
             self.user().update(response.user);
             self.user().password("");
@@ -56,13 +56,11 @@ function (router, app, loginService, cookie, userRole, User, createUser) {
         };
     };
     
+	var loginVM = new LoginViewModel();
+	
     var storedCookie = cookie.get(authToken);
     if (storedCookie)
-        loginVm.setLogin(storedCookie);
+        loginVM.setLogin(storedCookie);
     
-    //Login is a singleton
-    var singleton = new LoginViewModel();
-    window.loginDebug = singleton;
-    
-    return singleton;
+    return loginVM;
 });
