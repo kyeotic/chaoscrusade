@@ -2,7 +2,7 @@ require.config({
     paths: {
         'text': 'durandal/amd/text'
     },
-    waitSeconds: 15
+    waitSeconds: 30
 });
 
 define(['durandal/app', 'durandal/viewLocator', 'durandal/system', 'durandal/plugins/router', 
@@ -16,13 +16,13 @@ function(app, viewLocator, system, router) {
   
     //This changes Durandal's default promise from jQuery to Q
     system.defer = function (action) {
-      var deferred = Q.defer();
-      action.call(deferred, deferred);
-      var promise = deferred.promise;
-      deferred.promise = function () {
-        return promise;
-      };
-      return deferred;
+        var deferred = Q.defer();
+        action.call(deferred, deferred);
+        var promise = deferred.promise;
+        deferred.promise = function () {
+            return promise;
+        };
+        return deferred;
     };
     
     system.delay = function (ms) {

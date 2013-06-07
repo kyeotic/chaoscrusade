@@ -5,7 +5,9 @@ module.exports = function(db, models) {
         firstName: String,
         lastName: String,
         username: String,
-        passwordHash: String
+        usernameLower: String,
+        passwordHash: String,
+        role: String
     }, {id: true} );
     
     //add the models to our simplified models collection

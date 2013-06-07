@@ -1,10 +1,10 @@
 define(['durandal/app', 'durandal/system'], function (app, system) {
     
-    var authToken = { 'x-swat' : null };
+    var authToken = { 'X-Auth-Token' : null };
     
     var setAuthToken = function(token) {
         console.log(token);
-        authToken['x-swat'] = encodeURI(JSON.stringify(token));
+        authToken['X-Auth-Token'] = encodeURI(JSON.stringify(token));
     };
     
     var convertjQueryError = function (jqXHR) {
@@ -88,25 +88,11 @@ define(['durandal/app', 'durandal/system'], function (app, system) {
         });
     };
     
-    var postAjax = function (url, data, success, failure) {
-        $.ajax({
-            type: "POST",
-            url: url,
-            headers: authToken,
-            data: ko.toJSON(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: success,
-            error: globalError(failure)
-        });
-    };
-    
     return {
         get: promiseGet,
         remove: promiseDelete,
         post: promisePost,
         put: promisePut,
-        postAjax: postAjax,
         setAuthToken: setAuthToken
     };
 });

@@ -30,7 +30,7 @@ var verifyToken = function(token) {
 };
 
 var requireToken = function(req, res, next) {    
-    var token = req.headers['x-swat'];
+    var token = req.headers['X-Auth-Token'];
     
     var fail = function() {
         res.send(401, "Security token missing.");
