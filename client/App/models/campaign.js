@@ -9,7 +9,7 @@ function(Character) {
 		self.characters = ko.observableArray();
 
 		self.update = function(data){
-			self.id(data.id || self.id() || '');
+			self.id(data.id || data._id || self.id() || '');
 			self.name(data.name || self.name() || '');
 			self.gmId(data.gmId || self.gmId() || '');
 			

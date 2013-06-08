@@ -1,1 +1,13 @@
 <h1>Welcome</h1>
+
+<form data-bind="submit: addCampaign" class="form-inline">
+	<input class="input-medium" data-bind="value: campaignEntry" />
+	<button class="btn" type="submit">Add</button>
+</form>
+
+<div data-bind="foreach: campaigns">
+	<h4 data-bind="text: name"></h4><span data-bind="text: id"></span>
+	<button class="btn btn-danger" data-bind="$parent.deleteCampign">Delete</button>
+</div>
+
+Campaigns: <span data-bind="text: campaignCount"></span>

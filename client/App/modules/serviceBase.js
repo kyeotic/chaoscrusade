@@ -1,10 +1,10 @@
 define(['durandal/app', 'durandal/system'], function (app, system) {
     
-    var authToken = { 'X-Auth-Token' : null };
+    var authToken = { 'x-auth-token' : null };
     
     var setAuthToken = function(token) {
         console.log(token);
-        authToken['X-Auth-Token'] = encodeURI(JSON.stringify(token));
+        authToken['x-auth-token'] = encodeURI(JSON.stringify(token));
     };
     
     var convertjQueryError = function (jqXHR) {

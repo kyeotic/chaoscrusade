@@ -3,9 +3,9 @@ module.exports = function(db, models) {
 
     var set = new db.Schema({
         //id and _id are creatd by the system
-        gmId: Objectid,
+        gmId: db.Schema.Types.ObjectId,
         name: String,
-        characters: [Objectid]
+        characters: [db.Schema.Types.ObjectId]
     });
     
     //add the models to our simplified models collection
