@@ -8,7 +8,7 @@ function(serviceBase){
 			return serviceBase.get('/campaigns', { skip: skip || 0 });
 		},
 		deleteCampaign: function(campaignId) {
-			return serviceBase.remove('/campaign/' + campaignId);
+			return serviceBase.remove('/campaigns/' + campaignId);
 		}
 	};
 });

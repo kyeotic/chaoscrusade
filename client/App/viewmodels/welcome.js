@@ -26,7 +26,7 @@ function(app, Campaign, campaignService) {
         campaignService.getCampaigns()
 	        .then(function(response) {
 	        	self.campaigns.map(response.campaigns, Campaign);
-	        	self.campaignCount(resonse.count);
+	        	self.campaignCount(response.count);
 	        }).fail(app.log).done();
 
     };
