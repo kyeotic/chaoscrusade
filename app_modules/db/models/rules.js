@@ -6,7 +6,7 @@ module.exports = function(db, models) {
         alignment: String,
         text: String,
         baseXpCost: Number,
-        pageInBook: Number
+        rulebookPage: Number
     });
     
     //add the models to our simplified models collection
