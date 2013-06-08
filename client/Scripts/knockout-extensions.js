@@ -1,5 +1,5 @@
-ko.observableArray.fn.map = function(data, constructor, purge) {
-    if (purge)
+ko.observableArray.fn.map = function(data, constructor, options) {
+    if (options.purge)
         this.removeAll();
     this(ko.utils.arrayMap(data, function(i) {
         return new constructor(i);

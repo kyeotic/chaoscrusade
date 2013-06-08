@@ -30,7 +30,7 @@ var verifyToken = function(token) {
 };
 
 var requireToken = function(req, res, next) {    
-    var token = req.headers['X-Auth-Token'];
+    var token = getToken(req);
     
     var fail = function() {
         res.send(401, "Security token missing.");
@@ -49,9 +49,14 @@ var requireToken = function(req, res, next) {
     }
 };
 
+var getToken = function(req) {
+    return req.headers['X-Auth-Token'];
+};
+
 module.exports = {
     generateUserToken: generateUserToken,
     signToken: signToken,
     verifyToken: verifyToken,
-    require: requireToken
+    require: requireToken,
+    getToken: getToken
 };

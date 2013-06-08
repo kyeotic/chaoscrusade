@@ -1,14 +1,13 @@
 module.exports = function(db, models) {
+	var setName = 'Campaigns';
+
     var set = new db.Schema({
         //id and _id are creatd by the system
+        gmId: Objectid,
         name: String,
-        type: String,
-        alignment: String,
-        text: String,
-        baseXpCost: Number,
-        rulebookPage: Number
+        characters: [Objectid]
     });
     
     //add the models to our simplified models collection
-    models.Rules = db.model('Rules', set);
+    models[setName] = db.model(setName, set);
 };
