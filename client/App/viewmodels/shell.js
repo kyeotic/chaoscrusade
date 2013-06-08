@@ -17,11 +17,11 @@ function (router, app, login) {
                 
                 return app.showModal(login).then(function(dialogResult){
                     app.log(dialogResult);
-                    router.activate(router.visibleRoutes()[0]);
+                    router.activate(router.visibleRoutes()[0].url);
                 });
             }
             app.log("login active");
-            return router.activate(router.visibleRoutes()[0]);
+            return router.activate(router.visibleRoutes()[0].url);
         };
         
         self.logout = function() {
