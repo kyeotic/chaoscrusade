@@ -12,6 +12,7 @@ function(app, Campaign, campaignService) {
         	campaignService.createCampaign({ name: self.campaignEntry() })
         		.then(function(response) {
         			self.campaigns.push(new Campaign(response));
+                    self.campaignCount(self.campaignCount() + 1);
         			self.campaignEntry('');
         		}).fail(app.log).done();
         };
@@ -20,6 +21,7 @@ function(app, Campaign, campaignService) {
         	campaignService.deleteCampaign(campaign.id())
         		.then(function(response) {
         			self.campaigns.remove(campaign);
+                    self.campaignCount(self.campaignCount() - 1);
         		}).fail(app.log).done();
         };
 

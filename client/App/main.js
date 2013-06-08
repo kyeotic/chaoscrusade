@@ -28,7 +28,12 @@ function(app, viewLocator, system, router) {
     system.delay = function (ms) {
       return Q.delay(ms);
     };
-    
+
+    app.socket = io.connect('http://localhost:3001');
+
+    app.socket.on('test', function(data) {
+        app.log("Socket send", data);
+    });  
     
     app.defer = system.defer;
     app.delay = system.delay;

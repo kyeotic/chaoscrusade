@@ -3,7 +3,12 @@ var fs = require('fs'),
 
 require('sugar');
 var express = require("express");
-var app = express();
+var app = express(),
+	server = require('http').createServer(app),
+	io = require('socket.io').listen(server);
+
+server.listen(port + 1);
+app.io = io;
 app.fs = fs;
 
 var dir = __dirname + '/client/';

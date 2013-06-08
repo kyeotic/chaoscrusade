@@ -1,6 +1,15 @@
 module.exports = function(app) {   
     var auth = app.tokenAuth;
     var Campaigns = app.db.Campaigns;
+
+    app.io.sockets.on('connection', function(socket) {
+        socket.emit('test', {yup: 'success'});
+    });
+
+    app.io.sockets.on('disconnect', function(socket) {
+        console.log("Socket Disconnected");
+        console.log(socket);
+    });
     
     app.put('/campaigns', auth.requireToken, function(req, res) {
         var item = req.body;
