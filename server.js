@@ -2,12 +2,13 @@ var fs = require('fs'),
     port = process.env.PORT || 3000;
 
 require('sugar');
-var express = require("express");
-var app = express(),
+var express = require("express"),
+    app = express(),
 	server = require('http').createServer(app),
 	io = require('socket.io').listen(server);
 
-server.listen(port + 1);
+server.listen(port);
+
 app.io = io;
 app.fs = fs;
 
@@ -40,4 +41,4 @@ app.db = require('./app_modules/db');
 require('./routes')(app);
 
 //Start Listening
-app.listen(port);
+//app.listen(port);

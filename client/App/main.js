@@ -29,10 +29,10 @@ function(app, viewLocator, system, router) {
       return Q.delay(ms);
     };
 
-    app.socket = io.connect('http://localhost:3001');
+    app.socket = io.connect('http://localhost:3000');
 
     app.socket.on('test', function(data) {
-        app.log("Socket send", data);
+        app.log("Socket send", data, app.socket);
     });  
     
     app.defer = system.defer;
