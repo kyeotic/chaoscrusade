@@ -3,9 +3,9 @@ module.exports = function(app) {
     var Campaigns = app.db.Campaigns;
 
     app.io.sockets.on('connection', function(socket) {
-        console.log(app.io.sockets);
-        console.log(socket);
-        socket.emit('test', { });
+        var socketId = socket.id;
+
+        app.io.sockets.sockets[socketId].emit('test', {success: 'inddedd'});
     });
 
     app.io.sockets.on('disconnect', function(socket) {
