@@ -9,7 +9,7 @@ var express = require("express"),
 
 server.listen(port);
 
-app.io = io;
+app.sockets = io.sockets;
 app.fs = fs;
 
 var dir = __dirname + '/client/';

@@ -2,13 +2,13 @@ module.exports = function(app) {
     var auth = app.tokenAuth;
     var Campaigns = app.db.Campaigns;
 
-    app.io.sockets.on('connection', function(socket) {
+    app.sockets.on('connection', function(socket) {
         var socketId = socket.id;
 
-        app.io.sockets.sockets[socketId].emit('test', {success: 'inddedd'});
+        app.sockets.sockets[socketId].emit('test', {success: 'inddedd'});
     });
 
-    app.io.sockets.on('disconnect', function(socket) {
+    app.sockets.on('disconnect', function(socket) {
         console.log("Socket Disconnected");
         console.log(socket);
     });
