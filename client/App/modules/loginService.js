@@ -14,7 +14,7 @@ function (router, app, serviceBase) {
 		},
 		setAuthToken: function(token) {
 		    serviceBase.setAuthToken(token);
-	},
+		},
 		logout: function(){
 			//clear the cookie, when we are using one
 			

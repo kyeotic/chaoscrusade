@@ -1,5 +1,5 @@
-define(['durandal/app', 'models/campaign', 'modules/campaignService'],
-function(app, Campaign, campaignService) {
+define(['durandal/app', 'models/campaign', 'modules/dataContext', 'durandal/events'],
+function(app, Campaign, dataContext, Events) {
 
     var Welcome = function() {
         var self = this;
@@ -9,7 +9,7 @@ function(app, Campaign, campaignService) {
 
         self.campaignEntry = ko.observable();
         self.addCampaign = function() {
-        	campaignService.createCampaign({ name: self.campaignEntry() })
+        	dataContext.createCampaign({ name: self.campaignEntry() })
         		.then(function(response) {
         			self.campaigns.push(new Campaign(response));
                     self.campaignCount(self.campaignCount() + 1);
@@ -18,14 +18,14 @@ function(app, Campaign, campaignService) {
         };
 
         self.deleteCampaign = function(campaign) {
-        	campaignService.deleteCampaign(campaign.id())
+        	dataContext.deleteCampaign(campaign.id())
         		.then(function(response) {
         			self.campaigns.remove(campaign);
                     self.campaignCount(self.campaignCount() - 1);
         		}).fail(app.log).done();
         };
 
-        campaignService.getCampaigns()
+        dataContext.getCampaigns()
 	        .then(function(response) {
 	        	self.campaigns.map(response.campaigns, Campaign);
 	        	self.campaignCount(response.count);

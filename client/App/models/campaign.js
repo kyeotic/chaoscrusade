@@ -9,12 +9,13 @@ function(Character) {
 		self.characters = ko.observableArray();
 
 		self.update = function(data){
+			data  = data || {};
 			self.id(data.id || data._id || self.id() || '');
 			self.name(data.name || self.name() || '');
 			self.gmId(data.gmId || self.gmId() || '');
 			
 			if(data.characters && data.characters.length > 0) {
-				self.characters.map(data, Character, { purge: true });
+				self.characters.map(data, Character, { purge: false });
 			}
 		};
 		self.update(init);
