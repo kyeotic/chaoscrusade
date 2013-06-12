@@ -1,5 +1,8 @@
-define(['durandal/plugins/router', 'durandal/app', 'modules/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
-function (router, app, loginService, cookie, userRole, User, createUser) {
+define(['durandal/plugins/router', 'durandal/app', 
+    'modules/loginService', 'modules/cookie', 'modules/userRole', 
+    'models/user', 'viewmodels/createUser', 'modules/socket'], 
+function (router, app, loginService, cookie, userRole, User, 
+    createUser, socket) {
     
     var authToken = "ccAuthToken";
     
@@ -51,7 +54,7 @@ function (router, app, loginService, cookie, userRole, User, createUser) {
                 cookie.set(authToken, result);
                 self.setLogin(result);
             }).fail(function(error) {
-                app.log(error);
+                app.log("error", error);
             }).done();
         };
     };

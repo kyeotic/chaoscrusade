@@ -1,10 +1,14 @@
-define(['durandal/app', 'durandal/system'], function (app, system) {
+define(['durandal/app', 'durandal/system'],
+function (app, system) {
     
-    var authToken = { 'x-auth-token' : null };
+    var authToken = { 'x-auth-token' : null, 'x-socket-id': null };
     
     var setAuthToken = function(token) {
-        console.log(token);
         authToken['x-auth-token'] = encodeURI(JSON.stringify(token));
+    };
+
+    var setSocketId = function(socketId){
+        authToken['x-socket-id'] = socketId;
     };
     
     var convertjQueryError = function (jqXHR) {
@@ -93,6 +97,7 @@ define(['durandal/app', 'durandal/system'], function (app, system) {
         remove: promiseDelete,
         post: promisePost,
         put: promisePut,
-        setAuthToken: setAuthToken
+        setAuthToken: setAuthToken,
+        setSocketId: setSocketId
     };
 });

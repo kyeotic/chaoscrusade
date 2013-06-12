@@ -1,21 +1,16 @@
-define(['durandal/app', 'durandal/events'], 
-function(app, Events) {
-	
+define(['durandal/app', 'modules/dataContext', 'modules/serviceBase'], 
+function(app, dataContext, serviceBase) {	
+    var socket = io.connect('http://' + window.location.host);
 
-    app.socket.on('test', function(data) {
-        app.log("Socket send", data, app.socket);
-    });  
+    socket.on('connect', function () {
+        serviceBase.setSocketId(socket.socket.sessionid);
+    });
+    
+    socket.on('campaignAdded', dataContext.raise.campaignAdded);
+    socket.on('campaignAdded', function(){
+        app.log('successful socket add event');
+    });
+    socket.on('campaignRemoved', dataContext.raise.campaignRemoved);
 
-    var socketEvents = new Events();
-
-    var Socket = function(host, namespace) {
-    	var self = this;
-    	namespace = namespace || '';
-
-    	var socket = io.connect('http://' + window.location.host + '/' + namespace);
-
-    	
-    };
-
-    return Socket;
+    return socket;
 });

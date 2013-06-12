@@ -16,7 +16,6 @@ function (router, app, login) {
                 app.log("login required");
                 
                 return app.showModal(login).then(function(dialogResult){
-                    app.log(dialogResult);
                     router.activate(router.visibleRoutes()[0].url);
                 });
             }

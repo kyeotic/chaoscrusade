@@ -5,19 +5,12 @@ module.exports = function(app) {
     app.sockets.on('connection', function(socket) {
         var socketId = socket.id;
 
-        app.sockets.sockets[socketId].emit('test', {success: 'inddedd'});
+        //app.sockets.sockets[socketId].emit('test', {success: 'inddedd'});
     });
 
     app.sockets.on('disconnect', function(socket) {
         console.log("Socket Disconnected");
         console.log(socket);
-    });
-    
-    app.put('/campaigns', auth.requireToken, function(req, res) {
-        var item = req.body;
-        Campaigns.create(item, function(error, campaign) {
-            res.json(campaign);
-        });
     });
 
     app.get('/campaigns', auth.requireToken, function(req, res) {
@@ -30,12 +23,23 @@ module.exports = function(app) {
             });
         });
     });
+    
+    app.put('/campaigns', auth.requireToken, function(req, res) {
+        var item = req.body;
+        Campaigns.create(item, function(error, campaign) {
+            res.json(campaign);
+            app.sockets.sockets[req.socketId].broadcast.emit('campaignAdded', campaign);
+        });
+    });
 
     app.delete('/campaigns/:id', auth.requireToken, function(req, res) {
+
         var id = req.params.id;
         Campaigns.remove({ _id: id}, function(error) {
-            if (!error)
+            if (!error) {
                 res.json(true);
+                app.sockets.sockets[req.socketId].broadcast.emit('campaignRemoved', id);
+            }
             else
                 res.json(false);
         });

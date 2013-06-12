@@ -21,6 +21,8 @@ app.configure(function() {
     app.set('views', __dirname + '/views/');
     app.engine('.html', require("./app_modules/htmlEngine.js"));
     app.set('view engine', 'html');
+
+    app.use(require('./app_modules/socketId'));
     
     app.use(express.bodyParser());
     app.use(express.methodOverride());
