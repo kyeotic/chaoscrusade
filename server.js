@@ -9,7 +9,7 @@ var express = require("express"),
 
 server.listen(port);
 
-app.sockets = io.sockets;
+app.sockets = require('./app_modules/sockets')(io.sockets);
 app.fs = fs;
 
 var dir = __dirname + '/client/';
@@ -22,7 +22,7 @@ app.configure(function() {
     app.engine('.html', require("./app_modules/htmlEngine.js"));
     app.set('view engine', 'html');
 
-    app.use(require('./app_modules/socketId'));
+    app.use(app.sockets.middleware);
     
     app.use(express.bodyParser());
     app.use(express.methodOverride());

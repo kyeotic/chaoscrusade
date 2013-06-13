@@ -2,16 +2,6 @@ module.exports = function(app) {
     var auth = app.tokenAuth;
     var Campaigns = app.db.Campaigns;
 
-    app.sockets.on('connection', function(socket) {
-        var socketId = socket.id;
-
-        //app.sockets.sockets[socketId].emit('test', {success: 'inddedd'});
-    });
-
-    app.sockets.on('disconnect', function(socket) {
-        console.log("Socket Disconnected");
-        console.log(socket);
-    });
 
     app.get('/campaigns', auth.requireToken, function(req, res) {
         var skip = req.query.skip || 0;
@@ -28,7 +18,7 @@ module.exports = function(app) {
         var item = req.body;
         Campaigns.create(item, function(error, campaign) {
             res.json(campaign);
-            app.sockets.sockets[req.socketId].broadcast.emit('campaignAdded', campaign);
+            app.sockets.broadcast(req.socketId, 'campaignAdded', campaign);
         });
     });
 
@@ -38,7 +28,7 @@ module.exports = function(app) {
         Campaigns.remove({ _id: id}, function(error) {
             if (!error) {
                 res.json(true);
-                app.sockets.sockets[req.socketId].broadcast.emit('campaignRemoved', id);
+                app.sockets.broadcast(req.socketId, 'campaignRemoved', id);
             }
             else
                 res.json(false);
