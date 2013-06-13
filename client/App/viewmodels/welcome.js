@@ -34,6 +34,7 @@ function(app, Campaign, dataContext, Events) {
         //Removal has to work by reference, so external removal requires an id
         dataContext.campaignRemoved.then(function(campaignId) {
             var campaign = self.campaigns().find(function(c) { return c.id() == campaignId;});
+            self.campaignCount(self.campaignCount() - 1);
             self.campaigns.remove(campaign);
         });        
 
