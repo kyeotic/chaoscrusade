@@ -1,4 +1,4 @@
-define(['models/character'],
+define(['modules/socket', 'models/character'],
 function(Character) {
 	var Campaign = function(init) {
 		var self = this;
