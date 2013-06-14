@@ -7,12 +7,11 @@ function(Campaign, campaignService, socket){
 		var campaignCache = [];
 		self.campaigns = ko.observableArray();
 
+		//Load the set from the server
 		campaignService.getCampaigns().then(function(campaigns) {
 			campaignCache = campaigns;
 			self.campaigns.map(campaigns, Campaign);
 		});
-
-		.map(initialSet, Campaign);
 
 		//Add campaign from socket
 		socket.on('campaignAdded', function(campaign) {
@@ -50,8 +49,7 @@ function(Campaign, campaignService, socket){
 
 			}
 		);
-
 	};
 
-	return CampaignSet;
+	return new CampaignSet().campaigns;
 });

@@ -1,7 +1,6 @@
 define(['durandal/app', 'data/campaignSet'],
-function(app, CampaignSet) {
-
+function(app, campaignSet) {
 	return {
-		campaigns: new CampaignSet().campaigns
+		campaigns: campaignSet
 	};
 });
