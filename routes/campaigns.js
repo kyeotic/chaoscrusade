@@ -16,7 +16,9 @@ module.exports = function(app) {
     
     app.put('/campaigns', auth.requireToken, function(req, res) {
         var item = req.body;
+        console.log(item);
         Campaigns.create(item, function(error, campaign) {
+            console.log(error);
             res.json(campaign);
             app.sockets.broadcast(req.socketId, 'campaignAdded', campaign);
         });

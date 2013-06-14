@@ -1,29 +1,26 @@
-define(['models/campaign', 'services/campaignService', 'modules/socket'], 
-function(Campaign, campaignService, socket){
+define(['durandal/app', 'models/campaign', 'services/campaignService', 'modules/socket', 'data/cache'], 
+function(app, Campaign, campaignService, socket, cache){
 
 	var CampaignSet = function(initialSet) {
 		var self = this;
 
-		var campaignCache = [];
-		self.campaigns = ko.observableArray();
+		self.campaigns = ko.observableArray([]);
 
 		//Load the set from the server
-		campaignService.getCampaigns().then(function(campaigns) {
-			campaignCache = campaigns;
-			self.campaigns.map(campaigns, Campaign);
+		campaignService.getCampaigns().then(function(response) {
+			cache.campaigns.add(response.campaigns);
+			self.campaigns.map(response.campaigns, Campaign);
 		});
 
 		//Add campaign from socket
 		socket.on('campaignAdded', function(campaign) {
-			campaignCache.push(campaign);
+			cache.campaigns.push(campaign);
 			self.campaigns.push(new Campaign(campaign))
 		});
 
 		//Remove campaign from socket
 		socket.on('campaignRemoved', function(campaignId) {
-			campaignCache.remove(function(c) {
-				return c._id == campaignId;
-			});
+			cache.removeCampaign(campaignId);
 			var campaign = self.campaigns().find(function(c) { 
 				return c.id() == campaignId;
 			});
@@ -34,19 +31,19 @@ function(Campaign, campaignService, socket){
 		self.campaigns.subscribeArrayChanged(
 			//Added
 			function(newElement) {
-
-				var index = campaignCache.findIndex(function (c) {
-					return c._id == newElement.id();
-				});
-				if (index > -1)
-					return; //We already have it on the server
-				
-				campaignService.createCampaign(newElement);
-
+				if (cache.findCampaign(newElement.id()))
+					return; // We already have it on the server				
+				campaignService.createCampaign(newElement)
+					.then(function(response) {
+						newElement.update(response);
+					})
+					.fail(app.log);
 			},
 			//Removed
 			function(oldElement) {
-
+				if (!cache.findCampaign(oldElement.id()))
+					return; //Not in the cache, not on the server
+				campaignService.deleteCampaign(oldElement.id());
 			}
 		);
 	};

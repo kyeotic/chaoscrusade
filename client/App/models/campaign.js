@@ -15,7 +15,7 @@ function(Character) {
 			self.gmId(data.gmId || self.gmId() || '');
 			
 			if(data.characters && data.characters.length > 0) {
-				self.characters.map(data, Character, { purge: false });
+				self.characters.map(data, Character);
 			}
 		};
 		self.update(init);
