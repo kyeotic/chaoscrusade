@@ -10,4 +10,4 @@
 	<button class="btn btn-danger" data-bind="click: $parent.deleteCampaign">Delete</button>
 </div>
 
-Campaigns in DB: <span data-bind="text: campaignCount"></span>
+Campaigns in DB: <span data-bind="text: self.campaigns().length"></span>

@@ -4,9 +4,15 @@ function(Campaign, campaignService, socket){
 	var CampaignSet = function(initialSet) {
 		var self = this;
 
-		var campaignCache = initialSet;
-		self.campaigns = ko.observableArray()
-							.map(initialSet, Campaign);
+		var campaignCache = [];
+		self.campaigns = ko.observableArray();
+
+		campaignService.getCampaigns().then(function(campaigns) {
+			campaignCache = campaigns;
+			self.campaigns.map(campaigns, Campaign);
+		});
+
+		.map(initialSet, Campaign);
 
 		//Add campaign from socket
 		socket.on('campaignAdded', function(campaign) {
@@ -25,9 +31,11 @@ function(Campaign, campaignService, socket){
             self.campaigns.remove(campaign);
 		});
 
+		//TODO: FINISH THIS
 		self.campaigns.subscribeArrayChanged(
 			//Added
 			function(newElement) {
+
 				var index = campaignCache.findIndex(function (c) {
 					return c._id == newElement.id();
 				});
