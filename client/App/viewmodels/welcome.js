@@ -4,7 +4,7 @@ function(app, Campaign, dataContext, Events) {
     var Welcome = function() {
         var self = this;
 
-        self.campaigns = ko.observableArray();
+        self.campaigns = dataContext.campaigns;
 
         self.campaignEntry = ko.observable();
 
