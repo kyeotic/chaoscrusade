@@ -18,9 +18,13 @@ module.exports = function(app) {
         var item = req.body;
         console.log(item);
         Campaigns.create(item, function(error, campaign) {
-            console.log(error);
-            res.json(campaign);
-            app.sockets.broadcast(req.socketId, 'campaignAdded', campaign);
+            if (!error) {
+                res.json(campaign);
+                app.sockets.broadcast(req.socketId, 'campaignAdded', campaign);
+            } else {
+                console.log("save error", error);
+                res.send(500, "Error saving campaign");
+            }
         });
     });
 
@@ -32,8 +36,10 @@ module.exports = function(app) {
                 res.json(true);
                 app.sockets.broadcast(req.socketId, 'campaignRemoved', id);
             }
-            else
-                res.json(false);
+            else {
+                console.log("delete error", error);
+                res.send(500, "Error deleting campaign");
+            }
         });
     });
 };
