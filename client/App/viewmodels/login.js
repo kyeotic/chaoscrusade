@@ -1,8 +1,8 @@
 define(['durandal/plugins/router', 'durandal/app', 
     'modules/loginService', 'modules/cookie', 'modules/userRole', 
-    'models/user', 'viewmodels/createUser', 'modules/socket'], 
+    'models/user', 'viewmodels/createUser'], 
 function (router, app, loginService, cookie, userRole, User, 
-    createUser, socket) {
+    createUser) {
     
     var authToken = "ccAuthToken";
     

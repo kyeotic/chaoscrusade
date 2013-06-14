@@ -6,11 +6,5 @@ function(app, dataContext, serviceBase) {
         serviceBase.setSocketId(socket.socket.sessionid);
     });
     
-    socket.on('campaignAdded', dataContext.raise.campaignAdded);
-    socket.on('campaignAdded', function(){
-        app.log('successful socket add event');
-    });
-    socket.on('campaignRemoved', dataContext.raise.campaignRemoved);
-
     return socket;
 });
