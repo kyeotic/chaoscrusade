@@ -1,5 +1,5 @@
 define(['modules/socket', 'models/character'],
-function(Character) {
+function(socket, Character) {
 	var Campaign = function(init) {
 		var self = this;
 

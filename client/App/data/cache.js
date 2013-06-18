@@ -17,6 +17,7 @@ define(function() {
 			var element = cache[name].find(key);
 			if (element)
 				return false;
+			//We are replacing this method, so we use the Array protype version
 			Array.prototype.remove.call(cache[name], element);
 			return true;
 		};

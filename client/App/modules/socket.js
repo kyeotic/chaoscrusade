@@ -1,5 +1,5 @@
-define(['durandal/app', 'modules/dataContext', 'modules/serviceBase'], 
-function(app, dataContext, serviceBase) {	
+define(['durandal/app', 'modules/serviceBase'], 
+function(app, serviceBase) {	
     var socket = io.connect('http://' + window.location.host);
 
     socket.on('connect', function () {
