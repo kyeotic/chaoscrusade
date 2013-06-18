@@ -19,7 +19,10 @@ module.exports = function(app) {
         
         Users.findOne({usernameLower: credentials.username.toLowerCase()}).exec(function(error, user) {
             var result = hasher.verify(credentials.password, user.passwordHash);
-            delete user.passwordHash;
+            
+            //Document properties cannot be deleted
+            user.passwordHash = undefined;
+            console.log(user);
             
             if(result == hasher.results.failed) {
                 res.json(false);

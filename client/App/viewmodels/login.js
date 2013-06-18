@@ -57,6 +57,17 @@ function (router, app, loginService, cookie, userRole, User,
                 app.log("error", error);
             }).done();
         };
+
+        self.logout = function () {
+            cookie.remove(authToken);
+            /*
+               Logout navigates to the homepage after logging out to clear the app
+               If we forget to unload something, we could leave sensitive data in memory
+               By navigating, we safely ensure that the entire app restarts,
+               without needing to clutter our app code with "unload on logout" bits
+           */
+            window.location.href = "/";
+        };
     };
     
 	var loginVM = new LoginViewModel();

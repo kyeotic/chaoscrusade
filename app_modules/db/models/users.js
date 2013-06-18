@@ -8,7 +8,7 @@ module.exports = function(db, models) {
         usernameLower: String,
         passwordHash: String,
         role: String
-    }, {id: true} );
+    });
     
     //add the models to our simplified models collection
     models.Users = db.model('Users', users);
