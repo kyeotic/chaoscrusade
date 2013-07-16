@@ -41,6 +41,7 @@ var requireToken = function(req, res, next) {
     try {
         token = JSON.parse(decodeURI(token));
         if (verifyToken(token)) {
+            req.token = token;
             next();
         } else {
             fail();

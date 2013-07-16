@@ -1,0 +1,20 @@
+Roadmap
+===
+	Create generic subscribable socket model
+	allow users to add a character to a campaign
+	allow gm to make changes to characters
+	allow users to make un-approved changes to characters
+	create a chat
+	add die rolling to chat
+	add skill aware rolling to chat
+
+
+
+Tasks
+===
+	Finish the generic subscribable for client
+	Finish generic publisher for server
+	add characters to the campaign model
+	add character from logged in user campign vierw
+	
+

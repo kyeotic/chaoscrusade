@@ -37,7 +37,9 @@ app.rolesAuth = require("./app_modules/security/authRoles");
 
 //Database
 app.db = require('./app_modules/db');
-//console.log(app.db);
+
+//Socket Handler
+app.socketService = require('./app_modules/socketService')(app.db);
 
 // Routes
 require('./routes')(app);
