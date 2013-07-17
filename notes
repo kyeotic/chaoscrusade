@@ -18,3 +18,91 @@ Tasks
 	add character from logged in user campign vierw
 	
 
+Data Model
+===
+
+Users
+	
+
+Rules
+	Name
+	Type - Talent, Skill, Etc
+	Text
+	Alignment (optional)
+	Base XP Cost
+	Page in IRL rulebook⁄⁄
+	
+Link to rules
+	Skill
+		Rank
+	Talent
+		Tier
+	Psyhic Power
+	Trait
+	Reward of the Gods
+	Gift of the Gods
+	Gear
+		Weapons
+			Type
+			Damage Type
+			Ammo Type
+		Armor
+		ForceFields
+		Gear
+		Consumables
+		WarGear
+		Cybernetics
+		Bionics
+		Implants
+		Deamon Weapons
+
+
+
+Advancements have an optional stat modifier	
+
+
+Campaigns
+	DM
+	Characters
+
+DM
+	Notes
+	Goals
+
+Characters
+	Stats (Static, should be fields not records), include psy rating?
+		XP?
+	Wounds
+	Corruption
+	Alignment - calculated
+	Pride (stat modifier)
+	Disgrace (stat modifier or talent?)
+	Motivation (stat modifier)
+	Stat Modifier
+		A collection of things modify stats, to be used by the rolling system
+	Skills
+		Alignment
+		Level
+		XP Cost (dynamic)
+		Link to rule
+		Stat used
+	Talent
+		Alignment
+		Tier
+		Xp cost (Dynamic)
+		Link to rule
+	Psychic Power (Special kind of talent, but distinct enough)
+		Alignment
+		Rolling rule (to plug in to the rolling system)
+		Link to rule
+	Trait
+	Gear
+	Rewards of the Gods
+	Wishlist
+	
+Rolling System
+	Combat
+	Psychic Powers
+		Kind of caster
+		Push level
+		Psychic Phenomenon

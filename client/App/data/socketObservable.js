@@ -18,34 +18,16 @@ function(app, socket, socketService) {
 		//Create tracking property to allow subscriptions to check
 		var socketUpdating = false;
 
-		var publishCollectionChanged = function(model, property, eventName, isTyped) {
-			model[property].subscribeArrayChanged(
-				//Added
-				function(newElement) {
-					if (socketUpdating)
-						return; //Don't publish changes we received from the socket
-					socketService.put(eventName, newElement);
-				},
-				//Removed
-				function(oldElement) {
-					if (socketUpdating)
-						return;
-
-					//if typed, we need to send the id, not the value of the element
-					//If untyped the oldElement will just be a value, which we will send whole
-					socketService.remove(eventName, isTyped ? ko.unwrap(oldElement.id) : oldElement);
-				}
-			);
-		}
-
 		//Subcribe to socket methods for an array's add and remove element events
 		//Using the supplied constructor to transoform the data first
 		var subscribeToTypedCollection = function(modelType, model, modelId, property, constructor, value) {
 
-			//The constructor must return an object with an id property
+			//The constructor must return an object with an id property an dupdate method
 			var testItem = new constructor();
 			if (!testItem.id)
 				throw new Error("Typed items must have an Id property to use pub/sub");
+			if (!testItem.update)
+				throw new Error("Typed items must have an update function to use pub/sub");
 
 			model[property] = ko.observableArray(value);
 
@@ -59,7 +41,6 @@ function(app, socket, socketService) {
 			});
 
 			socket.on(eventName + '|removed', function(oldElement) {
-				//find the item by id, a required prop for typed items
 				var item = model[property]().find(function(i) {
 					return ko.unwrap(i.id) == oldElement.id;
 				});
@@ -70,7 +51,22 @@ function(app, socket, socketService) {
 			});
 
 			//Publish to service
-			publishCollectionChanged(model, property, eventName, true);
+			model[property].subscribeArrayChanged(
+				//Added
+				function(newElement) {
+					if (socketUpdating)
+						return;
+					socketService.put(eventName, newElement).then(function(response) {
+						newElement.update(response);
+					});
+				},
+				//Removed
+				function(oldElement) {
+					if (socketUpdating)
+						return;
+					socketService.remove(eventName, ko.unwrap(oldElement.id));
+				}
+			);
 		};
 
 		//Subcribe to socket methods for an array's add and remove element events
@@ -93,11 +89,24 @@ function(app, socket, socketService) {
 			});
 
 			//Publish to service
-			publishCollectionChanged(model, property, eventName, false);
+			model[property].subscribeArrayChanged(
+				//Added
+				function(newElement) {
+					if (socketUpdating)
+						return;
+					socketService.put(eventName, newElement);
+				},
+				//Removed
+				function(oldElement) {
+					if (socketUpdating)
+						return;
+					socketService.remove(eventName,oldElement);
+				}
+			);
 		};
 
 		//Subscribe to socket method for a property's changed event
-		var subscribeToProperty = function(modelType, model, modelId, property, value) {
+		var subscribeToProperty = function(modelType, model, *, property, value) {
 			model[property] = ko.observable(value);
 
 			var eventName = eventNamePrefix(modelType, modelId, property) + '|changed';
