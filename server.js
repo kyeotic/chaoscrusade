@@ -34,6 +34,7 @@ app.configure(function() {
 app.hasher = require("./app_modules/security/hasher");
 app.tokenAuth = require("./app_modules/security/authToken");
 app.rolesAuth = require("./app_modules/security/authRoles");
+app.errors = require("./app_modules/errors");
 
 //Database
 app.db = require('./app_modules/db');

@@ -5,14 +5,14 @@ module.exports = function(app) {
 	};
 
 	return {
-		update: function(token, modelType, modelId, property, newValue, callback) {
-			map[modelType].update(token, modelId, property, newValue, callback);
+		update: function(token, e, newValue, callback) {
+			map[e.model].update(token, e.id, e.property, newValue, callback);
 		},
-		insert: function(token, modelType, modelId, property, item, callback) {
-			map[modelType].insert(token, modelId, property, item, callback);
+		insert: function(token, e, item, callback) {
+			map[e.model].insert(token, e.id, e.property, item, callback);
 		},
-		remove: function(token, modelType, modelId, property, id, callback) {
-			map[modelType].remove(token, modelId, property, id, callback);
+		remove: function(token, e, id, callback) {
+			map[e.modele].remove(token, e.id, e.property, id, callback);
 		}
 	}
 };

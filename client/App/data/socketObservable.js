@@ -2,8 +2,10 @@ define(['durandal/app', 'modules/socket', 'services/socketService'],
 function(app, socket, socketService) {
 
 	//Generate a standard name for the socket event by comibing the parameters
-	var eventNamePrefix = function(modelType, modelId, property) {
-		return modelType + "|" + modelId + "|" + property;
+	var eventNamePrefix = function() {
+		//Get all non-empty arguments
+		var args = Array.prototype.slice.call(arguments).exclude('');
+  		return args.join('|');
 	};
 
 	//Walk the model and subscribe to 
