@@ -1,6 +1,8 @@
 define(['durandal/app', 'modules/socket', 'services/socketService'], 
 function(app, socket, socketService) {
 
+
+
 	//Generate a standard name for the socket event by comibing the parameters
 	var eventNamePrefix = function() {
 		//Get all non-empty arguments
@@ -28,9 +30,7 @@ function(app, socket, socketService) {
 			var testItem = new constructor();
 			if (!testItem.id)
 				throw new Error("Typed items must have an Id property to use pub/sub");
-			if (!testItem.update)
-				throw new Error("Typed items must have an update function to use pub/sub");
-
+			
 			model[property] = ko.observableArray(value);
 
 			var eventName = eventNamePrefix(modelType, modelId, property);
@@ -59,7 +59,7 @@ function(app, socket, socketService) {
 					if (socketUpdating)
 						return;
 					socketService.put(eventName, newElement).then(function(response) {
-						newElement.update(response);
+						newElement.id(response);
 					});
 				},
 				//Removed

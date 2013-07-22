@@ -23,14 +23,25 @@ Data Model
 
 Users
 	
+Advancement
+	RuleID
+	Alignment at purchase
+	Xp Cost
 
 Rules
 	Name
-	Type - Talent, Skill, Etc
+	Type - NOPE, rule is a child of the stuff below
 	Text
 	Alignment (optional)
 	Base XP Cost
-	Page in IRL rulebook⁄⁄
+	Page in rulebook
+	Stat modifier (optional)
+	trait modifier (optional)
+	Skill modifier (optional)
+	Roll modifier (optional)
+
+
+
 	
 Link to rules
 	Skill
@@ -42,14 +53,19 @@ Link to rules
 	Reward of the Gods
 	Gift of the Gods
 	Gear
+		Quality
+		Availability
+		Weight
+
 		Weapons
 			Type
 			Damage Type
 			Ammo Type
+		Ammo
 		Armor
 		ForceFields
-		Gear
 		Consumables
+		Tools
 		WarGear
 		Cybernetics
 		Bionics

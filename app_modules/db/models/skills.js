@@ -4,9 +4,10 @@ module.exports = function(db, models) {
     var set = new db.Schema({
         //id and _id are creatd by the system
         name: String,
-        type: String,
         text: String,
-        rulebookPage: Number
+        page: Number,
+        alignment: String,
+        characteristic: String
     });
     
     //add the models to our simplified models collection
