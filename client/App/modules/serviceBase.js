@@ -100,4 +100,60 @@ function (app, system) {
         setAuthToken: setAuthToken,
         setSocketId: setSocketId
     };
+    
+    
+    /*
+    var convertjQueryError = function (jqXHR) {
+        var message;
+        try {
+            message = JSON.parse(jqXHR.responseText).responseStatus.message;
+        } catch (e) {
+            message = jqXHR.statusText;
+        }
+        return {
+            message: message,
+            status: jqXHR.status,
+            statusText: jqXHR.statusText
+        };
+    };
+
+    var deferAjax = function (method, url, data) {
+        var ajaxCall = {
+            type: method,
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        };
+
+        if (data)
+            ajaxCall.data = ko.toJSON(data);
+
+        return system.defer(function (deferred) {
+            ajaxCall.success = function (response) {
+                deferred.resolve(response);
+            };
+            ajaxCall.error = function (jqXhr) {
+                var newError = convertjQueryError(jqXhr);
+                deferred.reject(newError);
+            };
+
+            $.ajax(ajaxCall);
+        }).promise();
+    };
+
+    return {
+        get: function (url) {
+            return deferAjax("GET", url);
+        },
+        post: function (url, data) {
+            return deferAjax("POST", url, data);
+        },
+        put: function (url, data) {
+            return deferAjax("PUT", url, data);
+        },
+        remove: function (url) {
+            return deferAjax("DELETE", url);
+        }
+    };
+    */
 });
