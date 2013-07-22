@@ -103,21 +103,21 @@ function (app, system) {
     
     
     /*
-    var convertjQueryError = function (jqXHR) {
+        var convertjQueryError = function (jqXhr) {
         var message;
         try {
-            message = JSON.parse(jqXHR.responseText).responseStatus.message;
+            message = JSON.parse(jqXhr.responseText).responseStatus.message;
         } catch (e) {
-            message = jqXHR.statusText;
+            message = jqXhr.statusText;
         }
         return {
             message: message,
-            status: jqXHR.status,
-            statusText: jqXHR.statusText
+            status: jqXhr.status,
+            statusText: jqXhr.statusText
         };
     };
 
-    var deferAjax = function (method, url, data) {
+    var ajaxPromise = function (method, url, data) {
         var ajaxCall = {
             type: method,
             url: url,
@@ -128,31 +128,32 @@ function (app, system) {
         if (data)
             ajaxCall.data = ko.toJSON(data);
 
-        return system.defer(function (deferred) {
-            ajaxCall.success = function (response) {
+        var defer = app.defer(function(deferred) {
+            ajaxCall.success = function(response) {
                 deferred.resolve(response);
             };
-            ajaxCall.error = function (jqXhr) {
-                var newError = convertjQueryError(jqXhr);
-                deferred.reject(newError);
+            ajaxCall.error = function(jqXhr) {
+                deferred.reject(convertjQueryError(jqXhr));
             };
 
             $.ajax(ajaxCall);
-        }).promise();
+        });
+
+        return defer.promise();
     };
 
     return {
         get: function (url) {
-            return deferAjax("GET", url);
+            return ajaxPromise("GET", url);
         },
         post: function (url, data) {
-            return deferAjax("POST", url, data);
+            return ajaxPromise("POST", url, data);
         },
         put: function (url, data) {
-            return deferAjax("PUT", url, data);
+            return ajaxPromise("PUT", url, data);
         },
         remove: function (url) {
-            return deferAjax("DELETE", url);
+            return ajaxPromise("DELETE", url);
         }
     };
     */
