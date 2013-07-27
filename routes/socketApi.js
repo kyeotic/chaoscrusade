@@ -4,7 +4,7 @@ module.exports = function(app) {
 
 	var splitEvent = function(eventName) {
 		var split = req.params.eventName.split("|");
-		return { model: split[0], id: split[1], property: split[2] };
+		return { model: split[0], id: split[1], property: split[2]};
 	}
 
 	var handlerCallback = function(req, res) {

@@ -1,11 +1,16 @@
 define(['durandal/app', 'data/socketObservable', 'models/character', 'services/campaignService'],
-function(app, Character, campaignService) {
+function(app, socketObservable, Character, campaignService) {
 	var Campaign = function(init) {
 		var self = this;
 
-		self.id = ko.observable(data.id || data._id || 0);
-		self.name = ko.observable(data.name || '');
-		self.gmId = ko.observable(data.gmId || '');
+		var map = {
+			id: data.id || data._id || '',
+			name: data.name || '',
+			gmId: data.gmId || ''
+		};
+
+		socketObservable.model.call(self, 'campaign', map);
+
 		self.charactersLoaded = ko.observable(false);
 
 		var initCharacters = [];

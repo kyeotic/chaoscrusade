@@ -1,7 +1,19 @@
+/*
+			| Root Collection	| Sub Collection							|
+	------------------------------------------------------------------------
+	Add		| Model				| ParentModel-ParentId-ChildModel			|
+	------------------------------------------------------------------------
+	Remove	| Model-Id			| ParentModel-ParentId-ChildModel-ChildId	|							|
+	------------------------------------------------------------------------
+	Change	| Model-Id-Property	| ChildModel-ChildId-ChildProperty			|
+	------------------------------------------------------------------------
+*/
+
 module.exports = function(app) {
 
 	var map = {
-		Campaign: require('./services/campaignService')(app)
+		Campaign: require('./services/campaignService')(app),
+		//Skill: require('./services/skillService')(app)
 	};
 
 	return {

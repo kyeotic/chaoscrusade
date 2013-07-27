@@ -1,143 +1,101 @@
 define(['durandal/app', 'modules/socket', 'services/socketService'], 
 function(app, socket, socketService) {
 
-
+	/*
+				| Root Collection	| Sub Collection							|
+		------------------------------------------------------------------------
+		Add		| Model				| ParentModel-ParentId-ChildModel			|
+		------------------------------------------------------------------------
+		Remove	| Model-Id			| ParentModel-ParentId-ChildModel-ChildId	|							|
+		------------------------------------------------------------------------
+		Change	| Model-Id-Property	| ChildModel-ChildId-ChildProperty			|
+		------------------------------------------------------------------------
+	*/
 
 	//Generate a standard name for the socket event by comibing the parameters
-	var eventNamePrefix = function() {
+	var getEventName = function() {
 		//Get all non-empty arguments
-		var args = Array.prototype.slice.call(arguments).exclude('');
+		var args = Array.prototype.slice.call(arguments).exclude(function(i) {
+			return i !== undefined && i !== null && i !== '';
+		});
   		return args.join('|');
 	};
 
-	//Walk the model and subscribe to 
-	var setupSocketSubcriber = function(config) {
-		//unwrap config
-		var model = config.model,
-			modelId = config.modelId,
-			modelType = config.modelType,
-			properties = config.properties;
+	//Root sets do not pass a parentSetName or parentId
+	//The event name will just filter them out
+	var ObservableSet = function(setName, constructor, parentSetName, parentId) {
+		var self = this,
+			eventName = getEventName(parentSetName, parentId, setName),
+			set = ko.observableArray(),
+			socketUpdating = fasle;
 
+		//Subscribe to socket
+		socket.on(eventName + "|added", function(newElement) {
+			socketUpdating = true;
+			set.push(new constructor(newElement));
+			socketUpdating = false;
+		});
 
-		//Create tracking property to allow subscriptions to check
-		var socketUpdating = false;
-
-		//Subcribe to socket methods for an array's add and remove element events
-		//Using the supplied constructor to transoform the data first
-		var subscribeToTypedCollection = function(modelType, model, modelId, property, constructor, value) {
-
-			//The constructor must return an object with an id property an dupdate method
-			var testItem = new constructor();
-			if (!testItem.id)
-				throw new Error("Typed items must have an Id property to use pub/sub");
-			
-			model[property] = ko.observableArray(value);
-
-			var eventName = eventNamePrefix(modelType, modelId, property);
-
-			//Subscribe to socket
-			socket.on(eventName + "|added", function(newElement) {
-				socketUpdating = true;
-				model[property].push(new constructor(newElement));
-				socketUpdating = false;
+		socket.on(eventName + '|removed', function(oldElement) {
+			var item = model[property]().find(function(i) {
+				return ko.unwrap(i.id) == oldElement.id;
 			});
 
-			socket.on(eventName + '|removed', function(oldElement) {
-				var item = model[property]().find(function(i) {
-					return ko.unwrap(i.id) == oldElement.id;
+			socketUpdating = true;
+			set.remove(item);
+			socketUpdating = false;
+		});
+
+		//Publish to service
+		set.subscribeArrayChanged(
+			//Added
+			function(newElement) {
+				if (socketUpdating)
+					return;
+				socketService.put(eventName, newElement).then(function(response) {
+					newElement.id(response);
 				});
+			},
+			//Removed
+			function(oldElement) {
+				if (socketUpdating)
+					return;
+				socketService.remove(eventName, ko.unwrap(oldElement.id));
+			}
+		);
+	};
 
-				socketUpdating = true;
-				model[property].remove(item);
+	var ObservableModel = function(modelName, map) {
+		var self = this,
+			id = ko.unwrap(map.id);
+
+		if (!map.id || id === 0 || id === '')
+			throw new Error("Socket Observables models must have a non-zero Id.");
+
+		var keys = Object.keys(map).exclude('id');
+
+		keys.forEach(function(property) {
+			self[property] = ko.observable(map[property]);
+
+			var eventName = getEventName(modelName, id, property),
 				socketUpdating = false;
-			});
 
-			//Publish to service
-			model[property].subscribeArrayChanged(
-				//Added
-				function(newElement) {
-					if (socketUpdating)
-						return;
-					socketService.put(eventName, newElement).then(function(response) {
-						newElement.id(response);
-					});
-				},
-				//Removed
-				function(oldElement) {
-					if (socketUpdating)
-						return;
-					socketService.remove(eventName, ko.unwrap(oldElement.id));
-				}
-			);
-		};
-
-		//Subcribe to socket methods for an array's add and remove element events
-		var subscribeToCollection = function(modelType, model, modelId, property, value) {
-			model[property] = ko.observableArray(value);
-
-			var eventName = eventNamePrefix(modelType, modelId, property);
-
-			//Subscribe to socket
-			socket.on(eventName + "|added", function(newElement) {
-				socketUpdating = true;
-				model[property].push(newElement);
-				socketUpdating = false;
-			});
-
-			socket.on(eventName + '|removed', function(oldElement) {
-				socketUpdating = true;
-				model[property].remove(oldElement);
-				socketUpdating = false;
-			});
-
-			//Publish to service
-			model[property].subscribeArrayChanged(
-				//Added
-				function(newElement) {
-					if (socketUpdating)
-						return;
-					socketService.put(eventName, newElement);
-				},
-				//Removed
-				function(oldElement) {
-					if (socketUpdating)
-						return;
-					socketService.remove(eventName,oldElement);
-				}
-			);
-		};
-
-		//Subscribe to socket method for a property's changed event
-		var subscribeToProperty = function(modelType, model, *, property, value) {
-			model[property] = ko.observable(value);
-
-			var eventName = eventNamePrefix(modelType, modelId, property) + '|changed';
 			socket.on(eventName, function(newValue) {
 				socketUpdating = true;
-				model[property](newValue);
+				self[property](newValue);
 				socketUpdating = false;
 			});
 
-			model[property].subscribe(function(newValue) {
+			self[property].subscribe(function(newValue) {
 				if (socketUpdating)
 					return;
 				socketService.post(eventName, newValue);
-			})
-		};
-
-		var keys = Object.keys(properties);
-
-		//Create observable properties on the model with socket pub/sub
-		keys.forEach(function(property) {
-			if (Object.isObject(properties[property]) {
-				subscribeToTypedCollection(modelType, model, modelId, property, properties[property].type,  properties[property].value);
-			} else if (Object.isArray(properties[property]) {
-				subscribeToCollection(modelType, model, modelId, property, properties[property]);
-			} else {
-				subscribeToProperty(modelType, model, modelId, property, properties[property]);
-			}
-		});		
+			});
+		});
 	};
 
-	return setupSocketSubcriber;
+	return {
+		set: ObservableSet,
+		model: ObservableModel
+	};
 });
