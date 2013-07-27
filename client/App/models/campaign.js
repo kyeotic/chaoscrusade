@@ -9,7 +9,7 @@ function(app, socketObservable, Character, campaignService) {
 			gmId: data.gmId || ''
 		};
 
-		socketObservable.model.call(self, 'campaign', map);
+		socketObservable.Model.call(self, 'campaign', map);
 
 		self.charactersLoaded = ko.observable(false);
 

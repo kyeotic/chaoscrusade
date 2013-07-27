@@ -23,21 +23,23 @@ function(app, socket, socketService) {
 
 	//Root sets do not pass a parentSetName or parentId
 	//The event name will just filter them out
-	var ObservableSet = function(setName, constructor, parentSetName, parentId) {
+	var ObservableSet = function(setName, Constructor, parentSetName, parentId) {
 		var self = this,
 			eventName = getEventName(parentSetName, parentId, setName),
 			set = ko.observableArray(),
-			socketUpdating = fasle;
+			socketUpdating = false;
+
+		app.log("Registering SocketSet " + setName);
 
 		//Subscribe to socket
-		socket.on(eventName + "|added", function(newElement) {
+		var add = socket.on(eventName + "|added", function(newElement) {
 			socketUpdating = true;
-			set.push(new constructor(newElement));
+			set.push(new Constructor(newElement));
 			socketUpdating = false;
 		});
 
-		socket.on(eventName + '|removed', function(oldElement) {
-			var item = model[property]().find(function(i) {
+		var remove = socket.on(eventName + '|removed', function(oldElement) {
+			var item = set().find(function(i) {
 				return ko.unwrap(i.id) == oldElement.id;
 			});
 
@@ -50,29 +52,40 @@ function(app, socket, socketService) {
 		set.subscribeArrayChanged(
 			//Added
 			function(newElement) {
-				if (socketUpdating)
+				if (socketUpdating) {
 					return;
+				}
 				socketService.put(eventName, newElement).then(function(response) {
 					newElement.id(response);
 				});
 			},
 			//Removed
 			function(oldElement) {
-				if (socketUpdating)
+				if (socketUpdating) {
 					return;
+				}
 				socketService.remove(eventName, ko.unwrap(oldElement.id));
 			}
 		);
+
+		self.unsocket = function() {
+			add.destroy();
+			remove.destory();
+		};
 	};
 
 	var ObservableModel = function(modelName, map) {
 		var self = this,
 			id = ko.unwrap(map.id);
 
-		if (!map.id || id === 0 || id === '')
+		if (!map.id || id === 0 || id === '') {
 			throw new Error("Socket Observables models must have a non-zero Id.");
+		}
+
+		app.log("Registering SocketModel " + modelName);
 
 		var keys = Object.keys(map).exclude('id');
+		var sockets = [];
 
 		keys.forEach(function(property) {
 			self[property] = ko.observable(map[property]);
@@ -80,22 +93,27 @@ function(app, socket, socketService) {
 			var eventName = getEventName(modelName, id, property),
 				socketUpdating = false;
 
-			socket.on(eventName, function(newValue) {
+			sockets.push(socket.on(eventName, function(newValue) {
 				socketUpdating = true;
 				self[property](newValue);
 				socketUpdating = false;
-			});
-
+			}));
+			
 			self[property].subscribe(function(newValue) {
-				if (socketUpdating)
+				if (socketUpdating) {
 					return;
+				}
 				socketService.post(eventName, newValue);
 			});
 		});
+
+		self.unsocket = function() {
+			sockets.forEach(function(s) { s.destroy(); });
+		};
 	};
 
 	return {
-		set: ObservableSet,
-		model: ObservableModel
+		Set: ObservableSet,
+		Model: ObservableModel
 	};
 });
