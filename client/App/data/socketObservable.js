@@ -68,6 +68,19 @@ function(app, socket, socketService) {
 			}
 		);
 
+		//Load data into set without tell the socketService that WE added it
+		self.loadSet = function(data) {
+			socketUpdating = true;
+			set.map(data, Constructor);
+			socketUpdating = false;
+		};
+
+		self.unloadSet = function() {
+			socketUpdating = true;
+			set.removeAll();
+			socketUpdating = false;
+		};
+
 		self.unsocket = function() {
 			add.destroy();
 			remove.destory();
