@@ -11,7 +11,7 @@ module.exports = function(db, models) {
     });
 
     // Ensure virtual fields are serialised.
-    set.set('toJSON', { virtuals: true });
+    users.set('toJSON', { virtuals: true });
     
     //add the models to our simplified models collection
     models.Users = db.model('Users', users);

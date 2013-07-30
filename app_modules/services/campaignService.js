@@ -1,6 +1,8 @@
 module.exports = function(app) {
 	var Campaigns = app.db.Campaigns;
 
+	console.log(app.db);
+
 	//callback(error, eventName, result)
 
 	var checkToken = function(token) {
