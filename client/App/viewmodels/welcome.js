@@ -1,4 +1,4 @@
-define(['durandal/app', 'models/campaign', 'modules/dataContext', 'viewmodels/login'],
+define(['durandal/app', 'models/campaign', 'data/dataContext', 'viewmodels/login'],
 function(app, Campaign, dataContext, login) {
 
     var Welcome = function() {

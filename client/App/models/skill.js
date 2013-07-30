@@ -1,12 +1,15 @@
-define(['durandal/app'], function(app) {
+define(['durandal/app', 'data/socketObservable'], function(app) {
 	var Skill = function(init) {
 		var self = this;
 
-		self.id = ko.observable(init.id || 0);
-		self.name = ko.observable(init.name || '');
-		self.page = ko.observable(init.page || 0);
-		self.alignment = ko.observable(init.alignment || '');
-		self.characteristic = ko.observable(init.characteristic || '');
+		socketObservable.Model.call(self, 'skill', {
+			id: init.id || init._id || '',
+			name: init.name || '',
+			text: init.text || '',
+			page: init.page || 0,
+			alignment: init.alignment || '',
+			characteristic: init.characteristic || ''
+		})
 	};
 
 	return Skill;

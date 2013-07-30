@@ -4,14 +4,14 @@ function(app, socketObservable, Character, campaignService) {
 		var self = this;
 
 		var map = {
-			id: data.id || data._id || '',
-			name: data.name || '',
-			gmId: data.gmId || ''
+			id: init.id || init._id || '',
+			name: init.name || '',
+			gmId: init.gmId || ''
 		};
 
 		socketObservable.Model.call(self, 'campaign', map);
 
-		self.characters = socketObservable.Set('character', Character, 'campaign', self.id());
+		self.characters = socketObservable.Set('character', Character, 'campaign', self.id);
 
 		self.loadCharacters = function() {
 			campaignService.getCharacters(self.id())

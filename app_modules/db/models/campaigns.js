@@ -5,7 +5,7 @@ module.exports = function(db, models) {
         //id and _id are creatd by the system
         gmId: db.Schema.Types.ObjectId,
         name: String,
-        characters: [db.Schema.Types.ObjectId]
+        characters: [{ type: db.Schema.Types.ObjectId, ref: 'Characters' }]
     });
     
     //add the models to our simplified models collection

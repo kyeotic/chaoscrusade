@@ -1,6 +1,8 @@
 /*
 			| Root Collection	| Sub Collection							|
 	------------------------------------------------------------------------
+	Get		| Model				| ParentModel-ParentId-ChildModel			|
+	------------------------------------------------------------------------
 	Add		| Model				| ParentModel-ParentId-ChildModel			|
 	------------------------------------------------------------------------
 	Remove	| Model-Id			| ParentModel-ParentId-ChildModel-ChildId	|							|
@@ -9,12 +11,25 @@
 	------------------------------------------------------------------------
 */
 
-var map = {
-	campaign: require('./services/campaignService')(app),
-	//Skill: require('./services/skillService')(app)
-};
-
 module.exports = function(app) {
+
+	var map = {
+		campaign: require('./services/campaignService')(app),
+		//Skill: require('./services/skillService')(app)
+	};
+
+	var get = function(token, e, callback) {
+		var eventData = e.split("|"),
+			model = eventData[0],
+			id = eventData[1],
+			childModel = eventData[2];
+
+		if (childModel === undefined) { //Root
+			map[model].get(token, callback);
+		} else { //Sub
+			map[model].getChildren(token, id, childModel, callback);
+		}
+	};
 
 	var insert = function(token, e, item, callback) {
 		var eventData = e.split("|"),
@@ -53,6 +68,7 @@ module.exports = function(app) {
 	};
 
 	return {
+		get: get,
 		insert: insert,
 		remove: remove,
 		update: update
