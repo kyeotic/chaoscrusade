@@ -9,7 +9,7 @@ function(app, Campaign, dataContext, login) {
         self.campaignEntry = ko.observable();
 
         self.addCampaign = function() {
-            var campaign = {name: self.campaignEntry(), gmId: login.user().id() };
+            var campaign = { name: self.campaignEntry(), gmId: login.user().id() };
             self.campaigns.push(new Campaign(campaign));
             self.campaignEntry('');
         };
@@ -19,5 +19,6 @@ function(app, Campaign, dataContext, login) {
         };
     };
     
-    return new Welcome();
+    window.welcome = new Welcome();
+    return window.welcome;
 });

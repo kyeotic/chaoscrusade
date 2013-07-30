@@ -7,7 +7,10 @@ module.exports = function(db, models) {
         name: String,
         characters: [{ type: db.Schema.Types.ObjectId, ref: 'Characters' }]
     });
-    
+
+    // Ensure virtual fields are serialised.
+	set.set('toJSON', { virtuals: true });
+	    
     //add the models to our simplified models collection
     models[setName] = db.model(setName, set);
 };

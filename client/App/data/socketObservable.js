@@ -1,18 +1,8 @@
 define(['durandal/app', 'modules/socket', 'services/socketService'], 
 function(app, socket, socketService) {
 
-	/*
-				| Root Collection	| Sub Collection							|
-		------------------------------------------------------------------------
-		Add		| Model				| ParentModel-ParentId-ChildModel			|
-		------------------------------------------------------------------------
-		Remove	| Model-Id			| ParentModel-ParentId-ChildModel-ChildId	|							|
-		------------------------------------------------------------------------
-		Change	| Model-Id-Property	| ChildModel-ChildId-ChildProperty			|
-		------------------------------------------------------------------------
-	*/
-
 	//Generate a standard name for the socket event by comibing the parameters
+	//Filter the empty ones here, since callers may not be Sub models
 	var getEventName = function() {
 		//Get all non-empty arguments
 		var args = Array.prototype.slice.call(arguments).exclude(function(i) {
@@ -25,14 +15,34 @@ function(app, socket, socketService) {
 	//The event name will just filter them out
 	var ObservableSet = function(setName, Constructor, parentSetName, parentId) {
 		var set = ko.observableArray(),
-			socketUpdating = false;
+			socketUpdating = false,
+			eventName = getEventName(parentSetName, ko.unwrap(parentId), setName);;
 
 		if (parentId !== undefined && !ko.isObservable(parentId))
 			throw new Error("Child Observable Sets must have observable parentId");
 
-		var setupSet = function() {
-			var eventName = getEventName(parentSetName, ko.unwrap(parentId), setName);
+		//Publish to service
+		set.subscribeArrayChanged(
+			//Added
+			function(newElement) {
+				if (socketUpdating) {
+					return;
+				}
+				socketService.put(eventName, newElement).then(function(response) {
+					newElement.id(response.id);
+				});
+			},
+			//Removed
+			function(oldElement) {
+				if (socketUpdating) {
+					return;
+				}
+				socketService.remove(eventName, ko.unwrap(oldElement.id));
+			}
+		);
 
+		var setupSetSockets = function() {
+			
 			app.log("Registering SocketSet " + setName);
 
 			//Subscribe to socket
@@ -52,25 +62,7 @@ function(app, socket, socketService) {
 				socketUpdating = false;
 			});
 
-			//Publish to service
-			set.subscribeArrayChanged(
-				//Added
-				function(newElement) {
-					if (socketUpdating) {
-						return;
-					}
-					socketService.put(eventName, newElement).then(function(response) {
-						newElement.id(response);
-					});
-				},
-				//Removed
-				function(oldElement) {
-					if (socketUpdating) {
-						return;
-					}
-					socketService.remove(eventName, ko.unwrap(oldElement.id));
-				}
-			);
+			
 
 			//Load data into set without tell the socketService that WE added it
 			set.loadSet = function(data) {
@@ -111,7 +103,7 @@ function(app, socket, socketService) {
 			sub = parentId.subscribe(function(newValue) {
 				if (newValue === 0 || newValue === '')
 					return; //We need a real value
-				setupSet();
+				setupSetSockets();
 				sub.dispose();
 			});
 
@@ -120,7 +112,7 @@ function(app, socket, socketService) {
 			self.unloadSet = function() {};
 			self.unsocket = function() {};
 		} else { //Otherwise setup now
-			setupSet();
+			setupSetSockets();
 		}
 
 		return set;
@@ -128,34 +120,42 @@ function(app, socket, socketService) {
 
 	var ObservableModel = function(modelName, map) {
 		var self = this,
-			id = ko.unwrap(map.id);
+			id = ko.unwrap(map.id),
+			keys = Object.keys(map).exclude('id'),
+			socketUpdating = false;
 
 		self.id = ko.observable(id);
 
-		var setupModel = function() {
+		keys.forEach(function(property) {
+				self[property] = ko.observable(map[property]);
+				
+				self[property].subscribe(function(newValue) {
+					if (socketUpdating) {
+						return;
+					}
+
+					//The ID might be getting populated after this is run
+					//We don't want to close over the ID value, we need to get it fresh
+					var eventName = getEventName(modelName, self.id(), property);
+					socketService.post(eventName, newValue);
+				});
+			});
+
+		var setupModelSockets = function() {
 			app.log("Registering SocketModel " + modelName);
 
-			var keys = Object.keys(map).exclude('id');
 			var sockets = [];
 
 			keys.forEach(function(property) {
-				self[property] = ko.observable(map[property]);
 
-				var eventName = getEventName(modelName, id, property),
-					socketUpdating = false;
+				var eventName = getEventName(modelName, self.id(), property);
 
 				sockets.push(socket.on(eventName, function(newValue) {
 					socketUpdating = true;
 					self[property](newValue);
 					socketUpdating = false;
 				}));
-				
-				self[property].subscribe(function(newValue) {
-					if (socketUpdating) {
-						return;
-					}
-					socketService.post(eventName, newValue);
-				});
+
 			});
 
 			self.unsocket = function() {
@@ -163,7 +163,7 @@ function(app, socket, socketService) {
 			};
 		};
 
-		//The ID doesn't exist yet, but it will be set by the first save 
+		//The ID may not exist yet, but it will be set by the first save 
 		//Which should be occuring as a result of this creation, or soonafter
 		//We will subscribe to the ID, and register the rest of the model when it arrives
 		if (!map.id || id === 0 || id === '') {
@@ -171,14 +171,14 @@ function(app, socket, socketService) {
 			sub = self.id.subscribe(function(newValue) {
 				if ( newValue === 0 || newValue === '')
 					return; //We need a real value
-				setupModel();
+				setupModelSockets();
 				sub.dispose();
 			});
 
 			//Make empty functions for the socket
 			self.unsocket = function() {};
 		} else {
-			setupModel();
+			setupModelSockets();
 		}
 		
 	};

@@ -9,6 +9,9 @@ module.exports = function(db, models) {
         alignment: String,
         characteristic: String
     });
+
+    // Ensure virtual fields are serialised.
+    set.set('toJSON', { virtuals: true });
     
     //add the models to our simplified models collection
     models[setName] = db.model(setName, set);

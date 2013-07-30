@@ -10,6 +10,8 @@ module.exports = function(app) {
 
 	var get = function (token, callback) {
 		Campaigns.find().exec(function(error, campaigns){
+			console.log(campaigns);
+			console.log(campaigns[0].id)
 			callback(error, null, campaigns);
         });
 	};

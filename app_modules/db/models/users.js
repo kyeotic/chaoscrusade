@@ -9,6 +9,9 @@ module.exports = function(db, models) {
         passwordHash: String,
         role: String
     });
+
+    // Ensure virtual fields are serialised.
+    set.set('toJSON', { virtuals: true });
     
     //add the models to our simplified models collection
     models.Users = db.model('Users', users);

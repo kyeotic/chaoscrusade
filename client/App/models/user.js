@@ -14,7 +14,7 @@ function(app) {
         
         self.update = function(data) {
             data = data || {};
-            self.id(data.id || data._id || self.id() || "");
+            self.id(data.id || self.id() || "");
             self.firstName(data.firstName || self.firstName() || "");
             self.lastName(data.lastName || self.lastName() || "");
             self.username(data.username || self.username() || "" );

@@ -4,7 +4,7 @@ function(app, socketObservable, Character, campaignService) {
 		var self = this;
 
 		var map = {
-			id: init.id || init._id || '',
+			id: init.id || '',
 			name: init.name || '',
 			gmId: init.gmId || ''
 		};

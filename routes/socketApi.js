@@ -34,7 +34,7 @@ module.exports = function(app) {
 	app.delete('/api/:eventName', auth.requireToken, function (req, res) {
 		var eventData = req.params.eventName;
 
-			//For value types, the id will just be the value, but this layer isn't concerned
+		//For value types, the id will just be the value, but this layer isn't concerned
 		socketService.remove(req.token, eventData, handlerCallback(req, res));
 	});
 

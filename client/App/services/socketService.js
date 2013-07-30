@@ -11,7 +11,7 @@ define(['modules/serviceBase'], function(serviceBase) {
 			return serviceBase.put(route + eventName, value);
 		},
 		remove: function(eventName, value) {
-			return serviceBase.remove(route + eventName + '/' + value);
+			return serviceBase.remove(route + eventName + '|' + value);
 		},
 	};
 });
