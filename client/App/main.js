@@ -1,50 +1,53 @@
 require.config({
     paths: {
-        'text': 'durandal/amd/text'
+        'text': '../lib/require/text'
+        , 'durandal':'../lib/durandal/js'
+        , 'plugins' : '../lib/durandal/js/plugins'
+        , 'transitions' : '../lib/durandal/js/transitions'
+        , 'knockout': '../lib/knockout-2.3.0'
+        , 'bootstrap': '../lib/bootstrap/js/bootstrap'
+        , 'jquery': '../lib/jquery-1.9.1'
+        , 'lib' : '../lib'
+    },
+    shim: {
+        'bootstrap': {
+            deps: ['jquery'],
+            exports: 'jQuery'
+        }
     },
     waitSeconds: 30
 });
 
-define(['durandal/app', 'durandal/viewLocator', 'durandal/system', 'durandal/plugins/router', 
+define(['durandal/system', 'durandal/app', 'durandal/viewLocator'],
+function(system, app, viewLocator) {
 
-'durandal/messageBox', 'durandal/transitions/entrance'],
-function(app, viewLocator, system, router) {
-    
     //>>excludeStart("build", true);
     system.debug(true);
-    //>>excludeEnd("build");
-  
-    //This changes Durandal's default promise from jQuery to Q
-    system.defer = function (action) {
-        var deferred = Q.defer();
-        action.call(deferred, deferred);
-        var promise = deferred.promise;
-        deferred.promise = function () {
-            return promise;
-        };
-        return deferred;
-    };
-    
-    system.delay = function (ms) {
-      return Q.delay(ms);
-    };
+    //>>excludeEnd("build");  
 
-    app.defer = system.defer;
-    app.delay = system.delay;
-    app.log = system.log;
+    //specify which plugins to install and their configuration
+    app.configurePlugins({
+
+        //Durandal plugins
+        router:true,
+        dialog: true,
+        widget: {
+            kinds: ['expander']
+        },
+
+        //App plugins
+        knockoutExtensions: true,
+        knockoutCommands: true,
+        qPatch: true
+    });
 
     app.title = 'ShiftWise Durandal';
     app.start().then(function () {
         //Replace 'viewmodels' in the moduleId with 'views' to locate the view.
         //Look for partial views in a 'views' folder in the root.
         viewLocator.useConvention();
-
-        //configure routing
-        router.useConvention();
-
-        app.adaptToDevice();
         
         //Show the app by setting the root view model for our application with a transition.
-        app.setRoot('viewmodels/shell', 'entrance');
+        app.setRoot('viewmodels/shell');
     });
 });

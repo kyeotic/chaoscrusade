@@ -1,11 +1,9 @@
-define(['durandal/plugins/router', 'durandal/app', 'viewmodels/login'], 
-function (router, app, login) {
+define(['plugins/router', 'knockout', 'durandal/app', 'viewmodels/login'], 
+function (router, ko, app, login) {
     
     app.on('userlogin', function() { 
         app.log("user logged in"); 
     });
-    
-    window.router = router;
     
     var Shell = function() {
         var self = this;
@@ -15,7 +13,7 @@ function (router, app, login) {
             if(login.user().id().length === 0){
                 app.log("login required");
                 
-                return app.showModal(login).then(function(dialogResult){
+                return app.showDialog(login).then(function(dialogResult){
                     router.activate(router.visibleRoutes()[0].url);
                 });
             }
@@ -23,10 +21,12 @@ function (router, app, login) {
             return router.activate(router.visibleRoutes()[0].url);
         };
         
+        //Used by the logout binding on the top bar
         self.logout = function() {
             login.logout();
         };
         
+        //Also used by top bar
         self.loggedInUser = ko.computed(function() {
             var id = login.user().id();
             if (id.length === 0 || id === 0)

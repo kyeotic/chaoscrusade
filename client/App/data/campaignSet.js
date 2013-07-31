@@ -1,5 +1,5 @@
-define(['durandal/app', 'models/campaign', 'services/campaignService', 'modules/socket', 'data/cache'], 
-function(app, Campaign, campaignService, socket, cache){
+define(['durandal/app', 'knockout', 'models/campaign', 'services/campaignService', 'modules/socket', 'data/cache'], 
+function(app, ko, Campaign, campaignService, socket, cache){
 
 	cache.createSet("campaigns", '_id');
 	var campaignSet = {};

@@ -1,5 +1,5 @@
-define(['durandal/app', 'models/campaign', 'data/dataContext', 'viewmodels/login'],
-function(app, Campaign, dataContext, login) {
+define(['durandal/app', 'knockout', 'models/campaign', 'data/dataContext', 'viewmodels/login'],
+function(app, ko, Campaign, dataContext, login) {
 
     var Welcome = function() {
         var self = this;

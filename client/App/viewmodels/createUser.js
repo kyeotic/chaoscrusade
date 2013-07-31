@@ -1,5 +1,5 @@
-define(['models/user', 'modules/loginService'],
-function(User, loginService) {
+define(['knockout', 'models/user', 'modules/loginService'],
+function(ko, User, loginService) {
     
     var CreateUser = function() {
         var self = this;

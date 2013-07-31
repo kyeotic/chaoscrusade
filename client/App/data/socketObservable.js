@@ -1,5 +1,5 @@
-define(['durandal/app', 'modules/socket', 'services/socketService'], 
-function(app, socket, socketService) {
+define(['durandal/app', 'knockout', 'modules/socket', 'services/socketService'], 
+function(app, ko, socket, socketService) {
 
 	//Generate a standard name for the socket event by comibing the parameters
 	//Filter the empty ones here, since callers may not be Sub models

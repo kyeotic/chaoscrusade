@@ -1,5 +1,5 @@
-define(['durandal/app', 'data/socketObservable', 'models/character', 'services/campaignService'],
-function(app, socketObservable, Character, campaignService) {
+define(['durandal/app', 'knockout', 'data/socketObservable', 'models/character', 'services/campaignService'],
+function(app, ko, socketObservable, Character, campaignService) {
 	var Campaign = function(init) {
 		var self = this;
 

@@ -1,8 +1,5 @@
-define(['durandal/plugins/router', 'durandal/app', 
-    'services/loginService', 'modules/cookie', 'modules/userRole', 
-    'models/user', 'viewmodels/createUser'], 
-function (router, app, loginService, cookie, userRole, User, 
-    createUser) {
+define(['durandal/app', 'knockout', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
+function (app, ko, loginService, cookie, userRole, User, createUser) {
     
     var authToken = "ccAuthToken";
     
@@ -47,15 +44,15 @@ function (router, app, loginService, cookie, userRole, User,
         };
         
         self.showCreateLogin = function() {
-            app.showModal(createUser)
-            .then(function(result) {
-                if (!result) //cancelled or failed
-                    return;
-                cookie.set(authToken, result);
-                self.setLogin(result);
-            }).fail(function(error) {
-                app.log("error", error);
-            }).done();
+            app.showDialog(createUser)
+                .then(function(result) {
+                    if (!result) //cancelled or failed
+                        return;
+                    cookie.set(authToken, result);
+                    self.setLogin(result);
+                }).fail(function(error) {
+                    app.log("error", error);
+                }).done();
         };
 
         self.logout = function () {

@@ -1,8 +1,4 @@
-//Fix jsLINT
-var ko = ko || {};
-
-define(['durandal/app'],
-function(app) {
+define(['durandal/app', 'knockout'], function(app, ko) {
     var User = function(init) {
         var self = this;
         self.id = ko.observable();
