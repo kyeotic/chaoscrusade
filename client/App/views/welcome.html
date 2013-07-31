@@ -7,5 +7,6 @@
 
 <div data-bind="foreach: campaigns">
 	<h4 data-bind="text: name"></h4><span data-bind="text: id"></span>
+	<button class="btn" data-bind="click: $parent.selectCampaign">Select</button>
 	<button class="btn btn-danger" data-bind="click: $parent.deleteCampaign">Delete</button>
 </div>

@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'models/campaign', 'data/dataContext', 'viewmodels/login'],
-function(app, ko, Campaign, dataContext, login) {
+define(['durandal/app', 'knockout', 'models/campaign', 'data/dataContext', 'viewmodels/login' , 'plugins/router'],
+function(app, ko, Campaign, dataContext, login, router) {
 
     var Welcome = function() {
         var self = this;
@@ -16,6 +16,11 @@ function(app, ko, Campaign, dataContext, login) {
 
         self.deleteCampaign = function(campaign) {
         	self.campaigns.remove(campaign);
+        };
+
+        self.selectCampaign = function(campaign) {
+            var result = router.navigate('#campaign/' + campaign.id());
+            app.log(result);
         };
     };
     

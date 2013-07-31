@@ -3,7 +3,8 @@ define(['plugins/router'], function(router) {
     var roles = {
         user: [
             //Navs
-            { route: '', moduleId: 'viewmodels/welcome', title: 'Home', nav: true}
+            { route: '', moduleId: 'viewmodels/welcome', title: 'Home', nav: true},
+            { route: 'campaign/:id', moduleId: 'viewmodels/campaignPage', title: 'Campaign', nav: false}
             
             //Routes
         ]
@@ -17,6 +18,8 @@ define(['plugins/router'], function(router) {
 
         router.map(role).buildNavigationModel();
 
+        window.router = router;
+        
         return true;
     };
     

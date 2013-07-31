@@ -1,4 +1,4 @@
-define(['knockout', 'models/user', 'modules/loginService'],
+define(['knockout', 'models/user', 'services/loginService'],
 function(ko, User, loginService) {
     
     var CreateUser = function() {
