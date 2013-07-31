@@ -14,7 +14,7 @@ function (router, ko, app, login) {
                 app.log("login required");
                 
                 return app.showDialog(login).then(function(dialogResult){
-                    router.activate();
+                    return router.activate();
                 });
             }
             app.log("login active");
