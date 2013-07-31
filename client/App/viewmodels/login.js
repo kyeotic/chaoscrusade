@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
-function (app, ko, loginService, cookie, userRole, User, createUser) {
+define(['durandal/app', 'knockout', 'plugins/dialog', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
+function (app, ko, dialog, loginService, cookie, userRole, User, createUser) {
     
     var authToken = "ccAuthToken";
     
@@ -39,8 +39,7 @@ function (app, ko, loginService, cookie, userRole, User, createUser) {
             //Trigger other viewmodel updates
             app.trigger('userlogin', response.user);
             
-            if (self.modal)
-                self.modal.close(true);
+            dialog.close(self, true);
         };
         
         self.showCreateLogin = function() {

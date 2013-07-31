@@ -14,11 +14,11 @@ function (router, ko, app, login) {
                 app.log("login required");
                 
                 return app.showDialog(login).then(function(dialogResult){
-                    router.activate(router.navigationModel()[0].url);
+                    router.activate();
                 });
             }
             app.log("login active");
-            return router.activate(router.navigationModel()[0].url);
+            return router.activate();
         };
         
         //Used by the logout binding on the top bar

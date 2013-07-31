@@ -3,7 +3,7 @@ define(['plugins/router'], function(router) {
     var roles = {
         user: [
             //Navs
-            { route: 'home', moduleId: 'viewmodels/welcome', title: 'Home', nav: true}
+            { route: '', moduleId: 'viewmodels/welcome', title: 'Home', nav: true}
             
             //Routes
         ]
