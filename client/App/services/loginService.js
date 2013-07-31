@@ -1,4 +1,4 @@
-define(['durandal/plugins/router', 'durandal/app', 'modules/serviceBase'], 
+define(['plugins/router', 'durandal/app', 'modules/serviceBase'], 
 function (router, app, serviceBase) {
 	return {
 		login: function(username, password) {

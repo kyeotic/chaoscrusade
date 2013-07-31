@@ -1,4 +1,4 @@
-define(['durandal/app', 'data/socketObservable'], function(app) {
+define(['durandal/app', 'data/socketObservable'], function(app, socketObservable) {
 	var Skill = function(init) {
 		var self = this;
 

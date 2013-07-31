@@ -1,13 +1,12 @@
 require.config({
     paths: {
-        'text': '../lib/require/text'
-        , 'durandal':'../lib/durandal/js'
-        , 'plugins' : '../lib/durandal/js/plugins'
-        , 'transitions' : '../lib/durandal/js/transitions'
-        , 'knockout': '../lib/knockout-2.3.0'
-        , 'bootstrap': '../lib/bootstrap/js/bootstrap'
-        , 'jquery': '../lib/jquery-1.9.1'
-        , 'lib' : '../lib'
+        'text': '../lib/require/text',
+        'durandal':'../lib/durandal/js',
+        'plugins' : '../lib/durandal/js/plugins',
+        'transitions' : '../lib/durandal/js/transitions',
+        'knockout': '../lib/knockout-2.3.0',
+        'bootstrap': '../lib/bootstrap/js/bootstrap',
+        'jquery': '../lib/jquery-1.9.1'
     },
     shim: {
         'bootstrap': {

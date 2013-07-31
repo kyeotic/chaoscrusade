@@ -1,4 +1,3 @@
-define(['durandal/app']
-,function(app){
+define(['durandal/app'] ,function(app){
 	return {};
 });
