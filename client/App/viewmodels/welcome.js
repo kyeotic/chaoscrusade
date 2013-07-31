@@ -19,8 +19,9 @@ function(app, ko, Campaign, dataContext, login, router) {
         };
 
         self.selectCampaign = function(campaign) {
-            var result = router.navigate('#campaign/' + campaign.id());
-            app.log(result);
+            app.log('navigating');
+            //router.navigate('campaign/' + campaign.id());
+            router.navigate('campaign/' + campaign.id(), true);
         };
     };
     

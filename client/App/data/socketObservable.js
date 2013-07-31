@@ -43,7 +43,7 @@ function(app, ko, socket, socketService) {
 
 		var setupSetSockets = function() {
 			
-			app.log("Registering SocketSet " + setName);
+			app.log("Registering SocketSet", eventName);
 
 			//Subscribe to socket
 			var add = socket.on(eventName + "|added", function(newElement) {
@@ -61,25 +61,24 @@ function(app, ko, socket, socketService) {
 				set.remove(item);
 				socketUpdating = false;
 			});
-
 			
 
 			//Load data into set without tell the socketService that WE added it
 			set.loadSet = function(data) {
-				socketUpdating = true;
-				set.map(data, Constructor);
-				socketUpdating = false;		
-			};
-
-			//Load the set from the socket Api
-			set.getSet = function() {
-				return socketService.get(eventName)
+				//Load the data param
+				if (data) {
+					socketUpdating = true;
+					set.map(data, Constructor);
+					socketUpdating = false;	
+				} else { //Or load the set from the service
+					return socketService.get(eventName)
 						.then(function(response) {
 							socketUpdating = true;
 							set.map(response, Constructor);
 							socketUpdating = false;	
 							return set();
 						});
+				}
 			};
 
 			set.unloadSet = function() {
@@ -92,7 +91,6 @@ function(app, ko, socket, socketService) {
 				add.destroy();
 				remove.destory();
 			};
-
 		};
 
 		//The ParentID doesn't exist yet, but it will be set by the first save 
@@ -142,7 +140,7 @@ function(app, ko, socket, socketService) {
 			});
 
 		var setupModelSockets = function() {
-			app.log("Registering SocketModel " + modelName);
+			app.log("Registering SocketModel", self);
 
 			var sockets = [];
 
