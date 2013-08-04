@@ -9,7 +9,7 @@ module.exports = function(app) {
 			if (!error) {
 				res.json(result);
 
-				if(eventName !== null)
+				if(eventName !== null && req.socketId !== undefined)
 					app.sockets.broadcast(req.socketId, eventName, result);
 			} else {
 				console.log(error.message);

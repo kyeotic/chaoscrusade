@@ -17,7 +17,7 @@ require.config({
     waitSeconds: 30
 });
 
-define(['durandal/system', 'durandal/app', 'durandal/viewLocator'],
+define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'data/socketBind'],
 function(system, app, viewLocator) {
 
     //>>excludeStart("build", true);

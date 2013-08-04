@@ -13,7 +13,7 @@ function(app, ko, socket, socketService) {
 
 	//Root sets do not pass a parentSetName or parentId
 	//The event name will just filter them out
-	var ObservableSet = function(setName, Constructor, parentSetName, parentId) {
+	var socketSet = function(setName, Constructor, parentSetName, parentId) {
 		var set = ko.observableArray(),
 			socketUpdating = false,
 			eventName = getEventName(parentSetName, ko.unwrap(parentId), setName);;
@@ -54,7 +54,7 @@ function(app, ko, socket, socketService) {
 
 			var remove = socket.on(eventName + '|removed', function(oldElement) {
 				var item = set().find(function(i) {
-					return ko.unwrap(i.id) == oldElement.id;
+					return ko.unwrap(i.id) == oldElement;
 				});
 
 				socketUpdating = true;
@@ -76,7 +76,7 @@ function(app, ko, socket, socketService) {
 							socketUpdating = true;
 							set.map(response, Constructor);
 							socketUpdating = false;	
-							return set();
+							return set;
 						});
 				}
 			};
@@ -116,8 +116,8 @@ function(app, ko, socket, socketService) {
 		return set;
 	};
 
-	var ObservableModel = function(modelName, map) {
-		var self = this,
+	var socketModel = function(model, modelName, map) {
+		var self = model,
 			id = ko.unwrap(map.id),
 			keys = Object.keys(map).exclude('id'),
 			socketUpdating = false;
@@ -181,8 +181,6 @@ function(app, ko, socket, socketService) {
 		
 	};
 
-	return {
-		Set: ObservableSet,
-		Model: ObservableModel
-	};
+	ko.socketSet = socketSet;
+	ko.socketModel = socketModel;
 });

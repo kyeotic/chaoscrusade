@@ -14,7 +14,7 @@ module.exports = function(db, models) {
 		infamy: Number,
 		wounds: Number,
 		corruption: Number,
-		skills: [{ type: db.Schema.Types.ObjectId, ref: 'Skills'}]
+		skills: [{ type: db.Schema.Types.ObjectId, ref: 'skills'}]
 	});
 
 	// Ensure virtual fields are serialised.

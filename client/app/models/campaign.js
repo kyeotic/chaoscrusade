@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'data/socketObservable', 'models/character', 'services/campaignService'],
-function(app, ko, socketObservable, Character, campaignService) {
+define(['durandal/app', 'knockout', 'models/character', 'services/campaignService'],
+function(app, ko, Character, campaignService) {
 	var Campaign = function(init) {
 		var self = this;
 
@@ -9,16 +9,16 @@ function(app, ko, socketObservable, Character, campaignService) {
 			gmId: init.gmId || ''
 		};
 
-		socketObservable.Model.call(self, 'campaign', map);
+		ko.socketModel(self, 'campaigns', map);
 
-		self.characters = socketObservable.Set('character', Character, 'campaign', self.id);
+		self.characters = ko.socketSet('characters', Character, 'campaigns', self.id);
 
-		self.loadCharacters = function() {
-			campaignService.getCharacters(self.id())
-				.then(function(characters) {
-					self.characters.loadSet(characters);
-				})
-				.fail(app.log).done();
+		self.load = function() {
+			return self.characters.loadSet(characters);
+		};
+
+		self.unload = function() {
+			self.characters.unloadSet();
 		};
 
 		self.charactersLoaded = ko.computed(function() {

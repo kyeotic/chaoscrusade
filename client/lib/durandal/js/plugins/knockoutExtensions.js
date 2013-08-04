@@ -15,6 +15,16 @@ define(['knockout'], function(ko) {
 		    return this.peek().length;
 		};
 
+		ko.subscribable.fn.subscribeChanged = function(callback) {
+		    var previousValue;
+		    this.subscribe(function(_previousValue) {
+		        previousValue = _previousValue;
+		    }, undefined, 'beforeChange');
+		    this.subscribe(function(latestValue) {
+		        callback(latestValue, previousValue );
+		    });
+		};
+
 		ko.observableArray.fn.subscribeArrayChanged = function(addCallback, deleteCallback) {
 		    var previousValue = undefined;
 		    this.subscribe(function(_previousValue) {

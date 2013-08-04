@@ -1,8 +1,8 @@
-define(['durandal/app', 'data/socketObservable'], function(app, socketObservable) {
+define(['durandal/app', 'knockout'], function(app, ko) {
 	var Skill = function(init) {
 		var self = this;
 
-		socketObservable.Model.call(self, 'skill', {
+		ko.socketModel(self, 'skill', {
 			id: init.id || '',
 			name: init.name || '',
 			text: init.text || '',

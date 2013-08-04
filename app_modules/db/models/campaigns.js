@@ -5,7 +5,7 @@ module.exports = function(db, models) {
         //id and _id are creatd by the system
         gmId: db.Schema.Types.ObjectId,
         name: String,
-        characters: [{ type: db.Schema.Types.ObjectId, ref: 'Characters' }]
+        characters: [{ type: db.Schema.Types.ObjectId, ref: 'characters' }]
     });
 
     // Ensure virtual fields are serialised.

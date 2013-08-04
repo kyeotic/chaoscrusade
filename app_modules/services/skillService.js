@@ -1,8 +1,8 @@
 module.exports = function(app) {
 
-	var Collection = app.db.Campaigns,
-		setName = 'campaigns',
-		itemName = 'campaign',
+	var Collection = app.db.Skills,
+		setName = 'skills',
+		itemName = 'skill',
 		j = '|';
 
 	//callback(error, eventName, result)

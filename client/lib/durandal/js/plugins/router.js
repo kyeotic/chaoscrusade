@@ -517,6 +517,11 @@ define(['durandal/system', 'durandal/app', 'durandal/activator', 'durandal/event
             return history.navigate(fragment, options);
         };
 
+        //You've got to be fucking kidding me. How is this not the default?
+        router.navigateTo = function(fragment, options) {
+            return router.navigate(fragment, options || true);
+        };
+
         /**
          * Navigates back in the browser history.
          * @method navigateBack
