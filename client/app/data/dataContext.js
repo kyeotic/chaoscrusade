@@ -34,5 +34,7 @@ function(ko, app, Campaign, Skill) {
 		latestValue.load();
 	});
 
+	window.dataContext = dataContext;
+
 	return dataContext;
 });

@@ -1,3 +1,13 @@
 <div>
-	<h2>Campaign</h2>
+	<div data-bind="with: campaign">
+		<h2 data-bind="text: 'Campaign: ' + id()"></h2>
+
+		<button class="btn" data-bind="command: $parent.addCharacter">Add Character</button>
+
+		<div data-bind="foreach: characters">
+			<span data-bind="text: id"></span>
+			<input data-bind="value: name" /><br/>
+		</div>
+
+	</div>
 </div>

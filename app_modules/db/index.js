@@ -6,6 +6,7 @@ var models = {};
 //Setup Schema
 require('./models/users')(mongoose, models);
 require('./models/campaigns')(mongoose, models);
+require('./models/characters')(mongoose, models);
 
 //console.log(models.Campaigns.schema.paths);
 //console.log(models.Campaigns.schema.tree.characters[0]);

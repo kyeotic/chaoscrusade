@@ -1,5 +1,5 @@
 module.exports = function(db, models) {
-	var setName = 'Skills';
+	var setName = 'skills';
 
     var set = new db.Schema({
         //id and _id are creatd by the system

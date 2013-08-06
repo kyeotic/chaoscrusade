@@ -14,5 +14,5 @@ module.exports = function(db, models) {
     users.set('toJSON', { virtuals: true });
     
     //add the models to our simplified models collection
-    models.Users = db.model('Users', users);
+    models.Users = db.model('users', users);
 };

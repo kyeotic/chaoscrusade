@@ -1,6 +1,6 @@
 module.exports = function(app) {
     var hasher = app.hasher;
-    var Users = app.db.Users;
+    var Users = app.db.users;
     
     var isUsernameAvailable = function(username, callback) {
         Users.count({usernameLower: username.toLowerCase()}, function(err, count) {

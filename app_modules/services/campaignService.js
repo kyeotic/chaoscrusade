@@ -1,6 +1,6 @@
 module.exports = function(app) {
 
-	var Collection = app.db.Campaigns,
+	var Collection = app.db.campaigns,
 		setName = 'campaigns',
 		itemName = 'campaign',
 		j = '|';

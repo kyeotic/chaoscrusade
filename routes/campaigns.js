@@ -1,6 +1,6 @@
 module.exports = function(app) {   
     var auth = app.tokenAuth;
-    var Campaigns = app.db.Campaigns;
+    var Campaigns = app.db.campaigns;
 
 
     app.get('/campaigns', auth.requireToken, function(req, res) {

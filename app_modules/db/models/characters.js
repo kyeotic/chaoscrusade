@@ -1,7 +1,10 @@
 module.exports = function(db, models) {
-	var setName = 'Characters';
+	var setName = 'characters';
 
 	var set = new db.Schema({
+		name: String,
+		campaignId: { type: db.Schema.Types.ObjectId, ref: 'campaigns'},
+		ownerId: { type: db.Schema.Types.ObjectId, ref: 'users'},
 		weaponSkill: Number,
 		ballisticSkill: Number,
 		strength: Number,

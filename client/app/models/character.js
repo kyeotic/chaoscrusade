@@ -5,6 +5,9 @@ function(ko, app){
 
 		var map = {
 			id: data.id || '',
+			name: data.name || '',
+			campaignId: data.campaignId || '',
+			ownerId: data.ownerId || '', 
 			weaponSkill: data.weaponSkill || 0,
 			ballisticSkill: data.ballisticSkill || 0,
 			strength: data.strength || 0,

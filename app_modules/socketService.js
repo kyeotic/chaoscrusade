@@ -38,6 +38,9 @@ module.exports = function(app) {
 			id = eventData[1],
 			childModel = eventData[2];
 
+		console.log(eventData);
+		console.log(model, id, childModel);
+
 		if (childModel === undefined) { //Root
 			map[model].insert(token, item, callback);
 		} else { //Sub

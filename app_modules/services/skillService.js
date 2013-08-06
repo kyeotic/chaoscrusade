@@ -1,6 +1,6 @@
 module.exports = function(app) {
 
-	var Collection = app.db.Skills,
+	var Collection = app.db.skills,
 		setName = 'skills',
 		itemName = 'skill',
 		j = '|';
