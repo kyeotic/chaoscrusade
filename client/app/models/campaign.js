@@ -14,7 +14,7 @@ function(app, ko, Character, campaignService) {
 		self.characters = ko.socketSet('characters', Character, 'campaigns', self.id);
 
 		self.load = function() {
-			return self.characters.loadSet(characters);
+			return self.characters.loadSet();
 		};
 
 		self.unload = function() {
