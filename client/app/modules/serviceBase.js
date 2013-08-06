@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'durandal/system'],
-function (app, ko, system) {
+define(['durandal/app', 'knockout'],
+function (app, ko) {
     
     var authToken = { 'x-auth-token' : null, 'x-socket-id': null };
     
@@ -32,7 +32,7 @@ function (app, ko, system) {
     };
 
     var deferAjax = function(ajaxCall) {
-        return system.defer(function(deferred) {
+        return app.defer(function(deferred) {
             ajaxCall.success = function (response) {
                 deferred.resolve(response);
             };

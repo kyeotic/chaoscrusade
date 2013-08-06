@@ -10,15 +10,7 @@ function (router, ko, app, login) {
         self.router = router;
         
         self.activate = function () {
-            if(login.user().id().length === 0){
-                app.log("login required");
-                
-                return app.showDialog(login).then(function(dialogResult){
-                    return router.activate();
-                });
-            }
-            app.log("login active");
-            return router.activate();
+            return login.show();
         };
         
         //Used by the logout binding on the top bar
@@ -27,12 +19,7 @@ function (router, ko, app, login) {
         };
         
         //Also used by top bar
-        self.loggedInUser = ko.computed(function() {
-            var id = login.user().id();
-            if (id.length === 0 || id === 0)
-                return null;
-            return login.user();
-        });
+        self.loggedInUser = login.loggedInUser;
     };
     
     return new Shell();

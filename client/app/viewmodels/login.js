@@ -41,6 +41,26 @@ function (app, ko, dialog, loginService, cookie, userRole, User, createUser) {
             
             dialog.close(self, true);
         };
+
+        self.show = function() {
+            if(self.user().id().length === 0){
+                app.log("login required");
+                
+                return app.showDialog(self).then(function(dialogResult){
+                    return router.activate();
+                });
+            }
+
+            app.log("login active");
+            return router.activate();
+        };
+
+        self.loggedInUser = ko.computed(function() {
+            var id = self.user().id();
+            if (id.length === 0 || id === 0)
+                return null;
+            return self.user();
+        });
         
         self.showCreateLogin = function() {
             app.showDialog(createUser)

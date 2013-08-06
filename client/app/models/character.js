@@ -4,6 +4,7 @@ function(ko, app){
 		var self = this;
 
 		var map = {
+			id: data.id || '',
 			weaponSkill: data.weaponSkill || 0,
 			ballisticSkill: data.ballisticSkill || 0,
 			strength: data.strength || 0,
@@ -18,6 +19,8 @@ function(ko, app){
 			corruption: data.corruption || 0
 		};
 
-		ko.socketModel(self, 'character', map);
+		ko.socketModel(self, 'character', map).then(function(result) {
+			app.log("character loaded", result);
+		});
 	};
 });

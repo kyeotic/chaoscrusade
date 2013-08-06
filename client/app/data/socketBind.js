@@ -117,68 +117,71 @@ function(app, ko, socket, socketService) {
 	};
 
 	var socketModel = function(model, modelName, map) {
-		var self = model,
-			id = ko.unwrap(map.id),
-			keys = Object.keys(map).exclude('id'),
-			socketUpdating = false;
+		return app.defer(function(deferred) {
+			var self = model,
+				id = ko.unwrap(map.id),
+				keys = Object.keys(map).exclude('id'),
+				socketUpdating = false;
 
-		self.id = ko.observable(id);
-
-		keys.forEach(function(property) {
-				self[property] = ko.observable(map[property]);
-				
-				self[property].subscribe(function(newValue) {
-					if (socketUpdating) {
-						return;
-					}
-
-					//The ID might be getting populated after this is run
-					//We don't want to close over the ID value, we need to get it fresh
-					var eventName = getEventName(modelName, self.id(), property);
-					socketService.post(eventName, newValue);
-				});
-			});
-
-		var setupModelSockets = function() {
-			app.log("Registering SocketModel", self);
-
-			var sockets = [];
+			self.id = ko.observable(id);
 
 			keys.forEach(function(property) {
+					self[property] = ko.observable(map[property]);
+					
+					self[property].subscribe(function(newValue) {
+						if (socketUpdating) {
+							return;
+						}
 
-				var eventName = getEventName(modelName, self.id(), property);
+						//The ID might be getting populated after this is run
+						//We don't want to close over the ID value, we need to get it fresh
+						var eventName = getEventName(modelName, self.id(), property);
+						socketService.post(eventName, newValue);
+					});
+				});
 
-				sockets.push(socket.on(eventName, function(newValue) {
-					socketUpdating = true;
-					self[property](newValue);
-					socketUpdating = false;
-				}));
+			var setupModelSockets = function() {
+				app.log("Registering SocketModel", self);
 
-			});
+				var sockets = [];
 
-			self.unsocket = function() {
-				sockets.forEach(function(s) { s.destroy(); });
+				keys.forEach(function(property) {
+
+					var eventName = getEventName(modelName, self.id(), property);
+
+					sockets.push(socket.on(eventName, function(newValue) {
+						socketUpdating = true;
+						self[property](newValue);
+						socketUpdating = false;
+					}));
+				});
+
+				self.unsocket = function() {
+					sockets.forEach(function(s) { s.destroy(); });
+				};
+
+				//Notify that setup has completed
+				deferred.resolve(self);
 			};
-		};
 
-		//The ID may not exist yet, but it will be set by the first save 
-		//Which should be occuring as a result of this creation, or soonafter
-		//We will subscribe to the ID, and register the rest of the model when it arrives
-		if (!map.id || id === 0 || id === '') {
-			var sub;
-			sub = self.id.subscribe(function(newValue) {
-				if ( newValue === 0 || newValue === '')
-					return; //We need a real value
+			//The ID may not exist yet, but it will be set by the first save 
+			//Which should be occuring as a result of this creation, or soonafter
+			//We will subscribe to the ID, and register the rest of the model when it arrives
+			if (!map.id || id === 0 || id === '') {
+				var sub;
+				sub = self.id.subscribe(function(newValue) {
+					if ( newValue === 0 || newValue === '')
+						return; //We need a real value
+					setupModelSockets();
+					sub.dispose();
+				});
+
+				//Make empty functions for the socket
+				self.unsocket = function() {};
+			} else {
 				setupModelSockets();
-				sub.dispose();
-			});
-
-			//Make empty functions for the socket
-			self.unsocket = function() {};
-		} else {
-			setupModelSockets();
-		}
-		
+			}
+		}).promise();
 	};
 
 	ko.socketSet = socketSet;
