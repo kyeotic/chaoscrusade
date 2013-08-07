@@ -15,35 +15,34 @@ function(app, ko, socket, socketService) {
 	//The event name will just filter them out
 	var socketSet = function(setName, Constructor, parentSetName, parentId) {
 		var set = ko.observableArray(),
-			socketUpdating = false,
-			eventName = getEventName(parentSetName, ko.unwrap(parentId), setName);;
+			socketUpdating = false;
 
 		if (parentId !== undefined && !ko.isObservable(parentId))
 			throw new Error("Child Observable Sets must have observable parentId");
 
-		//Publish to service
-		set.subscribeArrayChanged(
-			//Added
-			function(newElement) {
-				if (socketUpdating) {
-					return;
-				}
-				socketService.put(eventName, newElement).then(function(response) {
-					newElement.id(response.id);
-				});
-			},
-			//Removed
-			function(oldElement) {
-				if (socketUpdating) {
-					return;
-				}
-				socketService.remove(eventName, ko.unwrap(oldElement.id));
-			}
-		);
-
 		var setupSetSockets = function() {
-			
 			app.log("Registering SocketSet", eventName);
+
+			var eventName = getEventName(parentSetName, ko.unwrap(parentId), setName);
+			//Publish to service
+			set.subscribeArrayChanged(
+				//Added
+				function(newElement) {
+					if (socketUpdating) {
+						return;
+					}
+					socketService.put(eventName, newElement).then(function(response) {
+						newElement.id(response.id);
+					});
+				},
+				//Removed
+				function(oldElement) {
+					if (socketUpdating) {
+						return;
+					}
+					socketService.remove(eventName, ko.unwrap(oldElement.id));
+				}
+			);
 
 			//Subscribe to socket
 			var add = socket.on(eventName + "|added", function(newElement) {
@@ -60,25 +59,17 @@ function(app, ko, socket, socketService) {
 				socketUpdating = true;
 				set.remove(item);
 				socketUpdating = false;
-			});
-			
+			});			
 
 			//Load data into set without tell the socketService that WE added it
-			set.loadSet = function(data) {
-				//Load the data param
-				if (data) {
-					socketUpdating = true;
-					set.map(data, Constructor);
-					socketUpdating = false;	
-				} else { //Or load the set from the service
-					return socketService.get(eventName)
-						.then(function(response) {
-							socketUpdating = true;
-							set.map(response, Constructor);
-							socketUpdating = false;	
-							return set;
-						});
-				}
+			set.loadSet = function() {
+				return socketService.get(eventName)
+					.then(function(response) {
+						socketUpdating = true;
+						set.map(response, Constructor);
+						socketUpdating = false;	
+						return set;
+					});
 			};
 
 			set.unloadSet = function() {
@@ -96,7 +87,7 @@ function(app, ko, socket, socketService) {
 		//The ParentID doesn't exist yet, but it will be set by the first save 
 		//Which should be occuring as a result of this creation, or soonafter
 		//We will subscribe to the ParentID, and register the rest of the set when it arrives
-		if (parentId !== undefined && (parentId === '' || parentId === 0)) {
+		if (parentId !== undefined && (ko.unwrap(parentId) === '' || ko.unwrap(parentId) === 0)) {
 			var sub;
 			sub = parentId.subscribe(function(newValue) {
 				if (newValue === 0 || newValue === '')
