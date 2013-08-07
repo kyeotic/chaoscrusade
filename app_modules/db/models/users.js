@@ -1,6 +1,7 @@
-
 module.exports = function(db, models) {
-    var users = new db.Schema({
+    var setName = 'users';
+
+    var set = new db.Schema({
         //id and _id are creatd by the system
         firstName: String,
         lastName: String,
@@ -10,9 +11,14 @@ module.exports = function(db, models) {
         role: String
     });
 
+    var childrenToCascade = [];
+    set.methods.checkChildRemoveCascade = function(childModel) {
+        return childToCascade.indexOf(childModel) !== -1;
+    };
+
     // Ensure virtual fields are serialised.
-    users.set('toJSON', { virtuals: true });
+    set.set('toJSON', { virtuals: true });
     
     //add the models to our simplified models collection
-    models.Users = db.model('users', users);
+    models[setName] = db.model(setName, set);
 };

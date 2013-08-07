@@ -10,6 +10,12 @@ module.exports = function(db, models) {
         characteristic: String
     });
 
+    var childrenToCascade = [];
+    set.methods.checkChildRemoveCascade = function(property) {
+        return childToCascade.indexOf(property) !== -1;
+    };
+
+
     // Ensure virtual fields are serialised.
     set.set('toJSON', { virtuals: true });
     

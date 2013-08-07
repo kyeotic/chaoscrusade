@@ -8,6 +8,13 @@ module.exports = function(db, models) {
         characters: [{ type: db.Schema.Types.ObjectId, ref: 'characters' }]
     });
 
+    //Servicebase needs a generic way to determine whether or not to delete
+    //The referered document during removal of a child
+    var childToCascade = ['characters'];
+    set.methods.checkChildRemoveCascade = function(childModel) {
+        return childToCascade.indexOf(childModel) !== -1;
+    };
+
     // Ensure virtual fields are serialised.
 	set.set('toJSON', { virtuals: true });
 	    

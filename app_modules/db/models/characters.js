@@ -20,6 +20,11 @@ module.exports = function(db, models) {
 		skills: [{ type: db.Schema.Types.ObjectId, ref: 'skills'}]
 	});
 
+    var childrenToCascade = []; //none yet
+    set.methods.checkChildRemoveCascade = function(property) {
+        return childToCascade.indexOf(property) !== -1;
+    };
+
 	// Ensure virtual fields are serialised.
 	set.set('toJSON', { virtuals: true });
 
