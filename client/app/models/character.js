@@ -22,7 +22,7 @@ function(ko, app){
 			corruption: data.corruption || 0
 		};
 
-		ko.socketModel(self, 'character', map).then(function(result) {
+		ko.socketModel(self, 'characters', map).then(function(result) {
 			app.log("character loaded", result);
 		});
 	};

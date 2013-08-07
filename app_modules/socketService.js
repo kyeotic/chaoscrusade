@@ -65,6 +65,9 @@ module.exports = function(app) {
 			id = eventData[1],
 			property = eventData[2];
 
+		if (newValue.__data__)
+			newValue = newValue.__data__;
+
 		map[model].update(token, id, property, newValue, callback);
 	};
 

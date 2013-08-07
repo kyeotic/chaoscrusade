@@ -33,9 +33,8 @@ module.exports = function(app) {
 		serviceBase.removeChild(id, childModel, childId, callback);
 	};
 
-
 	var update = function(token, modelId, property, newValue, callback) {
-		serviceBase(modelId, property, newValue, callback);
+		serviceBase.update(modelId, property, newValue, callback);
 	};
 
 	return {

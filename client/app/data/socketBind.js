@@ -143,11 +143,15 @@ function(app, ko, socket, socketService) {
 						if (socketUpdating) {
 							return;
 						}
-						socketService.post(eventName, newValue);
+
+						var post = newValue;
+						if (typeof post === "string" || typeof post === "number")
+							post = { __data__ : newValue};
+						socketService.post(eventName, post);
 					});
 
 					//Subscribe to socket changes
-					sockets.push(socket.on(eventName, function(newValue) {
+					sockets.push(socket.on(eventName + '|changed', function(newValue) {
 						socketUpdating = true;
 						self[property](newValue);
 						socketUpdating = false;
