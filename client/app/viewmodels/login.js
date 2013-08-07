@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'plugins/dialog', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
-function (app, ko, dialog, loginService, cookie, userRole, User, createUser) {
+define(['durandal/app', 'knockout', 'plugins/dialog', 'data/dataContext', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
+function (app, ko, dialog, dataContext, loginService, cookie, userRole, User, createUser) {
     
     var authToken = "ccAuthToken";
     
@@ -38,21 +38,30 @@ function (app, ko, dialog, loginService, cookie, userRole, User, createUser) {
             
             //Trigger other viewmodel updates
             app.trigger('userlogin', response.user);
-            
+
             dialog.close(self, true);
+
+            
         };
 
         self.show = function() {
             if(self.user().id().length === 0){
                 app.log("login required");
                 
-                return app.showDialog(self).then(function(dialogResult){
-                    return router.activate();
-                });
+                return app.showDialog(self)
+                    .then(function() {
+                        return dataContext.load();
+                    })
+                    .then(function(dialogResult) {
+                        return router.activate();
+                    });
             }
 
             app.log("login active");
-            return router.activate();
+
+            return dataContext.load().then(function() {
+                router.activate();
+            });
         };
 
         self.loggedInUser = ko.computed(function() {

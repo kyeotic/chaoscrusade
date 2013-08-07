@@ -41,7 +41,6 @@ app.db = require('./app_modules/db');
 
 //Socket Handler
 app.socketService = require('./app_modules/socketService')(app);
-
 //console.log(app.socketService.insert);
 
 // Routes

@@ -126,19 +126,8 @@ function(app, ko, socket, socketService) {
 			self.id = ko.observable(id);
 
 			keys.forEach(function(property) {
-					self[property] = ko.observable(map[property]);
-					
-					self[property].subscribe(function(newValue) {
-						if (socketUpdating) {
-							return;
-						}
-
-						//The ID might be getting populated after this is run
-						//We don't want to close over the ID value, we need to get it fresh
-						var eventName = getEventName(modelName, self.id(), property);
-						socketService.post(eventName, newValue);
-					});
-				});
+				self[property] = ko.observable(map[property]);
+			});
 
 			var setupModelSockets = function() {
 				app.log("Registering SocketModel", self);
@@ -149,6 +138,15 @@ function(app, ko, socket, socketService) {
 
 					var eventName = getEventName(modelName, self.id(), property);
 
+					//Subscribe to local changes
+					self[property].subscribe(function(newValue) {
+						if (socketUpdating) {
+							return;
+						}
+						socketService.post(eventName, newValue);
+					});
+
+					//Subscribe to socket changes
 					sockets.push(socket.on(eventName, function(newValue) {
 						socketUpdating = true;
 						self[property](newValue);

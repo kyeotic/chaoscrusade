@@ -4,8 +4,9 @@ function(app, ko, dataContext, login, Character) {
 		var self = this;
 
 		self.activate = function(campaignId) {
-			app.log('campaign page activating', arguments);
+			app.log('campaign page activating', arguments, dataContext.campaigns().length);
 			dataContext.selectCampaign(campaignId);
+			app.log(dataContext.selectedCampaign().characters());
 		};
 
 		self.campaign = dataContext.selectedCampaign;

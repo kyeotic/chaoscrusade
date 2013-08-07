@@ -10,10 +10,13 @@ function(ko, app, Campaign, Skill) {
 		selectedCampaign: ko.observable()
 	};
 
-	//This is the initial campaign load. We always want this set
-	dataContext.campaigns.loadSet().then(function(set) {
-		//app.log('campaigns loaded', ko.unwrap(set));
-	});
+	dataContext.load = function() {
+		return app.deferAll([
+			dataContext.campaigns.loadSet()
+		]).fail(function() {
+			app.log('dataContext failed to load');
+		});
+	};
 
 	dataContext.selectCampaign = function(campaignId) {
 		var campaign = dataContext.campaigns().find(function(c) {

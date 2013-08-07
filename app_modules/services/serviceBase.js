@@ -10,7 +10,7 @@ module.exports = function(app, setName, itemName) {
 	        });
 		},
 		getChildren: function(id, childModel, callback) {
-			collection.find().populate(childModel).exec(function(error, doc) {
+			collection.findById(id).populate(childModel).exec(function(error, doc) {
 				callback(error, null, doc[childModel]);
 			});
 		},
