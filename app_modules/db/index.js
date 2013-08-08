@@ -1,5 +1,9 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://serviceUser:prototransgenesis@linus.mongohq.com:10056/chaoscrusade');
+
+if (process.env.SERVER === "PROD"){
+	mongoose.connect('mongodb://tyrsius:' + process.env.DBPASS + '@localhost/chaoscrusade');
+} else
+	mongoose.connect('mongodb://serviceUser:prototransgenesis@linus.mongohq.com:10056/chaoscrusade');
 //mongoose.connect('mongodb://@localhost/chaoscrusade');
 var models = {};
 
