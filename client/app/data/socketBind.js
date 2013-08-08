@@ -21,9 +21,10 @@ function(app, ko, socket, socketService) {
 			throw new Error("Child Observable Sets must have observable parentId");
 
 		var setupSetSockets = function() {
+			
+			var eventName = getEventName(parentSetName, ko.unwrap(parentId), setName);
 			app.log("Registering SocketSet", eventName);
 
-			var eventName = getEventName(parentSetName, ko.unwrap(parentId), setName);
 			//Publish to service
 			set.subscribeArrayChanged(
 				//Added
