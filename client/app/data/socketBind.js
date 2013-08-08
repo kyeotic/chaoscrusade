@@ -108,7 +108,7 @@ function(app, ko, socket, socketService) {
 	};
 
 	var socketModel = function(model, modelName, map) {
-		if (!map.id)
+		if (map.id === undefined)
 			throw new Error("SocketModel's must have an id property");
 
 		return app.defer(function(deferred) {
