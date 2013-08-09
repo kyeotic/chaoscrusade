@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'plugins/dialog', 'models/user', 'services/loginService'],
-function(app, ko, dialog, User, loginService) {
+define(['durandal/app', 'jquery', 'knockout', 'plugins/dialog', 'models/user', 'services/loginService'],
+function(app, $, ko, dialog, User, loginService) {
     
     var CreateUser = function() {
         var self = this;

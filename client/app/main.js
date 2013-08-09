@@ -40,7 +40,7 @@ function(system, app, viewLocator) {
         qPatch: true
     });
 
-    app.title = 'ShiftWise Durandal';
+    app.title = 'Chaos Crusade';
     app.start().then(function () {
         //Replace 'viewmodels' in the moduleId with 'views' to locate the view.
         //Look for partial views in a 'views' folder in the root.
