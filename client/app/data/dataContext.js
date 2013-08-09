@@ -10,6 +10,26 @@ function(ko, app, Campaign, Skill) {
 		selectedCampaign: ko.observable()
 	};
 
+	dataContext.alignments = [
+		'Khorne',
+		'Tzeentch',
+		'Nurgle',
+		'Slaanesh',
+		'Unaligned'
+	];
+
+	dataContext.characteristics = [
+		'Weapon Skill',
+		'Ballistic Skill',
+		'Strength',
+		'Toughness',
+		'Agility',
+		'Intelligence',
+		'Perception',
+		'Willpower',
+		'Fellowship'
+	];
+
 	dataContext.load = function() {
 		return app.deferAll([ //This really is an array, stop "fixing" it
 			dataContext.campaigns.loadSet()

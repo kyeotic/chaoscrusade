@@ -4,6 +4,7 @@ define(['plugins/router'], function(router) {
 		user: [
 			//Navs
 			{ route: '', moduleId: 'viewmodels/welcome', title: 'Home', nav: true},
+			{ route: 'skillEntry', moduleId: 'viewmodels/skillEntry', title: 'Skills', nav: true},
 			
 			
 			//Routes

@@ -11,6 +11,7 @@ var models = {};
 require('./models/users')(mongoose, models);
 require('./models/campaigns')(mongoose, models);
 require('./models/characters')(mongoose, models);
+require('./models/skills')(mongoose, models);
 
 //console.log(models.Campaigns.schema.paths);
 //console.log(models.Campaigns.schema.tree.characters[0]);

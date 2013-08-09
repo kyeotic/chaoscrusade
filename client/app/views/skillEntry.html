@@ -1,0 +1,46 @@
+<div>
+	<h3>Add Skill</h3>
+	<form class="form-inline" data-bind="submit: addSkill, with: entrySkill">
+		<label>Name
+			<input data-bind="value: name" />
+		</label>
+		<label>Page
+			<input class="input-small" data-bind="value: page" />
+		</label>
+		<label>Alignment
+			<select data-bind="options: $parent.alignments, value: alignment"></select>
+		</label>
+		<label>Characteristic
+			<select data-bind="options: $parent.characteristics, value: characteristic"></select>
+		</label>
+		<button class="btn btn-primary" type="submit">Add</button>
+		<br/>
+		<label>Text
+			<textarea data-bind="value: text" rows=3></textarea>
+		</label>
+	</form>
+
+	<h3>Skills</h3>
+	<input data-bind="value: filter" />Search
+
+	<div data-bind="foreach: filteredSkills">
+		<span data-bind="text: id"></span>
+		<label>Name
+			<input data-bind="value: name" />
+		</label>
+		<label>Page
+			<input class="input-small" data-bind="value: name" />
+		</label>
+		<label>Alignment
+			<select data-bind="options: $parent.alignments, value: alignment"></select>
+		</label>
+		<label>Characteristic
+			<select data-bind="options: $parent.characteristics, value: characteristic"></select>
+		</label>
+		<button class="btn btn-danger" data-bind="clicK: $parent.removeSkill">Delete</button>
+		<br/>
+		<label>Text
+			<textarea data-bind="value: text" rows=3></textarea>
+		</label><br/>
+	</div>
+</div>

@@ -1,15 +1,18 @@
 define(['durandal/app', 'knockout'], function(app, ko) {
 	var Skill = function(init) {
-		var self = this;
+		var self = this,
+			init = init || {};
 
-		ko.socketModel(self, 'skill', {
+		var map = {
 			id: init.id || '',
 			name: init.name || '',
 			text: init.text || '',
 			page: init.page || 0,
 			alignment: init.alignment || '',
 			characteristic: init.characteristic || ''
-		})
+		};
+
+		ko.socketModel(self, 'skills', map);
 	};
 
 	return Skill;
