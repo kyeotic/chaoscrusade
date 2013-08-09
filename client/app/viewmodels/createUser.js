@@ -1,5 +1,5 @@
-define(['knockout', 'models/user', 'services/loginService'],
-function(ko, User, loginService) {
+define(['durandal/app', 'knockout', 'plugins/dialog', 'models/user', 'services/loginService'],
+function(app, ko, dialog, User, loginService) {
     
     var CreateUser = function() {
         var self = this;
@@ -22,20 +22,30 @@ function(ko, User, loginService) {
         self.user.username.subscribe(function(newValue) {
             self.checkUser();
         });
+
+        self.show = function() {
+            //This is a stopgap to force the showing of the login modal
+            setTimeout(function() {
+                var theDialog = dialog.getDialog(self);
+                $(theDialog.host).css('opacity', 1);
+            }, 1000)
+            
+            return app.showDialog(self);
+        };
         
         self.createLogin = function() {
             self.user.keepPassword = true;
             return loginService.createLogin(self.user)
                     .then(function(response) {
-                        if (self.modal)
-                            self.modal.close(response);
+                        if (dialog.getDialog(self))
+                            dialog.close(self, response);
                         return response;
                     });
         };
     
         self.cancel = function() {
-            if (self.modal)
-                self.modal.close(false);
+            if (dialog.getDialog(self))
+                    dialog.close(self, false);
             return false;
         };
     };

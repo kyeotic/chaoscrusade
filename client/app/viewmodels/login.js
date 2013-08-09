@@ -98,7 +98,7 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
         });
         
         self.showCreateLogin = function() {
-            app.showDialog(createUser)
+            createUser.show()
                 .then(function(result) {
                     if (!result) //cancelled or failed
                         return;
