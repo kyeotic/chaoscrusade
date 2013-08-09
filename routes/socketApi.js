@@ -42,8 +42,6 @@ module.exports = function(app) {
 		var eventData = req.params.eventName,
 			value = req.body;
 
-		console.log(eventData, value);
-
 		socketService.update(req.token, eventData, value, handlerCallback(req, res));
 	});
 };

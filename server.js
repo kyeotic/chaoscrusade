@@ -19,7 +19,7 @@ app.configure(function() {
     app.use(require("./app_modules/security/allowCors"));
     
     app.set('views', __dirname + '/views/');
-    app.engine('.html', require("./app_modules/htmlEngine.js"));
+    app.engine('.html', require("./app_modules/htmlEngine.js")({ port: port}));
     app.set('view engine', 'html');
 
     app.use(app.sockets.middleware);

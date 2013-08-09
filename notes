@@ -23,10 +23,13 @@ Data Model
 
 Users
 	
+Have Collection per type? (Skill, talent?)
+Or prop per ptype?
 Advancement
 	RuleID
-	Alignment at purchase
-	Xp Cost
+	Character Alignment at purchase
+	Xp Cost - base*alignmentMod
+	IsStarter - doesn't count toward alignment if char started with it
 
 Rules
 	Name

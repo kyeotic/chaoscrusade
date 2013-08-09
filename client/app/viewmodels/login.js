@@ -86,7 +86,7 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
             app.log("login active");
 
             return dataContext.load().then(function() {
-                router.activate();
+                return router.activate();
             });
         };
 

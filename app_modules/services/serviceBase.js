@@ -112,7 +112,7 @@ module.exports = function(app, setName, itemName) {
 					
 					doc.save(function(error) {
 						if (!error)
-							callback(null, [setName, modelId, 'changed'], newValue);
+							callback(null, [setName, modelId, property, 'changed'].join(seperator), newValue);
 						else
 							callback(new app.errors.ServerError('Unable to update '+itemName+'.'));
 					});
