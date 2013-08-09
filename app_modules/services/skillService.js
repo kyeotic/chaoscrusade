@@ -35,7 +35,7 @@ module.exports = function(app) {
 
 
 	var update = function(token, modelId, property, newValue, callback) {
-		serviceBase(modelId, property, newValue, callback);
+		serviceBase.update(modelId, property, newValue, callback);
 	};
 
 	return {
