@@ -28,8 +28,9 @@ define(['knockout', 'jquery'], function(ko, $) {
             var self = function () {
                 return self.execute.apply(this, arguments);
             };
-            var canExecuteDelegate = options.canExecute;
-            var executeDelegate = options.execute;
+            
+            var canExecuteDelegate = options.canExecute,
+                executeDelegate = options.execute;
 
             self.isExecuting = ko.observable();
 
@@ -44,9 +45,11 @@ define(['knockout', 'jquery'], function(ko, $) {
 
                 self.isExecuting(true);
 
-                return Q.fapply(executeDelegate, [arg1, arg2]).then(function () {
+                //We can't return this and have a done() handler from the normal
+                //execute.
+                Q.fapply(executeDelegate, [arg1, arg2]).then(function () {
                     self.isExecuting(false);
-                });
+                }).done();
             };
 
             return self;

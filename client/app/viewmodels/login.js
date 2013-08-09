@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'plugins/dialog', 'data/dataContext', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
-function (app, ko, dialog, dataContext, loginService, cookie, userRole, User, createUser) {
+define(['durandal/app', 'jquery', 'knockout', 'plugins/dialog', 'data/dataContext', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
+function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User, createUser) {
     
     var authToken = "ccAuthToken";
     
@@ -17,16 +17,36 @@ function (app, ko, dialog, dataContext, loginService, cookie, userRole, User, cr
             self.password("");
             //Don't reset rememberMe, this should stick
         };
+
+        self.loginFailed = ko.observable(false);
+        self.loginFailed.subscribe(function(newValue) {
+            if (newValue)
+                setTimeout(function() {
+                    self.loginFailed(false);
+                }, 2000);
+        });
         
-        self.login = function(){
-            loginService.login(self.username(), self.password())
-            .then(function(response) {
-                cookie.set(authToken, response);
-                self.setLogin(response);
-            }).fail(function(error) {
-                console.log(error);
-            }).done();
-        };
+        self.login = ko.qCommand({
+            execute: function(){
+                return loginService.login(self.username(), self.password())
+                    .then(function(response) {
+                        cookie.set(authToken, response);
+                        self.setLogin(response);
+                    }).fail(function(error) {
+                        self.loginFailed(true);
+                        self.password('');
+                        app.log(error);
+                    });
+            },
+            canExecute: function(isExecuting) {
+                app.log("isExecuting", isExecuting);
+                return !isExecuting
+                        && self.password().length > 0
+                        && self.username().length > 0;
+            }
+        });
+
+        ;
         
         self.setLogin = function(response) {
             //Set User
@@ -47,6 +67,12 @@ function (app, ko, dialog, dataContext, loginService, cookie, userRole, User, cr
         self.show = function() {
             if(self.user().id().length === 0){
                 app.log("login required");
+
+                //This is a stopgap to force the showing of the login modal
+                setTimeout(function() {
+                    var theDialog = dialog.getDialog(self);
+                    $(theDialog.host).css('opacity', 1);
+                }, 1000)
                 
                 return app.showDialog(self)
                     .then(function() {

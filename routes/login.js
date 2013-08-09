@@ -18,24 +18,28 @@ module.exports = function(app) {
         var credentials = req.body.credentials;
         
         Users.findOne({usernameLower: credentials.username.toLowerCase()}).exec(function(error, user) {
-            var result = hasher.verify(credentials.password, user.passwordHash);
-            
-            //Document properties cannot be deleted
-            user.passwordHash = undefined;
-            console.log(user);
-            
-            if(result == hasher.results.failed) {
-                res.json(false);
+            console.log(error, user);
+            if (error || !user){
+                res.send(403, "Credentials invalid.");
             } else {
-                //update hash if needed
-                if (result == hasher.results.passedNeedsUpdate) {
-                    user.password = hasher.generate(user.password);
-                    store.save();
-                }
+                var result = hasher.verify(credentials.password, user.passwordHash);
+            
+                //Document properties cannot be deleted
+                user.passwordHash = undefined;
                 
-                var token = app.tokenAuth.generateUserToken(user);
-                res.json({ user: user, token: token });
-            }
+                if(result == hasher.results.failed) {
+                    res.send(403, "Credentials invalid.");
+                } else {
+                    //update hash if needed
+                    if (result == hasher.results.passedNeedsUpdate) {
+                        user.password = hasher.generate(user.password);
+                        store.save();
+                    }
+                    
+                    var token = app.tokenAuth.generateUserToken(user);
+                    res.json({ user: user, token: token });
+                }
+            }            
         });
     });
     
