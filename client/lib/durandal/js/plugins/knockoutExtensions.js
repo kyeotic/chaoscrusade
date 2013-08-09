@@ -1,6 +1,21 @@
 define(['knockout'], function(ko) {
 
 	var install = function() {
+
+		ko.bindingHandlers.enterKey = {
+		    init: function(element, valueAccessor, allBindings, data) {
+		        var handler = function(data, event) {
+		            if (event.keyCode === 13) {
+		                valueAccessor().call(data, data, event);
+		            };
+		        };
+		        var newValueAccessor = function() {
+		            return { keyup: handler };
+		        };
+		        ko.bindingHandlers.event.init(element, newValueAccessor, allBindings, data);
+		    }
+		};
+
 		ko.observableArray.fn.map = function(data, constructor) {
 		    this(ko.utils.arrayMap(data, function(i) {
 		        return new constructor(i);

@@ -18,7 +18,6 @@ module.exports = function(app) {
         var credentials = req.body.credentials;
         
         Users.findOne({usernameLower: credentials.username.toLowerCase()}).exec(function(error, user) {
-            console.log(error, user);
             if (error || !user){
                 res.send(403, "Credentials invalid.");
             } else {

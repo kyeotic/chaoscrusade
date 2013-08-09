@@ -39,7 +39,6 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
                     });
             },
             canExecute: function(isExecuting) {
-                app.log("isExecuting", isExecuting);
                 return !isExecuting
                         && self.password().length > 0
                         && self.username().length > 0;
@@ -126,6 +125,8 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
     var storedCookie = cookie.get(authToken);
     if (storedCookie)
         loginVM.setLogin(storedCookie);
+
+    app.loggedInUser = loginVM.loggedInUser;
     
     return loginVM;
 });

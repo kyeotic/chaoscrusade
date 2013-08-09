@@ -11,7 +11,7 @@ function(ko, app, Campaign, Skill) {
 	};
 
 	dataContext.load = function() {
-		return app.deferAll([
+		return app.deferAll([ //This really is an array, stop "fixing" it
 			dataContext.campaigns.loadSet()
 		]).fail(function() {
 			app.log('dataContext failed to load');

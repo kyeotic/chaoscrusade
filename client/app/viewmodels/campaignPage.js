@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 'models/character'], 
-function(app, ko, dataContext, login, Character) {
+define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 'models/character', 'viewmodels/ChatMessage'], 
+function(app, ko, dataContext, login, Character, ChatMessage) {
 	var CampaignPage = function() {
 		var self = this;
 
@@ -21,6 +21,18 @@ function(app, ko, dataContext, login, Character) {
 				self.campaign().characters.push(character);
 			}
 		});
+
+		self.deleteCharacter = function(character) {
+			self.campaign().characters.remove(character);
+		};
+
+
+		//Chat
+		self.messageInput = ko.observable('');
+		self.sendMessage = function(message) {
+			self.campaign().chatMessages.push(new ChatMessage({text: self.messageInput()}));
+			self.messageInput('');
+		};
 	};
 
 	return new CampaignPage();

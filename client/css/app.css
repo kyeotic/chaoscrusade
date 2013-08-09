@@ -79,4 +79,9 @@
     height: auto;
     margin-bottom: 15px;
     padding: 7px 9px;
-  }
+}
+
+.chat-messages {
+    max-height: 230px;
+    overflow: auto;
+}

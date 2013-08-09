@@ -20,6 +20,8 @@ define(['durandal/system', 'durandal/app'], function(system, app) {
 	    app.defer = system.defer;
 	    app.delay = system.delay;
 	    app.log = system.log;
+
+	    app.guid = system.guid;
     };
 
     return {

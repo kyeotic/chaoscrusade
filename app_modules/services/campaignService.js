@@ -22,7 +22,12 @@ module.exports = function(app) {
 	};
 
 	var insertChild = function(token, id, childModel, childItem, callback) {
-		serviceBase.insertChild(id, childModel, childItem, callback);
+		//Chat doesn't get stored
+		if (childModel === "chat") {
+			callback(null, ['campaigns', id, childModel, 'added'].join('|'), childItem);
+		} else {
+			serviceBase.insertChild(id, childModel, childItem, callback);
+		}		
 	};
 
 	var remove  = function(token, id, callback) {

@@ -6,8 +6,19 @@
 
 		<div data-bind="foreach: characters">
 			<span data-bind="text: id"></span>
-			<input data-bind="value: name" /><br/>
+			<input data-bind="value: name" />
+			<button class="btn btn-small btn-danger" data-bind="click: $parent.deleteCharacter">Delete</button><br/>
+		</div>
+	</div>
+
+	<div class="chat">
+		<div class="chat-messages" data-bind="foreach: campaign().chatMessages">
+			<div class="message-container">
+				<!-- ko compose: $data --><!-- /ko -->
+			</div>
 		</div>
 
+		<input  data-bind="value: messageInput, enterKey: sendMessage" rows="3"></input>
+		<button class="btn btn-small" data-bind="click: sendMessage">Send</button>
 	</div>
 </div>

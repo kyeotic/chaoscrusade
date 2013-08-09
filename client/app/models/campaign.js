@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'models/character', 'services/campaignService'],
-function(app, ko, Character, campaignService) {
+define(['durandal/app', 'knockout', 'models/character', 'services/campaignService', 'viewmodels/chatMessage'],
+function(app, ko, Character, campaignService, ChatMessage) {
 	var Campaign = function(init) {
 		var self = this;
 
@@ -12,13 +12,18 @@ function(app, ko, Character, campaignService) {
 		ko.socketModel(self, 'campaigns', map);
 
 		self.characters = ko.socketSet('characters', Character, 'campaigns', self.id);
+		self.chatMessages = ko.socketSet('chat', ChatMessage, 'campaigns', self.id);
 
 		self.load = function() {
-			return self.characters.loadSet();
+			return app.deferAll([
+				self.characters.loadSet(),
+				self.chatMessages.loadSet()
+			]);
 		};
 
 		self.unload = function() {
 			self.characters.unloadSet();
+			self.chatMessages.unloadSet();
 		};
 
 		self.charactersLoaded = ko.computed(function() {
