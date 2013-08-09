@@ -1,4 +1,4 @@
-define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 'models/character', 'viewmodels/ChatMessage'], 
+define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 'models/character', 'viewmodels/chatMessage'], 
 function(app, ko, dataContext, login, Character, ChatMessage) {
 	var CampaignPage = function() {
 		var self = this;
