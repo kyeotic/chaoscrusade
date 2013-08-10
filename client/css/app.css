@@ -85,3 +85,22 @@
     max-height: 230px;
     overflow: auto;
 }
+
+
+/* Skills Entry */
+
+.skills-list {
+    margin: 40px 0 0 0;
+}
+
+.skill-list-item {
+
+}
+
+.skill-list-item label {
+    display: inline;
+}
+
+.skill-list-item textarea {
+    width: 60%;
+}

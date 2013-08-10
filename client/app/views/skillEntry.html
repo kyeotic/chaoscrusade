@@ -21,26 +21,29 @@
 	</form>
 
 	<h3>Skills</h3>
-	<input data-bind="value: filter" />Search
+	<input data-bind="value: filter" placeholder="Search" />
+	
 
-	<div data-bind="foreach: filteredSkills">
-		<span data-bind="text: id"></span>
-		<label>Name
-			<input data-bind="value: name" />
-		</label>
-		<label>Page
-			<input class="input-small" data-bind="value: page" />
-		</label>
-		<label>Alignment
-			<select data-bind="options: $parent.alignments, value: alignment"></select>
-		</label>
-		<label>Characteristic
-			<select data-bind="options: $parent.characteristics, value: characteristic"></select>
-		</label>
-		<button class="btn btn-danger" data-bind="clicK: $parent.removeSkill">Delete</button>
-		<br/>
-		<label>Text
-			<textarea data-bind="value: text" rows=3></textarea>
-		</label><br/>
+	<div data-bind="foreach: filteredSkills" class="skills-list">
+		<div class="skill-list-item">
+			<span data-bind="text: name() + ' - ' + id()"></span><br/>
+			<label>Name
+				<input data-bind="value: name" />
+			</label>
+			<label>Page
+				<input class="input-small" data-bind="value: page" />
+			</label>
+			<label>Alignment
+				<select data-bind="options: $parent.alignments, value: alignment"></select>
+			</label>
+			<label>Characteristic
+				<select data-bind="options: $parent.characteristics, value: characteristic"></select>
+			</label>
+			<button class="btn btn-danger" data-bind="click: $parent.removeSkill">Delete</button>
+			<br/>
+			<label>Text
+				<textarea data-bind="value: text" rows=3></textarea>
+			</label><br/>
+		</div>
 	</div>
 </div>

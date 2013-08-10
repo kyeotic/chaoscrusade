@@ -10,9 +10,18 @@ function(app, ko, dataContext, Skill) {
 		self.entrySkill = ko.observable(new Skill());
 
 		self.addSkill = function() {
-			var copy = ko.toJS(self.entrySkill());
-			self.skills.push(new Skill(copy));
-			self.entrySkill(new Skill());
+			var name = self.entrySkill().name().toLowerCase();
+			var exists = self.skills().some(function (s) {
+				return s.name().toLowerCase() === name;
+			})
+
+			if (exists) {
+				app.showMessage('This skill already exists', 'Error');
+			} else {
+				var copy = ko.toJS(self.entrySkill());
+				self.skills.push(new Skill(copy));
+				self.entrySkill(new Skill());
+			}			
 		};
 
 		self.removeSkill = function(skill) {
@@ -21,9 +30,13 @@ function(app, ko, dataContext, Skill) {
 
 		self.filter = ko.observable('');
 		self.filteredSkills = ko.computed(function() {
-			var f = self.filter();
-			return self.skills().filter(function(s) {
-				return s.name().has(f);
+			var f = self.filter().toLowerCase();
+			var filtered = self.skills().filter(function(s) {
+				return s.name().toLowerCase().has(f);
+			});
+
+			return filtered.sortBy(function(s) {
+				return s.name();
 			});
 		});
 	};
