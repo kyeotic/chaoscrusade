@@ -34,6 +34,12 @@ function(app, ko, socket, socketService) {
 					}
 					socketService.put(eventName, newElement).then(function(response) {
 						newElement.id(response.id);
+					}).fail(function(error) {
+						socketUpdating = true;
+						set.remove(newElement);
+						socketUpdating = false;
+						app.log('Error', error);
+						app.showMessage('There was an error adding a ' + setName.singularize() + '. Please record the error and refresh the page.', 'Error');
 					});
 				},
 				//Removed
@@ -41,7 +47,14 @@ function(app, ko, socket, socketService) {
 					if (socketUpdating) {
 						return;
 					}
-					socketService.remove(eventName, ko.unwrap(oldElement.id));
+					socketService.remove(eventName, ko.unwrap(oldElement.id))
+						.fail(function(error) {
+							socketUpdating = true;
+							set.push(oldElement);
+							socketUpdating = false;
+							app.log('Error', error);
+							app.showMessage('There was an error removing a ' + setName.singularize() + '. Please record the error and refresh the page.', 'Error');
+						});
 				}
 			);
 
