@@ -32,7 +32,7 @@ function(app, ko, dataContext, Skill) {
 		self.filteredSkills = ko.computed(function() {
 			var f = self.filter().toLowerCase();
 			var filtered = self.skills().filter(function(s) {
-				return s.name().toLowerCase().has(f);
+				return s.name().toLowerCase().startsWith(f);
 			});
 
 			return filtered.sortBy(function(s) {
