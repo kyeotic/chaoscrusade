@@ -38,7 +38,7 @@ function(app, ko, dataContext, Skill) {
 			return filtered.sortBy(function(s) {
 				return s.name();
 			});
-		});
+		}).extend({throttle: 250});
 	};
 
 	return new SkillEntry();

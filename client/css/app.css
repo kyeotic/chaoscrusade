@@ -21,6 +21,7 @@
 .page-host {
     position: relative;
     top: 40px;
+    padding: 0 20px;
 }
 
 .navbar-fixed-top .navbar-inner {
@@ -90,17 +91,10 @@
 /* Skills Entry */
 
 .skills-list {
-    margin: 40px 0 0 0;
+    margin: 20px 0 0 0;
 }
 
 .skill-list-item {
-
-}
-
-.skill-list-item label {
-    display: inline;
-}
-
-.skill-list-item textarea {
-    width: 60%;
+    margin-top: 20px;
+    border-bottom: 1px solid grey;
 }

@@ -1,49 +1,79 @@
 <div>
 	<h3>Add Skill</h3>
-	<form class="form-inline" data-bind="submit: addSkill, with: entrySkill">
-		<label>Name
-			<input data-bind="value: name" />
-		</label>
-		<label>Page
-			<input class="input-small" data-bind="value: page" />
-		</label>
-		<label>Alignment
-			<select data-bind="options: $parent.alignments, value: alignment"></select>
-		</label>
-		<label>Characteristic
-			<select data-bind="options: $parent.characteristics, value: characteristic"></select>
-		</label>
-		<button class="btn btn-primary" type="submit">Add</button>
-		<br/>
-		<label>Text
-			<textarea data-bind="value: text" rows=3></textarea>
-		</label>
+	<form data-bind="submit: addSkill, with: entrySkill">
+		<div class="row">
+			<div class="span3">
+				<label>Name</label>
+				<input data-bind="value: name" class="span3" type="text" />
+			</div>
+			<div class="span1">
+				<label>Name</label>
+				<input class="input-mini" data-bind="value: page" class="span1" type="text" />
+			</div>
+			<div class="span2">
+				<label>Name</label>
+				<select data-bind="options: $parent.alignments, value: alignment" class="span2"></select>
+			</div>
+			<div class="span2">
+				<label>Name</label>
+				<select data-bind="options: $parent.characteristcis, value: characteristic" class="span2"></select>
+			</div>
+			<div class="span2">
+				<br/>
+				<button class="btn btn-primary" type="submit">Add</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span8">
+				<label>Text</label>
+				<textarea data-bind="value: text" rows=3 class="input-block-level" type="text"></textarea>
+			</div>
+			
+		</div>		
 	</form>
 
-	<h3>Skills</h3>
-	<input data-bind="value: filter" placeholder="Search" />
+	<h3>Skills
+	<input data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="Search" type="text" /></h3>
 	
 
 	<div data-bind="foreach: filteredSkills" class="skills-list">
 		<div class="skill-list-item">
-			<span data-bind="text: name() + ' - ' + id()"></span><br/>
-			<label>Name
-				<input data-bind="value: name" />
-			</label>
-			<label>Page
-				<input class="input-small" data-bind="value: page" />
-			</label>
-			<label>Alignment
-				<select data-bind="options: $parent.alignments, value: alignment"></select>
-			</label>
-			<label>Characteristic
-				<select data-bind="options: $parent.characteristics, value: characteristic"></select>
-			</label>
-			<button class="btn btn-danger" data-bind="click: $parent.removeSkill">Delete</button>
-			<br/>
-			<label>Text
-				<textarea data-bind="value: text" rows=3></textarea>
-			</label><br/>
+			<strong data-bind="text: name() + ' - ' + id()"></strong>
+			<div class="row">
+				<div class="span3">
+					<label>Name<br/>
+						<input data-bind="value: name" type="text" class="span3" />
+					</label>
+				</div>
+				<div class="span1">
+					<label>Page<br/>
+						<input class="input-mini" data-bind="value: page" type="text" />
+					</label>
+				</div>
+				<div class="span2">
+					<label>Alignment<br/>
+						<select data-bind="options: $parent.alignments, value: alignment" class="input-block-level"></select>
+					</label>
+				</div>
+				<div class="span2">
+					<label>Characteristic<br/>
+						<select data-bind="options: $parent.characteristics, value: characteristic" class="input-block-level"></select>
+					</label>
+				</div>
+
+				<div class="span2">
+					<br/>
+					<button class="btn btn-danger" data-bind="click: $parent.removeSkill">Delete</button>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="span8">
+					<label>Text<br/>
+						<textarea data-bind="value: text" rows=3 type="text" class="input-block-level"></textarea>
+					</label>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
