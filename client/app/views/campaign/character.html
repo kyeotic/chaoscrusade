@@ -1,0 +1,6 @@
+<div data-bind="with: selectedCharacter" class="campaign-character">
+	<h2 data-bind="text: id"></h2>
+	<input data-bind="value: name" type="text" />
+	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
+</div>
+

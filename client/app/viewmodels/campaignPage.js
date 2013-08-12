@@ -6,7 +6,7 @@ function(app, ko, dataContext, login, Character, ChatMessage) {
 		self.activate = function(campaignId) {
 			app.log('campaign page activating', arguments, dataContext.campaigns().length);
 			dataContext.selectCampaign(campaignId);
-			app.log(dataContext.selectedCampaign().characters());
+			//app.log(dataContext.selectedCampaign().characters());
 		};
 
 		self.campaign = dataContext.selectedCampaign;
@@ -24,16 +24,17 @@ function(app, ko, dataContext, login, Character, ChatMessage) {
 
 		self.deleteCharacter = function(character) {
 			self.campaign().characters.remove(character);
+			self.navHome();
 		};
 
 		//View
 		self.selectedCharacter = ko.observable(null);
-		self.view = ko.observable('home');
+		self.viewType = ko.observable('home');
 
-		self.navHome = function() { self.view('home'); self.selectedCharacter(null); };
-		self.navSettings = function() { self.view('settings'); self.selectedCharacter(null); };
+		self.navHome = function() { self.viewType('home'); self.selectedCharacter(null); };
+		self.navSettings = function() { self.viewType('settings'); self.selectedCharacter(null); };
 		self.navCharacter = function(character) {
-			self.view('character');
+			self.viewType('character');
 			self.selectedCharacter(character);
 		};
 

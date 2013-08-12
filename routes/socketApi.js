@@ -35,10 +35,7 @@ module.exports = function(app) {
 		var eventData = req.params.eventName;
 
 		//For value types, the id will just be the value, but this layer isn't concerned
-		//socketService.remove(req.token, eventData, handlerCallback(req, res));
-		setTimeout(function() {
-			res.send(503, "fuck you");
-		}, 1000);
+		socketService.remove(req.token, eventData, handlerCallback(req, res));
 		
 	});
 

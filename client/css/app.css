@@ -20,7 +20,7 @@
 
 .page-host {
     position: relative;
-    top: 40px;
+    top: 50px;
     padding: 0 20px;
 }
 
@@ -96,4 +96,10 @@
 
 .skill-list-item {
     margin-top: 20px;
+}
+
+
+/* Campaign Page */
+
+.campaign-character {
 }
