@@ -26,6 +26,17 @@ function(app, ko, dataContext, login, Character, ChatMessage) {
 			self.campaign().characters.remove(character);
 		};
 
+		//View
+		self.selectedCharacter = ko.observable(null);
+		self.view = ko.observable('home');
+
+		self.navHome = function() { self.view('home'); self.selectedCharacter(null); };
+		self.navSettings = function() { self.view('settings'); self.selectedCharacter(null); };
+		self.navCharacter = function(character) {
+			self.view('character');
+			self.selectedCharacter(character);
+		};
+
 
 		//Chat
 		self.messageInput = ko.observable('');

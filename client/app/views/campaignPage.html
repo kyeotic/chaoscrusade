@@ -1,24 +1,46 @@
 <div>
-	<div data-bind="with: campaign">
-		<h2 data-bind="text: 'Campaign: ' + id()"></h2>
+	<h2 data-bind="text: 'Campaign: ' + campaign().id()"></h2>
+	<div class="row">		
+		<div class="span2">
+			<ul class="nav nav-list">
+				<li class="nav-header">Campaign</li>
+				<li data-bind="css: { active: view() === 'home'}"><a href="#" data-bind="click: navHome">Home</a></li>
 
-		<button class="btn" data-bind="command: $parent.addCharacter">Add Character</button>
+				<li data-bind="css: { active: view() === 'settings'}">
+					<a href="#" data-bind="click: navSettings">Settings</a>
+				</li>
 
-		<div data-bind="foreach: characters">
-			<span data-bind="text: id"></span>
-			<input data-bind="value: name" />
-			<button class="btn btn-small btn-danger" data-bind="click: $parent.deleteCharacter">Delete</button><br/>
+				<li class="nav-header">Characters</li>
+				<!-- ko foreach: campaign().characters -->
+				<li data-bind="css: { active: selectedCharacter() == $data }">
+					<a href="#" data-bind="click: $parent.navCharacter, text: name"></a>
+				</li>
+				<!-- /ko -->
+				<li>
+					<a href="#" data-bind="command: addCharacter">
+						<i class="icon-plus"></i>Add Character
+					</a>
+				</li>
+			</ul>
 		</div>
-	</div>
 
-	<div class="chat">
-		<div class="chat-messages" data-bind="foreach: campaign().chatMessages">
-			<div class="message-container">
-				<!-- ko compose: $data --><!-- /ko -->
+
+		<div class="span7">
+			View placeholder
+			<span data-bind="text: view"></span>
+		</div>
+		
+
+		<div class="span3 chat">
+			<div class="chat-messages" data-bind="foreach: campaign().chatMessages">
+				<div class="message-container">
+					<!-- ko compose: $data --><!-- /ko -->
+				</div>
 			</div>
-		</div>
 
-		<input  data-bind="value: messageInput, enterKey: sendMessage" rows="3"></input>
-		<button class="btn btn-small" data-bind="click: sendMessage">Send</button>
+			<input  data-bind="value: messageInput, enterKey: sendMessage" rows="3"></input>
+			<button class="btn btn-small" data-bind="click: sendMessage">Send</button>
+		</div>
 	</div>
+
 </div>
