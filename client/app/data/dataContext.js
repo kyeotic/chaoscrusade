@@ -27,6 +27,8 @@ function(ko, app, Campaign, Skill) {
 		'Fellowship'
 	];
 
+	//The campaigns need to load to allow the router to select the campaign
+	//A lot of stuff also depends on the "root" sets being populated
 	dataContext.load = function() {
 		return app.deferAll([ //This really is an array, stop "fixing" it
 			dataContext.campaigns.loadSet(),
@@ -74,6 +76,8 @@ function(ko, app, Campaign, Skill) {
 		//Latest value might be empty
 		if (latestValue) {			
 			app.log(['loading campaign', latestValue.id()]);
+
+			//Trying to add .done() here errors, no idea why
 			latestValue.load();	
 		}
 	});

@@ -3,21 +3,20 @@ module.exports = function(db, models) {
 
     var set = new db.Schema({
         //id and _id are creatd by the system
-        character: db.Schema.Types.ObjectId,
-        skill: db.Schema.Types.ObjectId,
+        characterId: db.Schema.Types.ObjectId,
+        skillId: db.Schema.Types.ObjectId,
+
         rank: Number,
         rank1Xp: Number,
         rank2Xp: Number,
         rank3Xp: Number,
         rank4Xp: Number
-
     });
 
     var childrenToCascade = [];
     set.methods.checkChildRemoveCascade = function(property) {
         return childToCascade.indexOf(property) !== -1;
     };
-
 
     // Ensure virtual fields are serialised.
     set.set('toJSON', { virtuals: true });

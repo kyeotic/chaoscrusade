@@ -16,8 +16,12 @@ module.exports = function(db, models) {
 		fellowship: Number,
 		infamy: Number,
 		wounds: Number,
+		woundsRemaining: Number,
 		corruption: Number,
-		skills: [{ type: db.Schema.Types.ObjectId, ref: 'skills'}]
+		xpGained: Number,
+		xpRemaining: Number,
+
+		skills: [{ type: db.Schema.Types.ObjectId, ref: 'skillAdvancements'}]
 	});
 
     var childrenToCascade = []; //none yet

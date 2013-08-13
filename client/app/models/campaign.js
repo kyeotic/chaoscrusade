@@ -17,7 +17,11 @@ function(app, ko, Character, campaignService, ChatMessage) {
 
 		self.load = function() {
 			return app.deferAll([
-				self.characters.loadSet(),
+				self.characters.loadSet().then(function(set) {
+					self.characters().forEach(function(c) {
+						c.load();
+					});
+				}),
 				self.chatMessages.loadSet()
 			]);
 		};

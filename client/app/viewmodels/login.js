@@ -63,6 +63,8 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
             
         };
 
+        //We can't finish activating the router until the campaigns in the 
+        //dataContext are loaded, since we have to "select" one sometimes
         self.show = function() {
             if(self.user().id().length === 0){
                 app.log("login required");
@@ -72,7 +74,7 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
                     var theDialog = dialog.getDialog(self);
                     $(theDialog.host).css('opacity', 1);
                 }, 1000)
-                
+
                 return app.showDialog(self)
                     .then(function() {
                         return dataContext.load();

@@ -1,6 +1,10 @@
 define(['durandal/system', 'durandal/app'], function(system, app) {
     
-    var install = function () {
+    var install = function (config) {
+    	var config = config || {};
+    	if (config.debugMode)
+    		Q.longStackSupport = true;
+
     	//This changes Durandal's default promise from jQuery to Q
 	    system.defer = function (action) {
 	        var deferred = Q.defer();
