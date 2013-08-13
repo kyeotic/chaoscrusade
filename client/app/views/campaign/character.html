@@ -1,6 +1,14 @@
-<div data-bind="with: selectedCharacter" class="campaign-character">
+<div data-bind="with: character" class="campaign-character">
 	<h2 data-bind="text: id"></h2>
+
+	<!-- ko if: $parent.isOwner || $parent.isGm -->
 	<input data-bind="value: name" type="text" />
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
+	<!-- /ko -->
+
+	<!-- ko ifnot: $parent.isOwner && $parent.isGm -->
+	<span data-bind="text: name"></span>
+	<!-- /ko -->
+	
 </div>
 

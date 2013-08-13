@@ -12,7 +12,7 @@
 
 				<li class="nav-header">Characters</li>
 				<!-- ko foreach: campaign().characters -->
-				<li data-bind="css: { active: $parent.selectedCharacter() == $data }">
+				<li data-bind="css: { active: $parent.viewType() ==  id()}">
 					<a href="#" data-bind="click: $parent.navCharacter, text: name"></a>
 				</li>
 				<!-- /ko -->
@@ -26,10 +26,7 @@
 
 
 		<div class="span7">
-			<!-- ko compose: { 
-				view: 'campaign/' + viewType() + '.html',
-				preserveContext: true 
-			} --><!-- /ko -->
+			<!-- ko compose: view --><!-- /ko -->
 		</div>
 		
 

@@ -1,5 +1,8 @@
-define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 'models/character', 'viewmodels/chatMessage'], 
-function(app, ko, dataContext, login, Character, ChatMessage) {
+define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 
+		'models/character', 'viewmodels/chatMessage', 'viewmodels/campaign/home',
+		'viewmodels/campaign/character', 'viewmodels/campaign/settings'], 
+function(app, ko, dataContext, login, Character, ChatMessage,
+		 home, CharacterVm, settings) {
 	var CampaignPage = function() {
 		var self = this;
 
@@ -10,6 +13,10 @@ function(app, ko, dataContext, login, Character, ChatMessage) {
 		};
 
 		self.campaign = dataContext.selectedCampaign;
+
+		self.isGm = ko.computed(function() {
+			return self.campaign().gmId() === login.loggedInUser().id();
+		});
 
 		self.addCharacter = ko.command({
 			execute: function() {
@@ -29,13 +36,22 @@ function(app, ko, dataContext, login, Character, ChatMessage) {
 
 		//View
 		self.selectedCharacter = ko.observable(null);
-		self.viewType = ko.observable('home');
+		self.view = ko.observable(home);
+		self.viewType = ko.computed(function() {
+			var view = self.view();
+			if (view === home)
+				return 'home';
+			if (view === settings)
+				return 'settings';
+			//We better be a fucking character
+			return view.character.id();
+		});
 
-		self.navHome = function() { self.viewType('home'); self.selectedCharacter(null); };
-		self.navSettings = function() { self.viewType('settings'); self.selectedCharacter(null); };
+		self.navHome = function() { self.view(home); };
+		self.navSettings = function() { self.view(settings); };
 		self.navCharacter = function(character) {
-			self.viewType('character');
-			self.selectedCharacter(character);
+			var isOwner = character.ownerId() === login.loggedInUser().id();
+			self.view(new CharacterVm(character, self.isGm(), isOwner, self.navHome));
 		};
 
 

@@ -1,7 +1,8 @@
 define(['durandal/app', 'knockout', 'models/character', 'services/campaignService', 'viewmodels/chatMessage'],
 function(app, ko, Character, campaignService, ChatMessage) {
 	var Campaign = function(init) {
-		var self = this;
+		var self = this,
+			init = init || {};
 
 		var map = {
 			id: init.id || '',
