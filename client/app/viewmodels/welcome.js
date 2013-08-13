@@ -9,7 +9,11 @@ function(app, ko, Campaign, dataContext, login, router) {
         self.campaignEntry = ko.observable();
 
         self.addCampaign = function() {
-            var campaign = { name: self.campaignEntry(), gmId: login.user().id() };
+            var campaign = { 
+                name: self.campaignEntry(),
+                gmId: login.user().id(),
+                gmUsername: login.user().username()
+            };
             self.campaigns.push(new Campaign(campaign));
             self.campaignEntry('');
         };
