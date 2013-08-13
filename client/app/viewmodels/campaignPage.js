@@ -9,6 +9,7 @@ function(app, ko, dataContext, login, Character, ChatMessage,
 		self.activate = function(campaignId) {
 			app.log('campaign page activating', arguments, dataContext.campaigns().length);
 			dataContext.selectCampaign(campaignId);
+			self.navHome();
 			//app.log(dataContext.selectedCampaign().characters());
 		};
 

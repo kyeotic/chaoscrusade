@@ -27,6 +27,27 @@ function(ko, app, Campaign, Skill) {
 		'Fellowship'
 	];
 
+	dataContext.patronStatus = function(currentAlignment, testingAlignment) {
+		if (currentAlignment === testingAlignment)
+			return 'true';
+
+		//Ensure the order checks ahead make sense
+		var align = [currentAlignment, testingAlignment].sortBy();
+
+		if (align.any('Unaligned')
+			return 'allied';
+
+		//This covers all the options, since we know the sorting can't produce Tzeentch
+		if (align[0] === 'Khorne')
+			return align[1] === 'Nurgle' ? 'allied' : 'opposed';
+		else if (align[0] === 'Nurgle')
+			return 'opposed';
+		else if (align[0] === 'Slaanesh')
+			return 'allied';
+		else
+			throw new Error("Illegal alignment: " + currentAlignment);
+	};
+
 	//The campaigns need to load to allow the router to select the campaign
 	//A lot of stuff also depends on the "root" sets being populated
 	dataContext.load = function() {

@@ -1,8 +1,23 @@
 <div data-bind="with: character" class="campaign-character">
 	<h2 data-bind="text: id"></h2>
 
-	<!-- ko if: $parent.isOwner || $parent.isGm -->
+	<!-- ko if: $parent.isGm -->
+	<label>Name</label>
 	<input data-bind="value: name" type="text" />
+
+	<label>Xp</label>
+	<input data-bind="value: xpGained" type="text" />
+
+	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
+	<!-- /ko -->
+
+	<!-- ko if: $parent.isOwner -->
+	<label>Name</label>
+	<input data-bind="value: name" type="text" />
+
+	<label>Xp</label>
+	<span data-bind="text: xpGained" type="text"></span>
+
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
 	<!-- /ko -->
 
@@ -10,5 +25,12 @@
 	<span data-bind="text: name"></span>
 	<!-- /ko -->
 	
+	<div data-bind="foreach: skills">
+		<span data-bind="text: name"></span>
+		<span data-bind="text: rank"></span>
+		<span data-bind="text: totalXp"></span>
+		<button data-bind="command: $parent.rankUpSkill">Rank Up</button><br/>
+	</div>
+
 </div>
 
