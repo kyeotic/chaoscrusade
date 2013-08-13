@@ -21,8 +21,7 @@ function(ko, app, SkillAdvancement){
 			wounds: data.wounds || 0,
 			woundsRemaining: data.woundsRemaining || 0,
 			corruption: data.corruption || 0,
-			xpGained: data.xpGained || 0,
-			xpRemaining: data.xpRemaining || 0
+			xpGained: data.xpGained || 0
 		};
 
 		ko.socketModel(self, 'characters', map).then(function(result) {
@@ -35,6 +34,60 @@ function(ko, app, SkillAdvancement){
 		//Return a promise at that time
 		self.load = function() {
 			self.skills.loadSet();
+		};
+
+		self.xpRemaining = ko.computed(function() {
+			return self.xpGained - self.skills.sum(function(s) {
+				s.totalXpCost();
+			});
+		});
+
+		self.alignment = ko.computed(function() {
+			var counts = {};
+
+			//Count skills
+			self.skills().forEach(function(s) {
+				counts[s.alignment()] = (count[s.alignment()] || 0) + s.rank();
+			});
+
+			//Count talents
+			//Count characteristic advancements
+			//Count... other shit?
+
+			//Subtract character offsets
+
+
+			//Find highest and second highest patrons
+			var maxPatron = '',
+				max = 0, 
+				max2 = 0;
+			Object.keys(counts, function(patron, count) {
+				if (count > max) {
+					maxPatron = patron;
+					max= count;
+				} else if (count > max2) {
+					max2 = count;
+				}
+			});
+
+			//5 Higher than 2nd to align
+			return max > (max2 + 4) ? maxPatron : 'Unaligned';
+		});
+
+		self.canAffordSkillUp = function(skill) {
+			return self.xpRemaining() - skill.rankUpCost() >= 0;
+		};
+
+		self.addSkill = function(skill) {
+			var skillAdvancement = new SkillAdvancement({
+				characterId: self.id(),
+				skillId: skill.id()
+			});
+		};
+
+		self.removeSkill = function(skill) {
+			//XpRemaining will auto re-calc
+			self.skills.remove(skill);
 		};
 	};
 });

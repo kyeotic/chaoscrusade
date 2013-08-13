@@ -7,6 +7,17 @@ function(ko, app, Campaign, Skill) {
 		skills: ko.socketSet('skills', Skill)
 	};
 
+	//The campaigns need to load to allow the router to select the campaign
+	//A lot of stuff also depends on the "root" sets being populated
+	dataContext.load = function() {
+		return app.deferAll([ //This really is an array, stop "fixing" it
+			dataContext.campaigns.loadSet(),
+			dataContext.skills.loadSet()
+		]).fail(function() {
+			app.log('dataContext failed to load');
+		});
+	};
+
 	dataContext.alignments = [
 		'Khorne',
 		'Tzeentch',
@@ -48,19 +59,23 @@ function(ko, app, Campaign, Skill) {
 			throw new Error("Illegal alignment: " + currentAlignment);
 	};
 
-	//The campaigns need to load to allow the router to select the campaign
-	//A lot of stuff also depends on the "root" sets being populated
-	dataContext.load = function() {
-		return app.deferAll([ //This really is an array, stop "fixing" it
-			dataContext.campaigns.loadSet(),
-			dataContext.skills.loadSet()
-		]).fail(function() {
-			app.log('dataContext failed to load');
-		});
+	/*
+					Known	Trained	Experienced	Veteran
+		True		100xp	200xp	400xp		600xp
+		Allied		200xp	350xp	500xp		750xp
+		Opposed		250xp	500xp	750xp		1000xp
+	*/
+
+	var skillRankCosts = {
+		'true': [100, 200, 400, 600],
+		alllied: [200, 350, 500, 750],
+		Opposed: [250, 500, 750 , 1000]
 	};
 
-	
-	window.dataContext = dataContext;
+	dataContext.getSkillCost = function(patronStatus, rank) {
+		return skillRankCosts[patronStatus][rank - 1];
+	};
+
 
 	/*
 		Campaign

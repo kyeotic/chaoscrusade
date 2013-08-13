@@ -19,7 +19,9 @@ module.exports = function(db, models) {
 		woundsRemaining: Number,
 		corruption: Number,
 		xpGained: Number,
-		xpRemaining: Number,
+
+		//Computed
+		//xpRemaining: Number,
 
 		skills: [{ type: db.Schema.Types.ObjectId, ref: 'skillAdvancements'}]
 	});

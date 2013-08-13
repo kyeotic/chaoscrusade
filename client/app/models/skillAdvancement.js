@@ -1,19 +1,6 @@
 define(['durandal/app', 'knockout', 'data/dataContext', 'models/skill'], 
 function(app, ko, dataContext, Skill) {
 
-	/*
-					Known	Trained	Experienced	Veteran
-		True		100xp	200xp	400xp		600xp
-		Allied		200xp	350xp	500xp		750xp
-		Opposed		250xp	500xp	750xp		1000xp
-	*/
-
-	var patronCosts = {
-		'true': [100, 200, 400, 600],
-		alllied: [200, 350, 500, 750],
-		Opposed: [250, 500, 750 , 1000]
-	};
-
 	return function(data) {
 		var self = this,
 			data = data || {};
@@ -31,24 +18,31 @@ function(app, ko, dataContext, Skill) {
 
 		ko.socketModel(self, 'skillAdvancements', map);
 
-		//Todo, do this right
-		self.characterAlignment = ko.computed(function() {
-			return 'Tzeentch';
-		})
-
+		//The cost of ranking up for each patron status
 		self.rankUpCost = ko.computed(function() {
-			if (self.rank() === 4)
+
+			var rankUp = self.rank() + 1;
+			if (rankUp === 5)
 				return 0;
-			var patronity = dataContext.patronStatus(self.characterAlignment(), self.alignment());
-			//By getting the rank before we move up, we get the correct index
-			return patronCosts[patronity][rank];
+			
+			return {
+				'true': dataContext.getSkillCost('true', rankUp),
+				allied: dataContext.getSkillCost('allied', rankUp),
+				opposed: dataContext.getSkillCost('opposed', rankUp)
+			};
 		});
 
-		self.rankUp = function(currentAlignment) {
+		//Rank up the skill and add the xp cost of the patron status
+		self.rankUp = function(patronStatus) {
 			if (self.rank() === 4)
 				return;			
+			
 			self.rank(self.rank() + 1);
-			self.['rank' + self.rank() + 'Xp'](self.rankUpCost());
+
+			var rankXp = 'rank' + self.rank() + 'Xp';
+			self[rankXp](self.rankUpCost()[patronStatus]);
+
+			return self[rankXp]();
 		};
 
 		self.skill = ko.computed(function() {
@@ -65,7 +59,7 @@ function(app, ko, dataContext, Skill) {
 			return self.skill().alignment();
 		});
 
-		self.totalXp = ko.computed(function() {
+		self.totalXpCost = ko.computed(function() {
 			return [self.rank1Xp(), self.rank2Xp(), self.rank3Xp(), self.rank4Xp()].compact().sum();
 		});
 	};
