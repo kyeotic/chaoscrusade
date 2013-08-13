@@ -1,5 +1,5 @@
-define(['knockout', 'durandal/app', 'models/skillAdvancement'],
-function(ko, app, SkillAdvancement){
+define(['knockout', 'durandal/app', 'data/rules', 'models/skillAdvancement'],
+function(ko, app, rules, SkillAdvancement){
 	return function(data) {
 		var self = this;
 
@@ -74,20 +74,31 @@ function(ko, app, SkillAdvancement){
 			return max > (max2 + 4) ? maxPatron : 'Unaligned';
 		});
 
-		self.canAffordSkillUp = function(skill) {
-			return self.xpRemaining() - skill.rankUpCost() >= 0;
+		//Skills are always new, skill advancements always (should be) old
+		self.canAffordSkill = function(skill) {
+			var patronStatus = rules.getPatronStatus(self.alignment(), skill.alignment());
+			return self.xpRemaining() - rules.getSkillCost(patronStatus, 1);
+		};
+
+		self.canAffordSkillUp = function(skillAdvancement) {
+			return self.xpRemaining() - skillAdvancement.rankUpCost() >= 0;
 		};
 
 		self.addSkill = function(skill) {
+			if (!self.canAffordSkill(skill)) {
+				app.showMessage('You cannot afford this skill.', 'Error');
+				return;
+			}
+
 			var skillAdvancement = new SkillAdvancement({
 				characterId: self.id(),
 				skillId: skill.id()
 			});
 		};
 
-		self.removeSkill = function(skill) {
+		self.removeSkill = function(skillAdvancement) {
 			//XpRemaining will auto re-calc
-			self.skills.remove(skill);
+			self.skills.remove(skillAdvancement);
 		};
 	};
 });

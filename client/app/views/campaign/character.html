@@ -27,7 +27,7 @@
 		XP Remaining: <span data-bind="text: xpRemaining"></span>
 	</div>
 	
-	
+	<button data-bind="click: $parent.addSkills" class="btn">Add Skill</button>
 	<div data-bind="foreach: skills">
 		<span data-bind="text: name"></span>
 		<span data-bind="text: rank"></span>

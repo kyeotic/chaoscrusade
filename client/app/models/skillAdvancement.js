@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'data/dataContext', 'models/skill'], 
-function(app, ko, dataContext, Skill) {
+define(['durandal/app', 'knockout', 'data/dataContext', 'data/rules', 'models/skill'], 
+function(app, ko, dataContext, rules, Skill) {
 
 	return function(data) {
 		var self = this,
@@ -26,16 +26,18 @@ function(app, ko, dataContext, Skill) {
 				return 0;
 			
 			return {
-				'true': dataContext.getSkillCost('true', rankUp),
-				allied: dataContext.getSkillCost('allied', rankUp),
-				opposed: dataContext.getSkillCost('opposed', rankUp)
+				'true': rules.getSkillCost('true', rankUp),
+				allied: rules.getSkillCost('allied', rankUp),
+				opposed: rules.getSkillCost('opposed', rankUp)
 			};
 		});
 
 		//Rank up the skill and add the xp cost of the patron status
-		self.rankUp = function(patronStatus) {
+		self.rankUp = function(characterAlignment) {
 			if (self.rank() === 4)
-				return;			
+				return;
+
+			var patronStatus = rules.getPatronStatus(characterAlignment, self.alignment());
 			
 			self.rank(self.rank() + 1);
 

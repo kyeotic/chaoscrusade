@@ -1,6 +1,6 @@
 <!-- Outer Div to eat the transition css -->
 <div>
-    <form class="form-signin" data-bind="submit: login">
+    <form class="dialog-base form-signin" data-bind="submit: login">
         <h2 class="form-signin-heading" data-bind="text: loginFailed() ? 'Credentials Failed' : 'Please sign in'"></h2>
         <input type="text" class="input-block-level autofocus" placeholder="Username" data-bind="value: username, valueUpdate: 'afterkeydown'">
         <input type="password" class="input-block-level" placeholder="Password" data-bind="value: password, valueUpdate: 'afterkeydown'">

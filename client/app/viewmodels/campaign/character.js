@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'data/dataContext'],
-function(app, ko, dataContext, login) {
+define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/campaign/addSkill'],
+function(app, ko, dataContext, AddSkill) {
 	return function(character, isGm, isOwner, exit) {
 		var self = this;
 
@@ -17,5 +17,9 @@ function(app, ko, dataContext, login) {
 		});
 
 		self.character = character;
+
+		self.addSkills = function() {
+			new AddSkill(character).show();
+		};
 	};
 });	
