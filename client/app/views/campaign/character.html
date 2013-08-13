@@ -15,15 +15,18 @@
 	<label>Name</label>
 	<input data-bind="value: name" type="text" />
 
-	<label>Xp</label>
-	<span data-bind="text: xpGained" type="text"></span>
-
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
 	<!-- /ko -->
 
-	<!-- ko ifnot: $parent.isOwner && $parent.isGm -->
+	<!-- ko ifnot: $parent.isOwner || $parent.isGm -->
 	<span data-bind="text: name"></span>
 	<!-- /ko -->
+
+	<div>
+		XP Gained: <span data-bind="text: xpGained"></span><br/>
+		XP Remaining: <span data-bind="text: xpRemaining"></span>
+	</div>
+	
 	
 	<div data-bind="foreach: skills">
 		<span data-bind="text: name"></span>

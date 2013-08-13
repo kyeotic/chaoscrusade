@@ -37,7 +37,7 @@ function(ko, app, SkillAdvancement){
 		};
 
 		self.xpRemaining = ko.computed(function() {
-			return self.xpGained - self.skills.sum(function(s) {
+			return self.xpGained() - self.skills().sum(function(s) {
 				s.totalXpCost();
 			});
 		});

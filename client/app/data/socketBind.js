@@ -23,7 +23,7 @@ function(app, ko, socket, socketService) {
 		var setupSetSockets = function() {
 			
 			var eventName = getEventName(parentSetName, ko.unwrap(parentId), setName);
-			app.log("Registering SocketSet", eventName);
+			//app.log("Registering SocketSet", eventName);
 
 			//Publish to service
 			set.subscribeArrayChanged(
@@ -138,7 +138,7 @@ function(app, ko, socket, socketService) {
 			});
 
 			var setupModelSockets = function() {
-				app.log("Registering SocketModel", self);
+				//app.log("Registering SocketModel", self);
 
 				var sockets = [];
 

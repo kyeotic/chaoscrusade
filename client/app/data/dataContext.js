@@ -45,7 +45,7 @@ function(ko, app, Campaign, Skill) {
 		//Ensure the order checks ahead make sense
 		var align = [currentAlignment, testingAlignment].sortBy();
 
-		if (align.any('Unaligned')
+		if (align.any('Unaligned'))
 			return 'allied';
 
 		//This covers all the options, since we know the sorting can't produce Tzeentch

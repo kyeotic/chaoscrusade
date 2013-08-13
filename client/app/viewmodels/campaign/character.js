@@ -8,7 +8,7 @@ function(app, ko, dataContext, login) {
 
 		self.deleteCharacter = ko.command({
 			execute: function() {
-				self.campaign().characters.remove(character);
+				dataContext.selectedCampaign().characters.remove(character);
 				exit();
 			},
 			canExecute: function() {

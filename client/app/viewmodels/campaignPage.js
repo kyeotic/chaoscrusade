@@ -51,7 +51,8 @@ function(app, ko, dataContext, login, Character, ChatMessage,
 		self.navHome = function() { self.view(home); };
 		self.navSettings = function() { self.view(settings); };
 		self.navCharacter = function(character) {
-			var isOwner = character.ownerId() === login.loggedInUser().id();
+			//Cant be owner and gm, GM is higher
+			var isOwner = character.ownerId() === login.loggedInUser().id() && !self.isGm();
 			self.view(new CharacterVm(character, self.isGm(), isOwner, self.navHome));
 		};
 

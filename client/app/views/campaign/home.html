@@ -2,3 +2,8 @@
 
 <h4 data-bind="text: 'GM: ' + campaign().gmId()"></h4>
 <pre data-bind="text: 'GM: ' + isGm()"></pre>
+
+<!-- ko if: isGm -->
+	<input data-bind="value: addXpEntry" type="text" />
+	<button data-bind="click: addXp" class="btn btn-small">Add XP</button>
+<!-- /ko -->
