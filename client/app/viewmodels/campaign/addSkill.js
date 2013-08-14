@@ -29,10 +29,17 @@ function(app, dialog, ko, dataContext, rules) {
 			dialog.close(self, true);
 		};
 
+		self.filter = ko.observable('');
+
 		var skills = dataContext.skills().filter(function(s) {
 			return character.canAffordSkill(s);
 		});
 
-		self.skills = ko.observableArray(skills);
+		self.skills = ko.computed(function() {
+			var filter = self.filter().toLowerCase();
+			return skills.filter(function(s) {
+				return s.name().toLowerCase().startsWith(filter);
+			})
+		});
 	};
 });

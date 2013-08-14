@@ -1,9 +1,10 @@
-define(['durandal/app', 'knockout', 'data/dataContext', 'data/rules', 'models/skill'], 
-function(app, ko, dataContext, rules, Skill) {
+define(['durandal/app', 'knockout', 'data/rules', 'models/skill', 'require', 'data/dataContext'], 
+function(app, ko, rules, Skill, require) {
 
 	return function(data) {
 		var self = this,
-			data = data || {};
+			data = data || {},
+			dataContext = require('data/dataContext');
 
 		var map = {
 			id: data.id || '',
@@ -54,7 +55,7 @@ function(app, ko, dataContext, rules, Skill) {
 		});
 
 		self.name = ko.computed(function() {
-			return self.skill.name();
+			return self.skill().name();
 		});
 
 		self.alignment = ko.computed(function() {

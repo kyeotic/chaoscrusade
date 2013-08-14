@@ -23,12 +23,12 @@ module.exports = function(db, models) {
 		//Computed
 		//xpRemaining: Number,
 
-		skills: [{ type: db.Schema.Types.ObjectId, ref: 'skillAdvancements'}]
+		skillAdvancements: [{ type: db.Schema.Types.ObjectId, ref: 'skillAdvancements'}]
 	});
 
-    var childrenToCascade = []; //none yet
+    var childrenToCascade = ['skillAdvancements']; //none yet
     set.methods.checkChildRemoveCascade = function(property) {
-        return childToCascade.indexOf(property) !== -1;
+        return childrenToCascade.indexOf(property) !== -1;
     };
 
 	// Ensure virtual fields are serialised.

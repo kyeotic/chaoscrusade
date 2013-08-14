@@ -1,11 +1,11 @@
-define(['durandal/app', 'knockout', 'data/dataContext', 'models/skill'],
-function(app, ko, dataContext, Skill) {
+define(['durandal/app', 'knockout', 'data/dataContext', 'data/rules', 'models/skill'],
+function(app, ko, dataContext, rules, Skill) {
 	var SkillEntry = function() {
 		var self = this;
 
 		self.skills = dataContext.skills;
-		self.alignments = dataContext.alignments;
-		self.characteristics = dataContext.characteristics;
+		self.alignments = rules.alignments;
+		self.characteristics = rules.characteristics;
 
 		self.entrySkill = ko.observable(new Skill());
 

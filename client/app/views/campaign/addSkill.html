@@ -1,23 +1,27 @@
 <div class="dialog-base add-skill-dialog">
-	<div data-bind="foreach: skills">
-		<h4 data-bind="text: name" class="text-info"></h4>
+
+	<input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="search" />
+	<div data-bind="foreach: skills" class="add-skill-skills">
+		<div class="add-skill clearfix">
+			<h4 data-bind="text: name" class="text-info"></h4>
 		
-		<div class="pull-left add-skill-char">
-			<strong>Characteristic</strong><br/>
-			<span data-bind="text: characteristic"></span>
-		</div>
-		<div class="pull-left add-skill-alignment">
-			<strong>Alignment</strong><br/>
-			<span data-bind="text: alignment"></span>
-		</div>
-		<div class="pull-left add-skill-patron">
-			<strong>Patron Status</strong><br/>
-			<span data-bind="text: $parent.patronStatus($data)"></span>
-		</div>
-		<div class="pull-left add-skill-add">
-			<br/>
-			<button class="btn btn-primary btn-small pull-right" data-bind="click: $parent.addSkill, text: $parent.xpCost($data)"></button>
+			<div class="pull-left add-skill-char">
+				<strong>Characteristic</strong><br/>
+				<span data-bind="text: characteristic"></span>
+			</div>
+			<div class="pull-left add-skill-alignment">
+				<strong>Alignment</strong><br/>
+				<span data-bind="text: alignment"></span>
+			</div>
+			<div class="pull-left add-skill-patron">
+				<strong>Patron Status</strong><br/>
+				<span data-bind="text: $parent.patronStatus($data)"></span>
+			</div>
+			<div class="pull-left add-skill-add">
+				<br/>
+				<button class="btn btn-primary btn-small pull-right" data-bind="click: $parent.addSkill, text: $parent.xpCost($data) + 'xp'"></button>
+			</div>
 		</div>
 	</div>	
-	<button class="btn pull-right" data-bind="click: cancel">Cancel</button>
+	<button class="btn pull-right add-skill-cancel" data-bind="click: cancel">Cancel</button>
 </div>

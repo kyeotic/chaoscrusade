@@ -28,11 +28,12 @@
 	</div>
 	
 	<button data-bind="click: $parent.addSkills" class="btn">Add Skill</button>
-	<div data-bind="foreach: skills">
+	<div data-bind="foreach: skillAdvancements">
 		<span data-bind="text: name"></span>
 		<span data-bind="text: rank"></span>
-		<span data-bind="text: totalXp"></span>
-		<button data-bind="command: $parent.rankUpSkill">Rank Up</button><br/>
+		<span data-bind="text: totalXpCost"></span>
+		<button data-bind="click: $parent.removeSkill" class="btn btn-danger btn-small">Remove</button>
+		<!-- <button data-bind="command: $parent.rankUpSkill" class="btn">Rank Up</button> --><br/>
 	</div>
 
 </div>

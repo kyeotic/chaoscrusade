@@ -28,16 +28,16 @@ function(ko, app, rules, SkillAdvancement){
 			app.log("character loaded", result);
 		});
 
-		self.skills = ko.socketSet('skillAdvancements', SkillAdvancement, 'characters', self.id);
+		self.skillAdvancements = ko.socketSet('skillAdvancements', SkillAdvancement, 'characters', self.id);
 
 		//There are no consumers that need these loaded yet, but there may be?
 		//Return a promise at that time
 		self.load = function() {
-			self.skills.loadSet();
+			self.skillAdvancements.loadSet();
 		};
 
 		self.xpRemaining = ko.computed(function() {
-			return self.xpGained() - self.skills().sum(function(s) {
+			return self.xpGained() - self.skillAdvancements().sum(function(s) {
 				s.totalXpCost();
 			});
 		});
@@ -45,9 +45,9 @@ function(ko, app, rules, SkillAdvancement){
 		self.alignment = ko.computed(function() {
 			var counts = {};
 
-			//Count skills
-			self.skills().forEach(function(s) {
-				counts[s.alignment()] = (count[s.alignment()] || 0) + s.rank();
+			//Count skillAdvancements
+			self.skillAdvancements().forEach(function(s) {
+				counts[s.alignment()] = (counts[s.alignment()] || 0) + s.rank();
 			});
 
 			//Count talents
@@ -74,7 +74,7 @@ function(ko, app, rules, SkillAdvancement){
 			return max > (max2 + 4) ? maxPatron : 'Unaligned';
 		});
 
-		//Skills are always new, skill advancements always (should be) old
+		//skills are always new, skill advancements always (should be) old
 		self.canAffordSkill = function(skill) {
 			var patronStatus = rules.getPatronStatus(self.alignment(), skill.alignment());
 			return self.xpRemaining() - rules.getSkillCost(patronStatus, 1);
@@ -94,11 +94,13 @@ function(ko, app, rules, SkillAdvancement){
 				characterId: self.id(),
 				skillId: skill.id()
 			});
+
+			self.skillAdvancements.push(skillAdvancement);
 		};
 
 		self.removeSkill = function(skillAdvancement) {
 			//XpRemaining will auto re-calc
-			self.skills.remove(skillAdvancement);
+			self.skillAdvancements.remove(skillAdvancement);
 		};
 	};
 });

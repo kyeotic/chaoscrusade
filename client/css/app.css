@@ -53,8 +53,7 @@
 }
 
 .dialog-base {
-    padding: 19px 29px 29px;
-    margin: 0 auto 20px;
+    padding: 19px 29px;
     background-color: #fff;
     border: 1px solid #e5e5e5;
    -webkit-border-radius: 5px;
@@ -101,6 +100,32 @@
     margin-top: 20px;
 }
 
+.add-skill-dialog {
+    width: 400px;
+    padding-bottom: 40px;
+}
+
+.add-skill-skills {
+    max-height: 300px;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
+.add-skill {
+    margin: 0 0 10px 0;
+}
+
+.add-skill h4 {
+    margin: 0;
+}
+
+.add-skill-alignment, .add-skill-patron, .add-skill-add {
+    margin-left: 10px;
+}
+
+.add-skill-cancel {
+
+}
 
 /* Campaign Page */
 

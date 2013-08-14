@@ -16,8 +16,7 @@ function(ko, app, Campaign, Skill) {
 		]).fail(function() {
 			app.log('dataContext failed to load');
 		});
-	};	
-
+	};
 
 	/*
 		Campaign
