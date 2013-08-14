@@ -37,8 +37,8 @@ function(ko, app, rules, SkillAdvancement){
 		};
 
 		self.xpRemaining = ko.computed(function() {
-			return self.xpGained() - self.skillAdvancements().sum(function(s) {
-				s.totalXpCost();
+			return self.xpGained().toNumber() - self.skillAdvancements().sum(function(s) {
+				return s.totalXpCost().toNumber();
 			});
 		});
 
@@ -47,7 +47,7 @@ function(ko, app, rules, SkillAdvancement){
 
 			//Count skillAdvancements
 			self.skillAdvancements().forEach(function(s) {
-				counts[s.alignment()] = (counts[s.alignment()] || 0) + s.rank();
+				counts[s.alignment()] = (counts[s.alignment()] || 0) + s.rank().toNumber();
 			});
 
 			//Count talents
@@ -94,6 +94,8 @@ function(ko, app, rules, SkillAdvancement){
 				characterId: self.id(),
 				skillId: skill.id()
 			});
+
+			skillAdvancement.rankUp(self.alignment());
 
 			self.skillAdvancements.push(skillAdvancement);
 		};

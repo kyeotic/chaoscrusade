@@ -63,7 +63,12 @@ function(app, ko, rules, Skill, require) {
 		});
 
 		self.totalXpCost = ko.computed(function() {
-			return [self.rank1Xp(), self.rank2Xp(), self.rank3Xp(), self.rank4Xp()].compact().sum();
+			return [
+				self.rank1Xp().toNumber(), 
+				self.rank2Xp().toNumber(), 
+				self.rank3Xp().toNumber(), 
+				self.rank4Xp().toNumber()
+			].compact().sum();
 		});
 	};
 });
