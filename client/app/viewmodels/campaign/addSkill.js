@@ -29,16 +29,24 @@ function(app, dialog, ko, dataContext, rules) {
 			dialog.close(self, true);
 		};
 
+
+		self.alignments = rules.alignments.include('None', 0);
 		self.filter = ko.observable('');
+		self.alignmentFilter = ko.observable('');
 
 		var skills = dataContext.skills().filter(function(s) {
-			return character.canAffordSkill(s);
+			return character.canAffordSkill(s)
+					&& !character.skillAdvancements().any(function(cs) {
+						return cs.skillId() === s.id();
+					});
 		});
 
 		self.skills = ko.computed(function() {
 			var filter = self.filter().toLowerCase();
+			var align = self.alignmentFilter();
 			return skills.filter(function(s) {
-				return s.name().toLowerCase().startsWith(filter);
+				return s.name().toLowerCase().startsWith(filter)
+						&& (align === 'None' || align === s.alignment());
 			})
 		});
 	};

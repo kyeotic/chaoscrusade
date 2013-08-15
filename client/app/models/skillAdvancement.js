@@ -27,9 +27,9 @@ function(app, ko, rules, Skill, require) {
 				return 0;
 			
 			return {
-				'true': rules.getSkillCost('true', rankUp),
-				allied: rules.getSkillCost('allied', rankUp),
-				opposed: rules.getSkillCost('opposed', rankUp)
+				'True': rules.getSkillCost('True', rankUp),
+				Allied: rules.getSkillCost('Allied', rankUp),
+				Opposed: rules.getSkillCost('Opposed', rankUp)
 			};
 		});
 

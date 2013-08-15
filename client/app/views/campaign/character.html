@@ -26,6 +26,8 @@
 		XP Gained: <span data-bind="text: xpGained"></span><br/>
 		XP Remaining: <span data-bind="text: xpRemaining"></span>
 	</div>
+
+	<h4 data-bind="text: 'Alignment: ' + alignment()"></h4>
 	
 	<button data-bind="click: $parent.addSkills" class="btn">Add Skill</button>
 	<div data-bind="foreach: skillAdvancements">

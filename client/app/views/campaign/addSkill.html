@@ -1,6 +1,19 @@
 <div class="dialog-base add-skill-dialog">
 
-	<input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="search" />
+	<div class="row">
+		<div class="span3">
+			<label>Skill Name<br/>
+				<input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="search" class="autofocus" />
+			</label>
+		</div>
+		<div class="span2">
+			<label>Alignment<br/>
+				<select data-bind="options: alignments, value: alignmentFilter" class="span2"></select>
+			</label>
+		</div>
+	</div>
+	
+	
 	<div data-bind="foreach: skills" class="add-skill-skills">
 		<div class="add-skill clearfix">
 			<h4 data-bind="text: name" class="text-info"></h4>

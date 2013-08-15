@@ -22,22 +22,22 @@ define(function() {
 	];
 
 	self.getPatronStatus = function(currentAlignment, testingAlignment) {
-		if (currentAlignment === testingAlignment)
-			return 'true';
-
 		//Ensure the order checks ahead make sense
 		var align = [currentAlignment, testingAlignment].sortBy();
 
 		if (align.any('Unaligned'))
-			return 'allied';
+			return 'Allied';
 
+		if (currentAlignment === testingAlignment)
+			return 'True';
+		
 		//This covers all the options, since we know the sorting can't produce Tzeentch
 		if (align[0] === 'Khorne')
-			return align[1] === 'Nurgle' ? 'allied' : 'opposed';
+			return align[1] === 'Nurgle' ? 'Allied' : 'Opposed';
 		else if (align[0] === 'Nurgle')
-			return 'opposed';
+			return 'Opposed';
 		else if (align[0] === 'Slaanesh')
-			return 'allied';
+			return 'Allied';
 		else
 			throw new Error("Illegal alignment: " + currentAlignment);
 	};
@@ -50,9 +50,9 @@ define(function() {
 	*/
 
 	var skillRankCosts = {
-		'true': [100, 200, 400, 600],
-		allied: [200, 350, 500, 750],
-		opposed: [250, 500, 750 , 1000]
+		'True': [100, 200, 400, 600],
+		Allied: [200, 350, 500, 750],
+		Opposed: [250, 500, 750 , 1000]
 	};
 
 	self.getSkillCost = function(patronStatus, rank) {

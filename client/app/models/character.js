@@ -56,7 +56,7 @@ function(ko, app, rules, SkillAdvancement){
 
 			//Subtract character offsets
 
-
+			delete counts.Unaligned;
 			//Find highest and second highest patrons
 			var maxPatron = '',
 				max = 0, 
