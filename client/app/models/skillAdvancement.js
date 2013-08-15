@@ -39,11 +39,16 @@ function(app, ko, rules, Skill, require) {
 				return;
 
 			var patronStatus = rules.getPatronStatus(characterAlignment, self.alignment());
-			
-			self.rank(self.rank() + 1);
 
-			var rankXp = 'rank' + self.rank() + 'Xp';
+			var newRank = self.rank() + 1;
+
+			var rankXp = 'rank' + newRank + 'Xp';
+
+			//We have to get the rankUpCost BEFORE rankingup,
+			//since the rankUpCost shows the cost to rankUp from THE CURRENT RANK
 			self[rankXp](self.rankUpCost()[patronStatus]);
+
+			self.rank(newRank);
 
 			return self[rankXp]();
 		};
