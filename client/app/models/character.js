@@ -81,7 +81,8 @@ function(ko, app, rules, SkillAdvancement){
 		};
 
 		self.canAffordSkillUp = function(skillAdvancement) {
-			return self.xpRemaining() - skillAdvancement.rankUpCost() >= 0;
+			var patronStatus = rules.getPatronStatus(self.alignment(), skill.alignment());
+			return self.xpRemaining() - skillAdvancement.rankUpCost()[patronStatus] >= 0;
 		};
 
 		self.addSkill = function(skill) {
@@ -98,6 +99,15 @@ function(ko, app, rules, SkillAdvancement){
 			skillAdvancement.rankUp(self.alignment());
 
 			self.skillAdvancements.push(skillAdvancement);
+		};
+
+		self.rankUpSkill = function(skillAdvancement) {
+			if (!self.canAffordSkillUp(skillAdvancement)) {
+				app.showMessage('You cannot afford this skill up.', 'Error');
+				return;
+			}
+
+			skillAdvancement.rankUp(self.alignment());
 		};
 
 		self.removeSkill = function(skillAdvancement) {

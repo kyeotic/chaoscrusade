@@ -33,6 +33,11 @@ function(app, ko, rules, Skill, require) {
 			};
 		});
 
+		self.getRankUpCost = function(characterAlignment) {
+			var patronStatus = rules.getPatronStatus(characterAlignment, self.alignment());
+			return self.rankUpCost()[patronStatus];
+		};
+
 		//Rank up the skill and add the xp cost of the patron status
 		self.rankUp = function(characterAlignment) {
 			if (self.rank() === 4)
