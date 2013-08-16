@@ -34,7 +34,7 @@
 		<span data-bind="text: name"></span>
 		<span data-bind="text: rank"></span>
 		<span data-bind="text: totalXpCost"></span>
-		<button data-bind="click: $parent.rankUpSkill, visible: $parent.canAffordSkillUp, text: 'Rank Up ' + getRankUpCost($parent.alignment()) + 'xp'" class="btn"></button>
+		<button data-bind="click: $parent.rankUpSkill, visible: getRankUpCost($parent.alignment()) > 0, text: 'Rank Up ' + getRankUpCost($parent.alignment()) + 'xp'" class="btn"></button>
 		<button data-bind="click: $parent.removeSkill" class="btn btn-danger btn-small">Remove</button>
 		<!-- <button data-bind="command: $parent.rankUpSkill" class="btn">Rank Up</button> --><br/>
 	</div>

@@ -16,7 +16,8 @@ module.exports = function(app) {
 	var map = {
 		campaigns: require('./services/campaignService')(app),
 		characters: require('./services/characterService')(app),
-		skills: require('./services/skillService')(app)
+		skills: require('./services/skillService')(app),
+		skillAdvancements: require('./services/skillAdvancementsService')(app)
 	};
 
 	var get = function(token, e, callback) {

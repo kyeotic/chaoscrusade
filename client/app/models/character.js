@@ -81,8 +81,15 @@ function(ko, app, rules, SkillAdvancement){
 		};
 
 		self.canAffordSkillUp = function(skillAdvancement) {
+			var xpRemaining = self.xpRemaining();
 			var patronStatus = rules.getPatronStatus(self.alignment(), skill.alignment());
-			return self.xpRemaining() - skillAdvancement.rankUpCost()[patronStatus] >= 0;
+			var xpCost = skillAdvancement.rankUpCost()[patronStatus];
+
+			if (skillAdvancement.rank() ===4)
+				return false;
+			if (xpCost === 0)
+				return false;
+			return xpRemaining - xpCost >= 0;
 		};
 
 		self.addSkill = function(skill) {
