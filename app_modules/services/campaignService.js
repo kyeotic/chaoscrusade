@@ -9,50 +9,32 @@ module.exports = function(app) {
 		return true;
 	};
 
-	var get = function (token, callback) {
-		serviceBase.get(callback);
-	};
-
-	var getChildren = function (token, id, childModel, callback) {
-		serviceBase.getChildren(id, childModel, callback);
-	};
-
-	var insert = function(token, itemToAdd, callback) {
-		serviceBase.insert(itemToAdd, callback);
-	};
-
-	var insertChild = function(token, id, childModel, childItem, callback) {
-		//Chat doesn't get stored
-		if (childModel === "chat") {
-			callback(null, ['campaigns', id, childModel, 'added'].join('|'), childItem);
-		} else {
-			serviceBase.insertChild(id, childModel, childItem, callback);
-		}		
-	};
-
-	var remove  = function(token, id, callback) {
-		serviceBase.remove(id, callback);
-	};
-
-	var removeChild = function(token, id, childModel, childId, callback) {
-		serviceBase.removeChild(id, childModel, childId, callback);
-	};
-
-
-	var update = function(token, modelId, property, newValue, callback) {
-		serviceBase.update(modelId, property, newValue, callback);
-	};
-
 	return {
-		get: get,
-		getChildren: getChildren,
-
-		update: update,
-
-		insert: insert,
-		insertChild: insertChild,
-
-		remove: remove,
-		removeChild: removeChild
+		get: function (token, callback) {
+			serviceBase.get(callback);
+		},
+		getChildren: function (token, id, childModel, callback) {
+			serviceBase.getChildren(id, childModel, callback);
+		},
+		update: function(token, modelId, property, newValue, callback) {
+			serviceBase.update(modelId, property, newValue, callback);
+		},
+		insert: function(token, itemToAdd, callback) {
+			serviceBase.insert(itemToAdd, callback);
+		},
+		insertChild: function(token, id, childModel, childItem, callback) {
+			//Chat doesn't get stored
+			if (childModel === "chat") {
+				callback(null, ['campaigns', id, childModel, 'added'].join('|'), childItem);
+			} else {
+				serviceBase.insertChild(id, childModel, childItem, callback);
+			}		
+		},
+		remove: function(token, id, callback) {
+			serviceBase.remove(id, callback);
+		},
+		removeChild: function(token, id, childModel, childId, callback) {
+			serviceBase.removeChild(id, childModel, childId, callback);
+		}
 	};
 };

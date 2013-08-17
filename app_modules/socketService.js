@@ -29,11 +29,9 @@ module.exports = function(app) {
 			id = eventData[1],
 			childModel = eventData[2];
 
-		if (childModel === undefined && id == undefined) { //Root all
+		if (childModel === undefined) { //Root
 			map[model].get(token, callback);
-		} else if (childModel === undefined && id !== undefined) { //root item
-			map[model].getItem(token, id, callback);
-		} else {
+		} else { //Sub
 			map[model].getChildren(token, id, childModel, callback);
 		}
 	};

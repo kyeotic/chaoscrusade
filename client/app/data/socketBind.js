@@ -170,10 +170,6 @@ function(app, ko, socket, socketService) {
 					sockets.forEach(function(s) { s.destroy(); });
 				};
 
-				self.load = function() {
-					return socketService.get(getEventName(modelName, self.id()));
-				};
-
 				//Notify that setup has completed
 				deferred.resolve(self);
 			};
@@ -192,11 +188,6 @@ function(app, ko, socket, socketService) {
 
 				//Make empty functions for the socket
 				self.unsocket = function() {};
-
-				//Make a deferring load function
-				self.load = function() {
-					
-				};
 			} else {
 				setupModelSockets();
 			}

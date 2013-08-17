@@ -44,6 +44,6 @@ module.exports = function(app) {
 	return {
 		characters: new Service(characters),
 		skillAdvancements: new Service(skills),
-		skillAdvancements: new Service(stats)
+		statsAdvancements: new Service(stats)
 	};
 };

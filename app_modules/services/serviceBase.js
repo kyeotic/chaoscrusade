@@ -4,11 +4,6 @@ module.exports = function(app, setName, itemName) {
 		collection = db[setName];
 
 	return {
-		getItem: function(id, callback) {
-			collection.findById(id).exec(function(error, doc) {
-				callback(error, null, doc);
-			});
-		},
 		get: function(callback) {
 			collection.find().exec(function(error, docs){
 				callback(error, null, docs);

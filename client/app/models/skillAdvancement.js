@@ -57,11 +57,12 @@ function(app, ko, rules, Skill, require) {
 
 			return self[rankXp]();
 		};
-
 		
-
-		self.skill = ko.observable(new Skill(data.skillId));
-		self.skill().load();
+		self.skill = ko.computed(function() {
+			return skill = dataContext.skills().find(function(s) {
+				return s.id() === self.skillId();
+			}) || new Skill();
+		});
 
 		self.name = ko.computed(function() {
 			return self.skill().name();
