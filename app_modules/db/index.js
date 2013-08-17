@@ -1,4 +1,6 @@
-var mongoose = require('mongoose');
+var fs = require('fs'),
+	mongoose = require('mongoose'),
+	modelsDir = __dirname + '/models';
 
 if (process.env.SERVER === "PROD"){
 	mongoose.connect('mongodb://tyrsius:' + process.env.DBPASS + '@localhost/chaoscrusade');
@@ -7,14 +9,8 @@ if (process.env.SERVER === "PROD"){
 //mongoose.connect('mongodb://@localhost/chaoscrusade');
 var models = {};
 
-//Setup Schema
-require('./models/users')(mongoose, models);
-require('./models/campaigns')(mongoose, models);
-require('./models/characters')(mongoose, models);
-require('./models/skills')(mongoose, models);
-require('./models/skillAdvancements')(mongoose, models);
-
-//console.log(models.Campaigns.schema.paths);
-//console.log(models.Campaigns.schema.tree.characters[0]);
+fs.readdirSync(modelsDir).forEach(function(file) {
+    require(modelsDir + '/' + file)(mongoose, models);
+});
 
 module.exports = models;
