@@ -9,6 +9,10 @@ module.exports = function(app) {
 		return true;
 	};
 
+	var getItem = function(token, id, callback) {
+		serviceBase.getItem(id, callback);
+	};
+
 	var get = function (token, callback) {
 		serviceBase.get(callback);
 	};
@@ -39,6 +43,7 @@ module.exports = function(app) {
 	};
 
 	return {
+		getItem: getItem,
 		get: get,
 		getChildren: getChildren,
 
