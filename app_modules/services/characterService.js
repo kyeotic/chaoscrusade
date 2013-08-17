@@ -1,52 +1,49 @@
 module.exports = function(app) {
 
-	var serviceBase = new require('./serviceBase')(app, 'characters', 'character');
+	var skills = new require('./serviceBase')(app, 'skillAdvancements', 'skillAdvancement'),
+		stats = new require('./serviceBase')(app, 'statsAdvancements', 'statAdvancement'),
+		characters = new require('./serviceBase')(app, 'characters', 'character');
 
 	//callback(error, eventName, result)
 
-	var checkToken = function(token) {
+	var checkToken = function(token, characterId) {
 		//TODO
 		return true;
 	};
 
-	var get = function (token, callback) {
-		serviceBase.get(callback);
-	};
+	var Service = function(base) {
+		this.get = function (token, callback) {
+			base.get(callback);
+		};
 
-	var getChildren = function (token, id, childModel, callback) {
-		serviceBase.getChildren(id, childModel, callback);
-	};
+		this.getChildren = function (token, id, childModel, callback) {
+			base.getChildren(id, childModel, callback);
+		};
 
-	var insert = function(token, itemToAdd, callback) {
-		serviceBase.insert(itemToAdd, callback);
-	};
+		this.insert = function(token, itemToAdd, callback) {
+			base.insert(itemToAdd, callback);
+		};
 
-	var insertChild = function(token, id, childModel, childItem, callback) {
-		serviceBase.insertChild(id, childModel, childItem, callback);
-	};
+		this.insertChild = function(token, id, childModel, childItem, callback) {
+			base.insertChild(id, childModel, childItem, callback);
+		};
 
-	var remove  = function(token, id, callback) {
-		serviceBase.remove(id, callback);
-	};
+		this.remove  = function(token, id, callback) {
+			base.remove(id, callback);
+		};
 
-	var removeChild = function(token, id, childModel, childId, callback) {
-		serviceBase.removeChild(id, childModel, childId, callback);
-	};
+		this.removeChild = function(token, id, childModel, childId, callback) {
+			base.removeChild(id, childModel, childId, callback);
+		};
 
-	var update = function(token, modelId, property, newValue, callback) {
-		serviceBase.update(modelId, property, newValue, callback);
+		this.update = function(token, modelId, property, newValue, callback) {
+			base.update(modelId, property, newValue, callback);
+		};
 	};
 
 	return {
-		get: get,
-		getChildren: getChildren,
-
-		update: update,
-
-		insert: insert,
-		insertChild: insertChild,
-
-		remove: remove,
-		removeChild: removeChild
+		characters: new Service(characters),
+		skillAdvancements: new Service(skills),
+		skillAdvancements: new Service(stats)
 	};
 };

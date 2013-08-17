@@ -13,11 +13,14 @@
 
 module.exports = function(app) {
 
+	var characterService = require('./services/characterService')(app);
+
 	var map = {
 		campaigns: require('./services/campaignService')(app),
-		characters: require('./services/characterService')(app),
+		characters: characterService.characters,
 		skills: require('./services/skillService')(app),
-		skillAdvancements: require('./services/skillAdvancementsService')(app)
+		skillAdvancements: characterService.skillAdvancements,
+		statAdvancements: characterService.statAdvancements
 	};
 
 	var get = function(token, e, callback) {
@@ -26,9 +29,11 @@ module.exports = function(app) {
 			id = eventData[1],
 			childModel = eventData[2];
 
-		if (childModel === undefined) { //Root
+		if (childModel === undefined && id == undefined) { //Root all
 			map[model].get(token, callback);
-		} else { //Sub
+		} else if (childModel === undefined && id !== undefined) { //root item
+			map[model].getItem(token, id, callback);
+		} else {
 			map[model].getChildren(token, id, childModel, callback);
 		}
 	};

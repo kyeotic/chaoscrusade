@@ -1,8 +1,8 @@
 define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 
 		'models/character', 'viewmodels/chatMessage', 'viewmodels/campaign/home',
-		'viewmodels/campaign/character', 'viewmodels/campaign/settings'], 
+		'viewmodels/campaign/characterPage', 'viewmodels/campaign/settings'], 
 function(app, ko, dataContext, login, Character, ChatMessage,
-		 home, CharacterVm, settings) {
+		 home, characterPage, settings) {
 	var CampaignPage = function() {
 		var self = this;
 
@@ -53,7 +53,7 @@ function(app, ko, dataContext, login, Character, ChatMessage,
 		self.navCharacter = function(character) {
 			//Cant be owner and gm, GM is higher
 			var isOwner = character.ownerId() === login.loggedInUser().id() && !self.isGm();
-			self.view(new CharacterVm(character, self.isGm(), isOwner, self.navHome));
+			self.view(new characterPage(character, self.isGm(), isOwner, self.navHome));
 		};
 
 
