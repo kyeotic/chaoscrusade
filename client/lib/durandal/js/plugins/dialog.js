@@ -1,10 +1,10 @@
 /**
- * Durandal 2.0.0-pre Copyright (c) 2012 Blue Spire Consulting, Inc. All Rights Reserved.
+ * Durandal 2.0.0 Copyright (c) 2012 Blue Spire Consulting, Inc. All Rights Reserved.
  * Available via the MIT license.
  * see: http://durandaljs.com or https://github.com/BlueSpire/Durandal for details.
  */
 /**
- * The viewLocator module collaborates with the viewEngine module to provide views (literally dom sub-trees) to other parts of the framework as needed. The primary consumer of the viewLocator is the composition module.
+ * The dialog module enables the display of message boxes, custom modal dialogs and other overlays or slide-out UI abstractions. Dialogs are constructed by the composition system which interacts with a user defined dialog context. The dialog module enforced the activator lifecycle.
  * @module dialog
  * @requires system
  * @requires app
@@ -12,8 +12,9 @@
  * @requires activator
  * @requires viewEngine
  * @requires jquery
+ * @requires knockout
  */
-define(['durandal/system', 'durandal/app', 'durandal/composition', 'durandal/activator', 'durandal/viewEngine', 'jquery'], function (system, app, composition, activator, viewEngine, $) {
+define(['durandal/system', 'durandal/app', 'durandal/composition', 'durandal/activator', 'durandal/viewEngine', 'jquery', 'knockout'], function (system, app, composition, activator, viewEngine, $, ko) {
     var contexts = {},
         dialogCount = 0,
         dialog;
@@ -44,6 +45,17 @@ define(['durandal/system', 'durandal/app', 'durandal/composition', 'durandal/act
      */
     MessageBox.prototype.getView = function(){
         return viewEngine.processMarkup(MessageBox.defaultViewMarkup);
+    };
+
+    /**
+     * Configures a custom view to use when displaying message boxes.
+     * @method setViewUrl
+     * @param {string} viewUrl The view url relative to the base url which the view locator will use to find the message box's view.
+     * @static
+     */
+    MessageBox.setViewUrl = function(viewUrl){
+        delete MessageBox.prototype.getView;
+        MessageBox.prototype.viewUrl = viewUrl;
     };
 
     /**
@@ -86,6 +98,8 @@ define(['durandal/system', 'durandal/app', 'durandal/composition', 'durandal/act
             if (system.isString(objOrModuleId)) {
                 system.acquire(objOrModuleId).then(function (module) {
                     dfd.resolve(system.resolveObject(module));
+                }).fail(function(err){
+                    system.error('Failed to load dialog module (' + objOrModuleId + '). Details: ' + err.message);
                 });
             } else {
                 dfd.resolve(objOrModuleId);
@@ -105,13 +119,13 @@ define(['durandal/system', 'durandal/app', 'durandal/composition', 'durandal/act
         MessageBox:MessageBox,
         /**
          * The css zIndex that the last dialog was displayed at.
-         * @property {int} currentZIndex
+         * @property {number} currentZIndex
          */
         currentZIndex: 1050,
         /**
          * Gets the next css zIndex at which a dialog should be displayed.
          * @method getNextZIndex
-         * @param {int} The zIndex.
+         * @return {number} The next usable zIndex.
          */
         getNextZIndex: function () {
             return ++this.currentZIndex;
@@ -246,7 +260,7 @@ define(['durandal/system', 'durandal/app', 'durandal/composition', 'durandal/act
         },
         /**
          * Shows a message box.
-         * @method show
+         * @method showMessage
          * @param {string} message The message to display in the dialog.
          * @param {string} [title] The title message.
          * @param {string[]} [options] The options to provide to the user.
@@ -264,7 +278,7 @@ define(['durandal/system', 'durandal/app', 'durandal/composition', 'durandal/act
             return dialog.show(new this.MessageBox(message, title, options));
         },
         /**
-         * Installs this module into Durandal. Adds `app.showDialog` and `app.showMessage` convenience methods.
+         * Installs this module into Durandal; called by the framework. Adds `app.showDialog` and `app.showMessage` convenience methods.
          * @method install
          * @param {object} [config] Add a `messageBox` property to supply a custom message box constructor. Add a `messageBoxView` property to supply custom view markup for the built-in message box.
          */
@@ -336,8 +350,8 @@ define(['durandal/system', 'durandal/app', 'durandal/composition', 'durandal/act
             $(theDialog.blockout).css('opacity', 0);
 
             setTimeout(function() {
-                $(theDialog.host).remove();
-                $(theDialog.blockout).remove();
+                ko.removeNode(theDialog.host);
+                ko.removeNode(theDialog.blockout);
             }, this.removeDelay);
 
             if (!dialog.isOpen()) {

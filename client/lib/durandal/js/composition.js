@@ -1,5 +1,5 @@
 /**
- * Durandal 2.0.0-pre Copyright (c) 2012 Blue Spire Consulting, Inc. All Rights Reserved.
+ * Durandal 2.0.0 Copyright (c) 2012 Blue Spire Consulting, Inc. All Rights Reserved.
  * Available via the MIT license.
  * see: http://durandaljs.com or https://github.com/BlueSpire/Durandal for details.
  */
@@ -8,13 +8,13 @@
  * @module composition
  * @requires system
  * @requires viewLocator
- * @requires viewModelBinder
+ * @requires binder
  * @requires viewEngine
  * @requires activator
  * @requires jquery
  * @requires knockout
  */
-define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', 'durandal/viewEngine', 'durandal/activator', 'jquery', 'knockout'], function (system, viewLocator, viewModelBinder, viewEngine, activator, $, ko) {
+define(['durandal/system', 'durandal/viewLocator', 'durandal/binder', 'durandal/viewEngine', 'durandal/activator', 'jquery', 'knockout'], function (system, viewLocator, binder, viewEngine, activator, $, ko) {
     var dummyModel = {},
         activeViewAttributeName = 'data-active-view',
         composition,
@@ -227,6 +227,12 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
             return 'transitions/' + name;
         },
         /**
+         * The name of the transition to use in all compositions.
+         * @property {string} defaultTransitionName
+         * @default null
+         */
+        defaultTransitionName: null,
+        /**
          * Represents the currently executing composition transaction.
          * @property {CompositionTransaction} current
          */
@@ -342,7 +348,7 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
                                 removePreviousView(context.parent);
                             }
                         }else if(context.activeView){
-                            var instruction = viewModelBinder.getBindingInstruction(context.activeView);
+                            var instruction = binder.getBindingInstruction(context.activeView);
                             if(instruction.cacheViews != undefined && !instruction.cacheViews){
                                 ko.removeNode(context.activeView);
                             }
@@ -350,11 +356,13 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
 
                         context.triggerAttach();
                     });
+                }).fail(function(err){
+                    system.error('Failed to load transition (' + transitionModuleId + '). Details: ' + err.message);
                 });
             } else {
                 if (context.child != context.activeView) {
                     if (context.cacheViews && context.activeView) {
-                        var instruction = viewModelBinder.getBindingInstruction(context.activeView);
+                        var instruction = binder.getBindingInstruction(context.activeView);
                         if(instruction.cacheViews != undefined && !instruction.cacheViews){
                             ko.removeNode(context.activeView);
                         }else{
@@ -388,8 +396,8 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
             }
 
             tryActivate(context, function () {
-                if (context.beforeBind) {
-                    context.beforeBind(child, context);
+                if (context.binding) {
+                    context.binding(context.child, context.parent, context);
                 }
 
                 if (context.preserveContext && context.bindingContext) {
@@ -401,7 +409,7 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
                         $(child).hide();
                         ko.virtualElements.prepend(context.parent, child);
 
-                        viewModelBinder.bindContext(context.bindingContext, child, context.model);
+                        binder.bindContext(context.bindingContext, child, context.model);
                     }
                 } else if (child) {
                     var modelToBind = context.model || dummyModel;
@@ -423,7 +431,7 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
                         $(child).hide();
                         ko.virtualElements.prepend(context.parent, child);
 
-                        viewModelBinder.bind(modelToBind, child);
+                        binder.bind(modelToBind, child);
                     }
                 }
 
@@ -437,7 +445,7 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
          * @return {promise} A promise for the view.
          */
         defaultStrategy: function (context) {
-            return viewLocator.locateViewForObject(context.model, context.viewElements);
+            return viewLocator.locateViewForObject(context.model, context.area, context.viewElements);
         },
         getSettings: function (valueAccessor, element) {
             var value = valueAccessor(),
@@ -516,6 +524,8 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
                 system.acquire(context.strategy).then(function (strategy) {
                     context.strategy = strategy;
                     composition.executeStrategy(context);
+                }).fail(function(err){
+                    system.error('Failed to load view strategy (' + context.strategy + '). Details: ' + err.message);
                 });
             } else {
                 this.executeStrategy(context);
@@ -561,6 +571,8 @@ define(['durandal/system', 'durandal/viewLocator', 'durandal/viewModelBinder', '
                 system.acquire(settings.model).then(function (module) {
                     settings.model = system.resolveObject(module);
                     composition.inject(settings);
+                }).fail(function(err){
+                    system.error('Failed to load composed module (' + settings.model + '). Details: ' + err.message);
                 });
             } else {
                 composition.inject(settings);

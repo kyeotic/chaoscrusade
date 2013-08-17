@@ -1,5 +1,5 @@
 /**
- * Durandal 2.0.0-pre Copyright (c) 2012 Blue Spire Consulting, Inc. All Rights Reserved.
+ * Durandal 2.0.0 Copyright (c) 2012 Blue Spire Consulting, Inc. All Rights Reserved.
  * Available via the MIT license.
  * see: http://durandaljs.com or https://github.com/BlueSpire/Durandal for details.
  */
@@ -84,12 +84,12 @@ define(['require', 'jquery'], function(require, $) {
         } catch (ignore) { }
     };
 
-    var logError = function(error, id) {
+    var logError = function(error) {
         if(error instanceof Error){
             throw error;
         }
 
-        throw new Error(error, id);
+        throw new Error(error);
     };
 
     /**
@@ -101,7 +101,7 @@ define(['require', 'jquery'], function(require, $) {
          * Durandal's version.
          * @property {string} version
          */
-        version: "2.0.0-pre",
+        version: "2.0.0",
         /**
          * A noop function.
          * @method noop
@@ -355,6 +355,16 @@ define(['require', 'jquery'], function(require, $) {
      */
     system.isBoolean = function(obj) {
         return typeof(obj) === "boolean";
+    };
+
+    /**
+     * Determines if the specified object is a promise.
+     * @method isPromise
+     * @param {object} object The object to check.
+     * @return {boolean} True if matches the type, false otherwise.
+     */
+    system.isPromise = function(obj) {
+        return obj && system.isFunction(obj.then);
     };
 
     /**

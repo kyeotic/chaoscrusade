@@ -1,5 +1,5 @@
 /**
- * Durandal 2.0.0-pre Copyright (c) 2012 Blue Spire Consulting, Inc. All Rights Reserved.
+ * Durandal 2.0.0 Copyright (c) 2012 Blue Spire Consulting, Inc. All Rights Reserved.
  * Available via the MIT license.
  * see: http://durandaljs.com or https://github.com/BlueSpire/Durandal for details.
  */
@@ -43,7 +43,7 @@ define(['durandal/system', 'durandal/viewEngine', 'durandal/composition', 'duran
 
                 dfd.resolve();
             }).fail(function(err){
-                system.error('Failed to load plugins. Details: ' + err.message);
+                system.error('Failed to load plugin(s). Details: ' + err.message);
             });
         }).promise();
     }
