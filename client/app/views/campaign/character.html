@@ -1,19 +1,21 @@
 <div data-bind="with: character" class="campaign-character">
-	<h2 data-bind="text: id"></h2>
 
 	<!-- ko if: $parent.isGm -->
-	<label>Name</label>
-	<input data-bind="value: name" type="text" />
+	<label>Name
+		<input data-bind="value: name" type="text" />
+	</label>
 
-	<label>Xp</label>
-	<input data-bind="value: xpGained" type="text" />
+	<label>Xp
+		<input data-bind="value: xpGained" type="text" />
+	</label>
 
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
 	<!-- /ko -->
 
 	<!-- ko if: $parent.isOwner -->
-	<label>Name</label>
-	<input data-bind="value: name" type="text" />
+	<label>Name
+		<input data-bind="value: name" type="text" />
+	</label>
 
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
 	<!-- /ko -->
