@@ -1,5 +1,9 @@
 <div data-bind="with: character" class="campaign-character">
 
+	<label>Name
+		<div data-bind="authInput: { auth: ($parent.isGm || $parent.isOwner), value: name }" class="inline"></div>
+	</label>
+
 	<!-- ko if: $parent.isGm -->
 	<label>Name
 		<input data-bind="value: name" type="text" />

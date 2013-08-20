@@ -31,7 +31,7 @@ function(system, app, viewLocator) {
         router:true,
         dialog: true,
         widget: {
-            kinds: ['expander']
+            kinds: ['authInput']
         },
 
         //App plugins

@@ -1,0 +1,9 @@
+<div class="inline">
+	<!-- ko ifnot: isAuthorized -->
+	<span data-part="text" data-bind="ifnot: isAuthorized, text: value"></span>
+	<!-- /ko -->
+
+	<!-- ko if: isAuthorized -->
+	<input data-part="input" data-bind="if: isAuthorized, value: value" type="text" />
+	<!-- /ko -->
+</div>

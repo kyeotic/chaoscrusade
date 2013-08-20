@@ -3,7 +3,7 @@ function (router, ko, app, login) {
     return {
         router: router,
         activate: function() {
-            return login.show();
+            login.show();
         },
         logout: function() {
             login.logout();

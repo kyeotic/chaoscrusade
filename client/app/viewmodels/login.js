@@ -69,12 +69,6 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
             if(self.user().id().length === 0){
                 app.log("login required");
 
-                //This is a stopgap to force the showing of the login modal
-                setTimeout(function() {
-                    var theDialog = dialog.getDialog(self);
-                    $(theDialog.host).css('opacity', 1);
-                }, 1000)
-
                 return app.showDialog(self)
                     .then(function() {
                         return dataContext.load();
