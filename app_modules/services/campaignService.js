@@ -14,7 +14,10 @@ module.exports = function(app) {
 			serviceBase.get(callback);
 		},
 		getChildren: function (token, id, childModel, callback) {
-			serviceBase.getChildren(id, childModel, callback);
+			if (childModel === 'chat')
+				callback(null, null, []);
+			else
+				serviceBase.getChildren(id, childModel, callback);
 		},
 		update: function(token, modelId, property, newValue, callback) {
 			serviceBase.update(modelId, property, newValue, callback);

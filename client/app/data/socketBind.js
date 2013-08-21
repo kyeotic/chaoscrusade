@@ -101,6 +101,8 @@ function(app, ko, socket, socketService) {
 						//make a new defer, in case load is called again (?)
 						loadDefer = app.deferred();
 						isLoadingSet = false;
+					}).fail(function(error) {
+						app.log('socketbind load error', error);
 					}).done();
 
 				return loadDefer.promise;

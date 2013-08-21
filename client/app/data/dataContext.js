@@ -60,6 +60,8 @@ function(ko, app, Campaign, Skill) {
 			latestValue.load().then(function() {
 				campaignDefer.resolve(latestValue);
 				campaignDefer = app.deferred();
+			}).fail(function(error) {
+				app.log('datacontext load error', error);
 			}).done();
 		}
 	});
