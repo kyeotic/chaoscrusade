@@ -32,7 +32,7 @@ function(app, ko, router, dataContext, login, AddSkill) {
 		});
 
 		self.addSkills = function() {
-			new AddSkill(character).show();
+			new AddSkill(self.character).show();
 		};
 	};
 });	
