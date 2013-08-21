@@ -1,19 +1,34 @@
 define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 
-		'models/character', 'viewmodels/chatMessage', 'viewmodels/campaign/home',
-		'viewmodels/campaign/characterPage', 'viewmodels/campaign/settings'], 
-function(app, ko, dataContext, login, Character, ChatMessage,
-		 home, characterPage, settings) {
+		'models/character', 'viewmodels/chatMessage'], 
+function(app, ko, dataContext, login, Character, ChatMessage) {
 	var CampaignPage = function() {
 		var self = this;
+		var childRouter = router.createChildRouter();
 
 		self.activate = function(campaignId) {
-			app.log('campaign page activating', arguments, dataContext.campaigns().length);
+
+			//Don't reactive everything, its just a child route
+			if (dataContext.selectedCampaign().id() === campaignId)
+				return;
+
 			dataContext.selectCampaign(campaignId);
-			self.navHome();
-			//app.log(dataContext.selectedCampaign().characters());
+
+			var route = 'campaign/' + campaignId;
+			self.router = childRouter.reset()
+				.makeRelative({
+					moduleId: 'viewmodels/campaign',
+					route: route
+					//route: 'campaign/:id'
+				}).map([
+					{ route: '', moduleId: 'home', hash: '#' + route, title: 'Home', nav: true },
+					{ route: 'settings', moduleId: 'settings', hash: '#' + route + '/settings', title: 'Settings', nav: true },
+					{ route: 'character/:id', moduleId: 'characterPage', hash: '#' + route + '/character', nav: false }
+				]).buildNavigationModel();
 		};
 
-		self.campaign = dataContext.selectedCampaign;
+		self.campaign = ko.computed(function() {
+			return dataContext.selectedCampaign();
+		});
 
 		self.isGm = ko.computed(function() {
 			return self.campaign().gmId() === login.loggedInUser().id();
@@ -35,25 +50,10 @@ function(app, ko, dataContext, login, Character, ChatMessage,
 			self.navHome();
 		};
 
-		//View
-		self.selectedCharacter = ko.observable(null);
-		self.view = ko.observable(home);
-		self.viewType = ko.computed(function() {
-			var view = self.view();
-			if (view === home)
-				return 'home';
-			if (view === settings)
-				return 'settings';
-			//We better be a fucking character
-			return view.character.id();
-		});
-
-		self.navHome = function() { self.view(home); };
-		self.navSettings = function() { self.view(settings); };
-		self.navCharacter = function(character) {
-			//Cant be owner and gm, GM is higher
-			var isOwner = character.ownerId() === login.loggedInUser().id() && !self.isGm();
-			self.view(new characterPage(character, self.isGm(), isOwner, self.navHome));
+		//Nav
+		self.characterHash = function(character) {
+			return '#campaign/' + self.campaign().id() + '/character/' + character.id();
+			app.log('nav mock to', character, self.campaign());
 		};
 
 

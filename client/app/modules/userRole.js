@@ -8,7 +8,7 @@ define(['plugins/router'], function(router) {
 			
 			
 			//Routes
-			{ route: 'campaign/:id', moduleId: 'viewmodels/campaignPage', title: 'Campaign', nav: false}
+			{ route: 'campaign/:id*splat', moduleId: 'viewmodels/campaignPage', title: 'Campaign', nav: false}
 		]
 	};
 	

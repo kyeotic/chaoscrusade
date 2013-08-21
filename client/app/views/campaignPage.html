@@ -3,17 +3,18 @@
 	<div class="row">		
 		<div class="span2">
 			<ul class="nav nav-list">
-				<li class="nav-header">Campaign</li>
-				<li data-bind="css: { active: viewType() === 'home'}"><a href="#" data-bind="click: navHome">Home</a></li>
 
-				<li data-bind="css: { active: viewType() === 'settings'}">
-					<a href="#" data-bind="click: navSettings">Settings</a>
+				<li class="nav-header">Campaign</li>				
+				<!-- ko foreach: router.navigationModel -->
+				<li data-bind="css: { active: isActive }">
+					<a data-bind="attr: { href: hash }, text: title"></a>
 				</li>
+				<!-- /ko -->
 
 				<li class="nav-header">Characters</li>
 				<!-- ko foreach: campaign().characters -->
-				<li data-bind="css: { active: $parent.viewType() ==  id()}">
-					<a href="#" data-bind="click: $parent.navCharacter, text: name"></a>
+				<li data-bind="css: { active: false }">
+					<a data-bind="attr: { href: $parent.characterHash($data) }, text: name"></a>
 				</li>
 				<!-- /ko -->
 				<li>
@@ -26,7 +27,10 @@
 
 
 		<div class="span7">
-			<!-- ko compose: view --><!-- /ko -->
+			<!-- ko router: {
+				model: router.activeItem,
+				cacheViews: false
+			} --><!-- /ko -->
 		</div>
 		
 
