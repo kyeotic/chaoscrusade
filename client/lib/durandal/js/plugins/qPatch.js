@@ -15,6 +15,8 @@ define(['durandal/system', 'durandal/app'], function(system, app) {
 	        };
 	        return deferred;
 	    };
+
+	    system.deferred = app.deferred = Q.defer;
 	    
 	    system.delay = function (ms) {
 	      return Q.delay(ms);

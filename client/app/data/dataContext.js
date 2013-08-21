@@ -35,11 +35,13 @@ function(ko, app, Campaign, Skill) {
 		}
 	})
 
+	var campaignDefer = app.deferred();
 	dataContext.selectCampaign = function(campaignId) {
 		var campaign = dataContext.campaigns().find(function(c) {
 			return c.id() === campaignId;
 		});
 		dataContext.selectedCampaign(campaign);
+		return campaignDefer.promise;
 	};
 
 	//Loading gets all the "meat" of the campaign, and subscribes to the socket
@@ -55,7 +57,10 @@ function(ko, app, Campaign, Skill) {
 			app.log(['loading campaign', latestValue.id()]);
 
 			//Trying to add .done() here errors, no idea why
-			latestValue.load();	
+			latestValue.load().then(function() {
+				campaignDefer.resolve(latestValue);
+				campaignDefer = app.deferred();
+			}).done();
 		}
 	});
 

@@ -7,23 +7,24 @@ function(app, ko, dataContext, login, Character, ChatMessage) {
 
 		self.activate = function(campaignId) {
 
-			//Don't reactive everything, its just a child route
-			if (dataContext.selectedCampaign().id() === campaignId)
+			//Don't reactivate everything, its just a child route
+			if (self.campaign().id() === campaignId)
 				return;
 
-			dataContext.selectCampaign(campaignId);
-
-			var route = 'campaign/' + campaignId;
-			self.router = childRouter.reset()
-				.makeRelative({
-					moduleId: 'viewmodels/campaign',
-					route: route
-					//route: 'campaign/:id'
-				}).map([
-					{ route: '', moduleId: 'home', hash: '#' + route, title: 'Home', nav: true },
-					{ route: 'settings', moduleId: 'settings', hash: '#' + route + '/settings', title: 'Settings', nav: true },
-					{ route: 'character/:id', moduleId: 'characterPage', hash: '#' + route + '/character', nav: false }
-				]).buildNavigationModel();
+			return dataContext.selectCampaign(campaignId)
+				.then(function() {
+					var route = 'campaign/' + campaignId;
+					self.router = childRouter.reset()
+						.makeRelative({
+							moduleId: 'viewmodels/campaign',
+							route: route
+							//route: 'campaign/:id'
+						}).map([
+							{ route: '', moduleId: 'home', hash: '#' + route, title: 'Home', nav: true },
+							{ route: 'settings', moduleId: 'settings', hash: '#' + route + '/settings', title: 'Settings', nav: true },
+							{ route: 'character/:id', moduleId: 'characterPage', hash: '#' + route + '/character', nav: false }
+						]).buildNavigationModel();
+				});			
 		};
 
 		self.campaign = ko.computed(function() {

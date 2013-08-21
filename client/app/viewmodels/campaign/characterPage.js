@@ -15,7 +15,8 @@ function(app, ko, router, dataContext, login, AddSkill) {
 
 			if (!character)
 				return false;
-			self.character = ko.observable(character);
+
+			self.character = character;
 			self.isGm = dataContext.selectedCampaign().gmId() === login.user().id();
 			self.isOwner = character.ownerId() === login.user().id() && !self.isGm;
 		};

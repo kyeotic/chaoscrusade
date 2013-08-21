@@ -19,6 +19,9 @@ function(app, ko, Character, campaignService, ChatMessage) {
 		self.load = function() {
 			return app.deferAll([
 				self.characters.loadSet().then(function(set) {
+
+					//We don't need to return this
+					//The characters don't need to be loaded for the campaign
 					self.characters().forEach(function(c) {
 						c.load();
 					});

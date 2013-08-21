@@ -15,7 +15,14 @@ function(app, ko, socket, socketService) {
 	//The event name will just filter them out
 	var socketSet = function(setName, Constructor, parentSetName, parentId) {
 		var set = ko.observableArray(),
-			socketUpdating = false;
+			socketUpdating = false,
+
+			//Used to get load to work, even if called before setup
+			//While still returning a functional promise
+			//Also enforces only one load call at a time
+			loadDefer = app.deferred(),
+			isLoadingSet = false,
+			preSetupLoad = false;
 
 		if (parentId !== undefined && !ko.isObservable(parentId))
 			throw new Error("Child Observable Sets must have observable parentId");
@@ -75,15 +82,28 @@ function(app, ko, socket, socketService) {
 				socketUpdating = false;
 			});			
 
+			var isLoadingSet = false;
 			//Load data into set without tell the socketService that WE added it
 			set.loadSet = function() {
-				return socketService.get(eventName)
+				if (isLoadingSet)
+					return loadDefer.promise;
+				isLoadingSet = true;
+
+				socketService.get(eventName)
 					.then(function(response) {
 						socketUpdating = true;
 						set.map(response, Constructor);
-						socketUpdating = false;	
-						return set;
-					});
+						socketUpdating = false;
+
+						//resolve the promise, but don't return it, we are done
+						loadDefer.resolve(set);
+
+						//make a new defer, in case load is called again (?)
+						loadDefer = app.deferred();
+						isLoadingSet = false;
+					}).done();
+
+				return loadDefer.promise;
 			};
 
 			set.unloadSet = function() {
@@ -96,6 +116,12 @@ function(app, ko, socket, socketService) {
 				add.destroy();
 				remove.destory();
 			};
+
+			//If this is true, load was called before setup ran
+			if (preSetupLoad) {
+				preSetupLoad = false;
+				self.loadSet();
+			}
 		};
 
 		//The ParentID doesn't exist yet, but it will be set by the first save 
@@ -111,9 +137,15 @@ function(app, ko, socket, socketService) {
 			});
 
 			//Make empty functions for the socket
-			self.loadSet = function() {};
-			self.unloadSet = function() {};
-			self.unsocket = function() {};
+			self.loadSet = function() {
+				preSetupLoad = true;
+				return loadDefer.promise;
+			};
+
+			//If either of these are called before setup, just don't perform the setup
+			self.unloadSet = self.unsocket = function() {
+				setupSetSockets = function() { };
+			};
 		} else { //Otherwise setup now
 			setupSetSockets();
 		}
