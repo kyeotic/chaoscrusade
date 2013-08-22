@@ -1,4 +1,4 @@
-define(['plugins/router', 'knockout', 'durandal/app', 'viewmodels/login'], 
+define(['plugins/router', 'knockout', 'durandal/app', 'login/login'], 
 function (router, ko, app, login) {  
     return {
         router: router,

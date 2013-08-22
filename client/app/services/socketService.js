@@ -1,17 +1,17 @@
-define(['modules/serviceBase'], function(serviceBase) {
+define(['services/http'], function(http) {
 	var route = '/api/';
 	return {
 		get: function(eventName) {
-			return serviceBase.get(route + eventName);
+			return http.get(route + eventName);
 		},
 		post: function(eventName, value) {
-			return serviceBase.post(route + eventName, value);
+			return http.post(route + eventName, value);
 		},
 		put: function(eventName, value) {
-			return serviceBase.put(route + eventName, value);
+			return http.put(route + eventName, value);
 		},
 		remove: function(eventName, value) {
-			return serviceBase.remove(route + eventName + '|' + value);
+			return http.remove(route + eventName + '|' + value);
 		},
 	};
 });

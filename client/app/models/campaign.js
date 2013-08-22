@@ -1,4 +1,4 @@
-define(['durandal/app', 'knockout', 'models/character', 'services/campaignService', 'viewmodels/chatMessage'],
+define(['durandal/app', 'knockout', 'models/character', 'services/campaign', 'chatMessage/chatMessage'],
 function(app, ko, Character, campaignService, ChatMessage) {
 	var Campaign = function(init) {
 		var self = this,

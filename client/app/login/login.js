@@ -1,4 +1,4 @@
-define(['durandal/app', 'jquery', 'knockout', 'plugins/dialog', 'data/dataContext', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
+define(['durandal/app', 'jquery', 'knockout', 'plugins/dialog', 'data/dataContext', 'services/login', 'services/cookie', 'services/userRole', 'models/user', 'createUser/createUser'], 
 function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User, createUser) {
     
     var authToken = "ccAuthToken";

@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login', 
-		'models/character', 'viewmodels/chatMessage'], 
+define(['durandal/app', 'knockout', 'data/dataContext', 'login/login', 
+		'models/character', 'chatMessage/chatMessage'], 
 function(app, ko, dataContext, login, Character, ChatMessage) {
 	var CampaignPage = function() {
 		var self = this;
@@ -16,7 +16,7 @@ function(app, ko, dataContext, login, Character, ChatMessage) {
 					var route = 'campaign/' + campaignId;
 					self.router = childRouter.reset()
 						.makeRelative({
-							moduleId: 'viewmodels/campaign',
+							moduleId: 'campaign',
 							route: route
 							//route: 'campaign/:id'
 						}).map([

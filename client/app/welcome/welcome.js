@@ -1,4 +1,4 @@
-define(['durandal/app', 'knockout', 'models/campaign', 'data/dataContext', 'viewmodels/login' , 'plugins/router'],
+define(['durandal/app', 'knockout', 'models/campaign', 'data/dataContext', 'login/login' , 'plugins/router'],
 function(app, ko, Campaign, dataContext, login, router) {
 
     var Welcome = function() {

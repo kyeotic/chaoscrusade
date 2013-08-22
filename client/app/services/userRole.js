@@ -3,12 +3,12 @@ define(['plugins/router'], function(router) {
 	var roles = {
 		user: [
 			//Navs
-			{ route: '', moduleId: 'viewmodels/welcome', title: 'Home', nav: true},
-			{ route: 'skillEntry', moduleId: 'viewmodels/skillEntry', title: 'Skills', nav: true},
+			{ route: '', moduleId: 'welcome/welcome', title: 'Home', nav: true},
+			{ route: 'skillEntry', moduleId: 'skillEntry/skillEntry', title: 'Skills', nav: true},
 			
 			
 			//Routes
-			{ route: 'campaign/:id*splat', moduleId: 'viewmodels/campaignPage', title: 'Campaign', nav: false}
+			{ route: 'campaign/:id*splat', moduleId: 'campaign/campaignPage', title: 'Campaign', nav: false}
 		]
 	};
 	

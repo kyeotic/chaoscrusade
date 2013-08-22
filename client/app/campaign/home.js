@@ -1,4 +1,4 @@
-define(['durandal/app', 'knockout', 'data/dataContext', 'viewmodels/login'],
+define(['durandal/app', 'knockout', 'data/dataContext', 'login/login'],
 function(app, ko, dataContext, login) {
 	var self = {};
 
