@@ -33,7 +33,7 @@ function(ko, app, rules, SkillAdvancement){
 		//There are no consumers that need these loaded yet, but there may be?
 		//Return a promise at that time
 		self.load = function() {
-			self.skillAdvancements.loadSet();
+			self.skillAdvancements.loadSet().done();
 		};
 
 		self.xpRemaining = ko.computed(function() {

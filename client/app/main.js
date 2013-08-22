@@ -38,7 +38,7 @@ function(system, app, viewLocator) {
         knockoutExtensions: true,
         knockoutCommands: true,
         qPatch: {
-            debugMode: true
+            debugMode: false
         }
     });
 
