@@ -58,9 +58,7 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
             //Trigger other viewmodel updates
             app.trigger('userlogin', response.user);
 
-            dialog.close(self, true);
-
-            
+            dialog.close(self, true);            
         };
 
         //We can't finish activating the router until the campaigns in the 

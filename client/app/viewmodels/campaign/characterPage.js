@@ -5,14 +5,10 @@ function(app, ko, router, dataContext, login, AddSkill) {
 		var self = this;
 
 		self.activate = function(characterId) {
-
-			app.log('activating', characterId);
 			var character = dataContext.selectedCampaign().characters().find(function(c) {
 				return c.id() === characterId;
 			});
-
-			app.log('character', character)
-
+			
 			if (!character)
 				return false;
 
