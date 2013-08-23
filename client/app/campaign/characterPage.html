@@ -1,49 +1,19 @@
 <div data-bind="with: character" class="campaign-character">
 
-	<label>Name
-		<div data-bind="authInput: { auth: ($parent.isGm || $parent.isOwner), value: name }" class="inline"></div>
-	</label>
-
 	<!-- ko if: $parent.isGm -->
-	<label>Name
-		<input data-bind="value: name" type="text" />
-	</label>
-
-	<label>Xp
-		<input data-bind="value: xpGained" type="text" />
-	</label>
-
-	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
+		<!-- ko compose: { view: 'characterGm.html', preserveContext: true } -->
+		<!-- /ko -->
 	<!-- /ko -->
 
 	<!-- ko if: $parent.isOwner -->
-	<label>Name
-		<input data-bind="value: name" type="text" />
-	</label>
-
-	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
+		<!-- ko compose: { view: 'characterOwner.html', preserveContext: true } -->
+		<!-- /ko -->
 	<!-- /ko -->
 
-	<!-- ko ifnot: $parent.isOwner || $parent.isGm -->
-	<span data-bind="text: name"></span>
+	<!-- ko ifnot: $parent.isGm && $parent.isOwner -->
+		<!-- ko compose: { view: 'characterStandard.html', preserveContext: true } -->
+		<!-- /ko -->
 	<!-- /ko -->
-
-	<div>
-		XP Gained: <span data-bind="text: xpGained"></span><br/>
-		XP Remaining: <span data-bind="text: xpRemaining"></span>
-	</div>
-
-	<h4 data-bind="text: 'Alignment: ' + alignment()"></h4>
-	
-	<button data-bind="click: $parent.addSkills" class="btn">Add Skill</button>
-	<div data-bind="foreach: skillAdvancements">
-		<span data-bind="text: name"></span>
-		<span data-bind="text: rank"></span>
-		<span data-bind="text: totalXpCost"></span>
-		<button data-bind="click: $parent.rankUpSkill, visible: getRankUpCost($parent.alignment()) > 0, text: 'Rank Up ' + getRankUpCost($parent.alignment()) + 'xp'" class="btn"></button>
-		<button data-bind="click: $parent.removeSkill" class="btn btn-danger btn-small">Remove</button>
-		<!-- <button data-bind="command: $parent.rankUpSkill" class="btn">Rank Up</button> --><br/>
-	</div>
 
 </div>
 
