@@ -1,4 +1,4 @@
-define(['durandal/app', 'jquery', 'knockout', 'plugins/dialog', 'data/dataContext', 'services/loginService', 'modules/cookie', 'modules/userRole', 'models/user', 'viewmodels/createUser'], 
+define(['durandal/app', 'jquery', 'knockout', 'plugins/dialog', 'data/dataContext', 'services/login', 'services/cookie', 'services/userRole', 'models/user', 'createUser/createUser'], 
 function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User, createUser) {
     
     var authToken = "ccAuthToken";
@@ -58,9 +58,7 @@ function (app, $, ko, dialog, dataContext, loginService, cookie, userRole, User,
             //Trigger other viewmodel updates
             app.trigger('userlogin', response.user);
 
-            dialog.close(self, true);
-
-            
+            dialog.close(self, true);            
         };
 
         //We can't finish activating the router until the campaigns in the 

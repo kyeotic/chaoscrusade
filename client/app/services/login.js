@@ -1,19 +1,19 @@
-define(['plugins/router', 'durandal/app', 'modules/serviceBase'], 
-function (router, app, serviceBase) {
+define(['plugins/router', 'durandal/app', 'services/http'], 
+function (router, app, http) {
 	return {
 		login: function(username, password) {
 			var credentials = { username: username, password: password};
-			return serviceBase.post('/login', { credentials: credentials });
+			return http.post('/login', { credentials: credentials });
 		},
 		isUsernameAvailable: function(username) {
             app.log(username);
-			return serviceBase.get('/checkUsernameAvailable/' + username);
+			return http.get('/checkUsernameAvailable/' + username);
 		},
 		createLogin: function(user) {
-			return serviceBase.put('/login', user);  
+			return http.put('/login', user);  
 		},
 		setAuthToken: function(token) {
-		    serviceBase.setAuthToken(token);
+		    http.setAuthToken(token);
 		},
 		logout: function(){
 			//clear the cookie, when we are using one

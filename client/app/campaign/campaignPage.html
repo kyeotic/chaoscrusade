@@ -1,7 +1,7 @@
 <div>
 	
-	<div class="row">		
-		<div class="span2">
+	<div class="campaign-container">		
+		<div class="campaign-left">
 			<ul class="nav nav-list">
 
 				<li class="nav-header">Campaign</li>				
@@ -26,7 +26,7 @@
 		</div>
 
 
-		<div class="span7">
+		<div class="campaign-center">
 			<!-- ko router: {
 				model: router.activeItem,
 				cacheViews: false
@@ -34,7 +34,7 @@
 		</div>
 		
 
-		<div class="span3 chat">
+		<div class="campaign-right chat">
 			<div class="chat-messages" data-bind="foreach: campaign().chatMessages">
 				<div class="message-container">
 					<!-- ko compose: $data --><!-- /ko -->
