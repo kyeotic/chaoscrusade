@@ -4,8 +4,8 @@ module.exports = function(db, models) {
     var set = new db.Schema({
         //id and _id are creatd by the system
         characterId: db.Schema.Types.ObjectId,
-        skillId: db.Schema.Types.ObjectId,
-
+        name: String,
+        baseValue: Number,
         rank: Number,
         rank1Xp: Number,
         rank2Xp: Number,

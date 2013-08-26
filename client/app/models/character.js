@@ -1,5 +1,5 @@
-define(['knockout', 'durandal/app', 'data/rules', 'models/skillAdvancement'],
-function(ko, app, rules, SkillAdvancement){
+define(['knockout', 'durandal/app', 'data/rules', 'models/skillAdvancement', 'models/statAdvancement'],
+function(ko, app, rules, SkillAdvancement, StatAdvancement){
 	return function(data) {
 		var self = this;
 
@@ -7,16 +7,7 @@ function(ko, app, rules, SkillAdvancement){
 			id: data.id || '',
 			name: data.name || '',
 			campaignId: data.campaignId || '',
-			ownerId: data.ownerId || '', 
-			weaponSkill: data.weaponSkill || 0,
-			ballisticSkill: data.ballisticSkill || 0,
-			strength: data.strength || 0,
-			toughness: data.toughness || 0,
-			agility: data.agility || 0,
-			intelligence: data.intelligence || 0,
-			perception: data.perception || 0,
-			willpower: data.willpower || 0,
-			fellowship: data.fellowship || 0,
+			ownerId: data.ownerId || '',
 			infamy: data.infamy || 0,
 			wounds: data.wounds || 0,
 			woundsRemaining: data.woundsRemaining || 0,
@@ -29,6 +20,7 @@ function(ko, app, rules, SkillAdvancement){
 		});
 
 		self.skillAdvancements = ko.socketSet('skillAdvancements', SkillAdvancement, 'characters', self.id);
+		self.statAdvancements = ko.socketSet('statAdvancements', StatAdvancement, 'characters', self.id);
 
 		//There are no consumers that need these loaded yet, but there may be?
 		//Return a promise at that time
@@ -52,6 +44,10 @@ function(ko, app, rules, SkillAdvancement){
 
 			//Count talents
 			//Count characteristic advancements
+			self.statAdvancements().forEach(function(s) {
+				counts[s.alignment()] = (counts[s.alignment()] || 0) + s.rank().toNumber();
+			});
+
 			//Count... other shit?
 
 			//Subtract character offsets

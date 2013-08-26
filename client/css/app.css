@@ -162,6 +162,10 @@
 
 /* Character page */
 
+.character-stat {
+    display: inline-block;
+}
+
 .character-stats input {
     width: 18px;
 }

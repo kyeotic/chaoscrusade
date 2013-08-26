@@ -59,5 +59,15 @@ define(function() {
 		return skillRankCosts[patronStatus][rank - 1];
 	};
 
+	var statRankCosts = {
+		'True': [100, 250, 500, 750],
+		Allied: [250, 500, 750, 1000],
+		Opposed: [500, 750, 1000 , 2500]
+	};
+
+	self.getstatCost = function(patronStatus, rank) {
+		return statRankCosts[patronStatus][rank - 1];
+	};
+
 	return self;
 });

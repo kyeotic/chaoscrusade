@@ -5,15 +5,6 @@ module.exports = function(db, models) {
 		name: String,
 		campaignId: { type: db.Schema.Types.ObjectId, ref: 'campaigns'},
 		ownerId: { type: db.Schema.Types.ObjectId, ref: 'users'},
-		weaponSkill: Number,
-		ballisticSkill: Number,
-		strength: Number,
-		toughness: Number,
-		agility: Number,
-		intelligence: Number,
-		perception: Number,
-		willpower: Number,
-		fellowship: Number,
 		infamy: Number,
 		wounds: Number,
 		woundsRemaining: Number,
@@ -23,10 +14,12 @@ module.exports = function(db, models) {
 		//Computed
 		//xpRemaining: Number,
 
-		skillAdvancements: [{ type: db.Schema.Types.ObjectId, ref: 'skillAdvancements'}]
+		skillAdvancements: [{ type: db.Schema.Types.ObjectId, ref: 'skillAdvancements'}],
+		statAdvancements: [{ type: db.Schema.Types.ObjectId, ref: 'statAdvancements'}]
 	});
 
-    var childrenToCascade = ['skillAdvancements']; //none yet
+	//Owned reference sets
+    var childrenToCascade = ['skillAdvancements', 'statAdvancements'];
     set.methods.checkChildRemoveCascade = function(property) {
         return childrenToCascade.indexOf(property) !== -1;
     };

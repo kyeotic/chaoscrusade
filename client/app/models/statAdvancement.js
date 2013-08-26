@@ -1,15 +1,17 @@
-define(['durandal/app', 'knockout', 'data/rules', 'models/skill', 'require', 'data/dataContext'], 
-function(app, ko, rules, Skill, require) {
+define(['durandal/app', 'knockout', 'data/rules'], 
+function(app, ko, rules, require) {
 
+	//Stats function very similarly to skills
+	//Changes made here may also apply to skills, especially those related to XP costs
 	return function(data) {
 		var self = this,
-			data = data || {},
-			dataContext = require('data/dataContext');
+			data = data || {};
 
 		var map = {
 			id: data.id || '',
 			characterId: data.characterId || '',
-			skillId: data.skillId || '',
+			name: data.name || '',
+			baseValue: data.baseValue || 0,
 			rank: data.rank || 0,
 			rank1Xp: data.rank1Xp || 0,
 			rank2Xp: data.rank2Xp || 0,
@@ -17,7 +19,7 @@ function(app, ko, rules, Skill, require) {
 			rank4Xp: data.rank4Xp || 0
 		};
 
-		ko.socketModel(self, 'skillAdvancements', map);
+		ko.socketModel(self, 'statAdvancements', map);
 
 		//The cost of ranking up for each patron status
 		self.rankUpCost = ko.computed(function() {
@@ -27,9 +29,9 @@ function(app, ko, rules, Skill, require) {
 				return 0;
 			
 			return {
-				'True': rules.getSkillCost('True', rankUp),
-				Allied: rules.getSkillCost('Allied', rankUp),
-				Opposed: rules.getSkillCost('Opposed', rankUp)
+				'True': rules.getStatCost('True', rankUp),
+				Allied: rules.getStatCost('Allied', rankUp),
+				Opposed: rules.getStatCost('Opposed', rankUp)
 			};
 		});
 
@@ -67,19 +69,9 @@ function(app, ko, rules, Skill, require) {
 				return self.rank() > 1;
 			}
 		});
-		
-		self.skill = ko.computed(function() {
-			return skill = dataContext.skills().find(function(s) {
-				return s.id() === self.skillId();
-			}) || new Skill();
-		});
-
-		self.name = ko.computed(function() {
-			return self.skill().name();
-		});
 
 		self.alignment = ko.computed(function() {
-			return self.skill().alignment();
+			return rules.statAlignments[self.name()];
 		});
 
 		self.totalXpCost = ko.computed(function() {
@@ -89,6 +81,12 @@ function(app, ko, rules, Skill, require) {
 				self.rank3Xp().toNumber(), 
 				self.rank4Xp().toNumber()
 			].compact().sum();
+		});
+
+		//The value should not be writeable
+		//If you need to change the value, use the baseValue
+		self.value = ko.computed(function() {
+			return self.baseValue().toNumber() + (self.rank().toNumber() * 5);
 		});
 	};
 });
