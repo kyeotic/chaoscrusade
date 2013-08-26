@@ -159,3 +159,9 @@
 
 .campaign-character {
 }
+
+/* Character page */
+
+.character-stats input {
+    width: 18px;
+}

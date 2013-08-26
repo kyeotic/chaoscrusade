@@ -1,13 +1,48 @@
-<div>
-	<label>Name
-		<input data-bind="value: name" type="text" />
-	</label>
+<div data-bind="with: character">
+	Name<input data-bind="value: name" type="text" />
 
-	<label>Xp
-		<input data-bind="value: xpGained" type="text" />
-	</label>
+	Xp<input data-bind="value: xpGained" type="text" />
 
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
+
+	<div class="character-stats pull-right">
+		<div>
+			<abbr title="Weapon Skill">WS: </abbr>
+			<input type="text" data-bind="value: weaponSkill">
+		</div>
+		<div>
+			<abbr title="Ballistic Skill">BS: </abbr>
+			<input type="text" data-bind="value: ballisticSkill">
+		</div>
+		<div>
+			<abbr title="Strength">S: </abbr>
+			<input type="text" data-bind="value: strength">
+		</div>
+		<div>
+			<abbr title="Toughness">T: </abbr>
+			<input type="text" data-bind="value: toughness">
+		</div>
+		<div>
+			<abbr title="Agility">Ag: </abbr>
+			<input type="text" data-bind="value: agility">
+		</div>
+		<div>
+			<abbr title="Intelligence">Int: </abbr>
+			<input type="text" data-bind="value: intelligence">
+		</div>
+		<div>
+			<abbr title="Perception">Per: </abbr>
+			<input type="text" data-bind="value: perception">
+		</div>
+		<div>
+			<abbr title="Willpower">WP: </abbr>
+			<input type="text" data-bind="value: willpower">
+		</div>
+		<div>
+			<abbr title="Fellowship">Fel: </abbr>
+			<input type="text" data-bind="value: fellowship">
+		</div>
+	</div>
 
 
 	<h4 data-bind="text: 'Alignment: ' + alignment()"></h4>

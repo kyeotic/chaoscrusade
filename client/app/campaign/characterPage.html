@@ -1,16 +1,16 @@
-<div data-bind="with: character" class="campaign-character">
+<div class="campaign-character">
 
-	<!-- ko if: $parent.isGm -->
+	<!-- ko if: isGm -->
 		<!-- ko compose: { view: 'campaign/characterGm.html', preserveContext: true } -->
 		<!-- /ko -->
 	<!-- /ko -->
 
-	<!-- ko if: $parent.isOwner -->
+	<!-- ko if: isOwner -->
 		<!-- ko compose: { view: 'characterOwner.html', preserveContext: true } -->
 		<!-- /ko -->
 	<!-- /ko -->
 
-	<!-- ko ifnot: $parent.isGm || $parent.isOwner -->
+	<!-- ko ifnot: isGm || isOwner -->
 		<!-- ko compose: { view: 'characterStandard.html', preserveContext: true } -->
 		<!-- /ko -->
 	<!-- /ko -->
