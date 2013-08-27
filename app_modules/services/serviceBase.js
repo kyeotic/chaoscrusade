@@ -97,12 +97,8 @@ module.exports = function(app, setName, itemName) {
 			if (childModel in collection.schema.paths) {
 				collection.findById(id, function(error, doc) {
 					if (!error) {
-
-						//We remove the last index because we are generally taking items off the end
-						//We need a better way to handle this for more advanced cases
-						var index = doc[childModel].lastIndexOf(childId);
-						doc[childModel].removeAt(index);
-						
+						//Child id is the index here
+						doc[childModel].splice(childId, 1);						
 						doc.save(function(error) {
 							if (!error)
 								callback(null, [setName, id, childModel, 'removed'].join(seperator), childId);

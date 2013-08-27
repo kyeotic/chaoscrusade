@@ -202,15 +202,15 @@ function(app, ko, socket, socketService) {
 								});
 							},
 							//Removed
-							function(oldElement) {
+							function(oldElement, index) {
 								if (socketUpdating) {
 									return;
 								}
 
-								socketService.remove(eventName, ko.unwrap(oldElement))
+								socketService.remove(eventName, index)
 									.fail(function(error) {
 										socketUpdating = true;
-										set.push(oldElement);
+										set.splice(index, 0, oldElement);
 										socketUpdating = false;
 										app.log('Error', error);
 										app.showMessage('There was an error removing a ' + setName.singularize() + '. Please record the error and refresh the page.', 'Error');
@@ -225,11 +225,7 @@ function(app, ko, socket, socketService) {
 							socketUpdating = false;
 						});
 
-						var remove = socket.on(eventName + '|removed', function(oldElement) {
-							//We remove the last index because we are generally taking items off the end
-							//We need a better way to handle this for more advanced cases
-							var index = set().lastIndexOf(oldElement);
-
+						var remove = socket.on(eventName + '|removed', function(index) {
 							socketUpdating = true;
 							set.splice(index, 1);
 							socketUpdating = false;

@@ -26,8 +26,8 @@ function(app, ko, dataContext, login) {
 		self.campaign().items.push(item);
 	};
 
-	self.removeItem = function(item){
-		self.campaign().items.remove(item);
+	self.removeItem = function(index){
+		self.campaign().items.splice(index, 1);
 	}
 
 	return self;

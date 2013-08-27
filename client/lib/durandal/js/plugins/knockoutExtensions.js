@@ -53,11 +53,11 @@ define(['knockout'], function(ko) {
 		                    break;
 		                case "deleted":
 		                    if (deleteCallback)
-		                        deleteCallback(editScript[i].value);
+		                        deleteCallback(editScript[i].value, i);
 		                    break;
 		                case "added":
 		                    if (addCallback)
-		                        addCallback(editScript[i].value);
+		                        addCallback(editScript[i].value, i);
 		                    break;
 		            }
 		        }

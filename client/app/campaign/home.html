@@ -13,6 +13,6 @@
 <ul data-bind="foreach: campaign().items">
 	<li>
 		<span data-bind="text: $data"></span>
-		<button class="btn btn-danger btn-small" data-bind="click: $parent.removeItem">Delete</button>
+		<button class="btn btn-danger btn-small" data-bind="click: function() { $parent.removeItem($index()) }">Delete</button>
 	</li>
 </ul>
