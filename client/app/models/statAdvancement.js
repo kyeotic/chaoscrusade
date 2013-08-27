@@ -50,7 +50,7 @@ function(app, ko, rules, require) {
 
 			self.rank(self.rank() + 1);
 
-			return self[rankXp]();
+			return self.xpSpent().last();
 		};
 
 		self.rankDown = ko.command({
