@@ -69,5 +69,15 @@ define(function() {
 		return statRankCosts[patronStatus][rank - 1];
 	};
 
+	var talentCosts = {
+		'True': [200, 300, 400],
+		Allied: [250, 500, 750],
+		Opposed: [500, 750, 1000]
+	};
+
+	self.getTalentCost = function(patronStatus, tier) {
+		return talentCosts[patronStatus][tier -1];
+	};
+
 	return self;
 });

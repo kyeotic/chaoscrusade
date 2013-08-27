@@ -29,9 +29,14 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 		};
 
 		self.xpRemaining = ko.computed(function() {
-			return self.xpGained().toNumber() - self.skillAdvancements().sum(function(s) {
+			var skillCosts = self.skillAdvancements().sum(function(s) {
 				return s.totalXpCost().toNumber();
 			});
+			var statCosts = self.statAdvancements().sum(function(s) {
+				return s.totalXpCost().toNumber();
+			});
+
+			return self.xpGained().toNumber() - skillCosts - statCosts;
 		});
 
 		self.alignment = ko.computed(function() {
@@ -69,6 +74,14 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 			//5 Higher than 2nd to align
 			return max > (max2 + 4) ? maxPatron : 'Unaligned';
 		});
+
+		/*
+			Stats
+		*/
+
+		/*
+			Skills
+		*/
 
 		//skills are always new, skill advancements always (should be) old
 		self.canAffordSkill = function(skill) {
