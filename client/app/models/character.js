@@ -126,6 +126,10 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 			skillAdvancement.rankUp(self.alignment());
 		};
 
+		self.rankDownSkill = function(skillAdvancement) {
+			
+		};
+
 		self.removeSkill = function(skillAdvancement) {
 			//XpRemaining will auto re-calc
 			self.skillAdvancements.remove(skillAdvancement);

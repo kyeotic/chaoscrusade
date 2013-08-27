@@ -183,6 +183,7 @@ function(app, ko, socket, socketService) {
 
 					var eventName = getEventName(modelName, self.id(), property);
 
+					//Array
 					if (Object.isArray(self[property]())) {
 						var set = self[property];
 						//Publish to service
@@ -230,13 +231,15 @@ function(app, ko, socket, socketService) {
 							set.splice(index, 1);
 							socketUpdating = false;
 						});
+						
+					//Property
 					} else {
 						//Subscribe to local changes
 						self[property].subscribe(function(newValue) {
 							if (socketUpdating) {
 								return;
 							}
-							socketService.post(eventName, post);
+							socketService.post(eventName, newValue);
 						});
 
 						//Subscribe to socket changes

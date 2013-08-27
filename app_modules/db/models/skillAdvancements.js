@@ -7,10 +7,7 @@ module.exports = function(db, models) {
         skillId: db.Schema.Types.ObjectId,
 
         rank: Number,
-        rank1Xp: Number,
-        rank2Xp: Number,
-        rank3Xp: Number,
-        rank4Xp: Number
+        xpSpent: [Number]
     });
 
     var childrenToCascade = [];

@@ -13,10 +13,7 @@ function(app, ko, rules, require) {
 			name: data.name || '',
 			baseValue: data.baseValue || 0,
 			rank: data.rank || 0,
-			rank1Xp: data.rank1Xp || 0,
-			rank2Xp: data.rank2Xp || 0,
-			rank3Xp: data.rank3Xp || 0,
-			rank4Xp: data.rank4Xp || 0
+			xpSpent: data.xpSpent || []
 		};
 
 		ko.socketModel(self, 'statAdvancements', map);
@@ -47,22 +44,18 @@ function(app, ko, rules, require) {
 
 			var patronStatus = rules.getPatronStatus(characterAlignment, self.alignment());
 
-			var newRank = self.rank() + 1;
-
-			var rankXp = 'rank' + newRank + 'Xp';
-
 			//We have to get the rankUpCost BEFORE rankingup,
 			//since the rankUpCost shows the cost to rankUp from THE CURRENT RANK
-			self[rankXp](self.rankUpCost()[patronStatus]);
+			self.xpSpent.push(self.rankUpCost()[patronStatus]);
 
-			self.rank(newRank);
+			self.rank(self.rank() + 1);
 
 			return self[rankXp]();
 		};
 
 		self.rankDown = ko.command({
 			execute: function() {
-				self['rank' + self.rank() + 'Xp'](0);
+				self.xpSpent.pop();
 				self.rank(self.rank() - 1);
 			},
 			canExecute: function() {
@@ -75,12 +68,7 @@ function(app, ko, rules, require) {
 		});
 
 		self.totalXpCost = ko.computed(function() {
-			return [
-				self.rank1Xp().toNumber(), 
-				self.rank2Xp().toNumber(), 
-				self.rank3Xp().toNumber(), 
-				self.rank4Xp().toNumber()
-			].compact().sum();
+			return self.xpSpent().sum();
 		});
 
 		//The value should not be writeable

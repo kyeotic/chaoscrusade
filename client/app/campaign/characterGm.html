@@ -5,6 +5,7 @@
 
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
 
+	<!-- 
 	<div class="character-stats">
 		<div class="character-stat">
 			<abbr title="Weapon Skill">WS: </abbr>
@@ -44,6 +45,8 @@
 		</div>
 	</div>
 
+	-->
+
 
 	<h4 data-bind="text: 'Alignment: ' + alignment()"></h4>
 	
@@ -53,7 +56,7 @@
 		<span data-bind="text: rank"></span>
 		<span data-bind="text: totalXpCost"></span>
 		<button data-bind="click: $parent.rankUpSkill, visible: getRankUpCost($parent.alignment()) > 0, text: 'Rank Up ' + getRankUpCost($parent.alignment()) + 'xp'" class="btn"></button>
-		<button class="btn btn-inverse" data-bind="click: $parent.rankDownSkill, visible: rank() > 1">Rank Down</button>
+		<button class="btn btn-inverse" data-bind="command: rankDown, visible: rankDown.canExecute()">Rank Down</button>
 		<button data-bind="click: $parent.removeSkill" class="btn btn-danger btn-small">Remove</button>
 		<!-- <button data-bind="command: $parent.rankUpSkill" class="btn">Rank Up</button> --><br/>
 	</div>
