@@ -7,3 +7,12 @@
 	<input data-bind="value: addXpEntry" type="text" />
 	<button data-bind="click: addXp" class="btn btn-small">Add XP</button>
 <!-- /ko -->
+
+<button class="btn btn-small" data-bind="click: addItem">Add Item</button>
+
+<ul data-bind="foreach: campaign().items">
+	<li>
+		<span data-bind="text: $data"></span>
+		<button class="btn btn-danger btn-small" data-bind="click: $parent.removeItem">Delete</button>
+	</li>
+</ul>

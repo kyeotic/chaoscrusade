@@ -8,7 +8,9 @@ function(app, ko, Character, campaignService, ChatMessage) {
 			id: init.id || '',
 			name: init.name || '',
 			gmId: init.gmId || '',
-			gmUsername: init.gmUsername || ''
+			gmUsername: init.gmUsername || '',
+
+			items: init.items || []
 		};
 
 		ko.socketModel(self, 'campaigns', map);

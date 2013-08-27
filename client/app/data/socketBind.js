@@ -80,7 +80,7 @@ function(app, ko, socket, socketService) {
 				socketUpdating = true;
 				set.remove(item);
 				socketUpdating = false;
-			});			
+			});
 
 			var isLoadingSet = false;
 			//Load data into set without tell the socketService that WE added it
@@ -168,7 +168,10 @@ function(app, ko, socket, socketService) {
 			self.id = ko.observable(id);
 
 			keys.forEach(function(property) {
-				self[property] = ko.observable(map[property]);
+				if (Object.isArray(map[property]))
+					self[property] = ko.observableArray(map[property]);
+				else
+					self[property] = ko.observable(map[property]);
 			});
 
 			var setupModelSockets = function() {
@@ -180,24 +183,73 @@ function(app, ko, socket, socketService) {
 
 					var eventName = getEventName(modelName, self.id(), property);
 
-					//Subscribe to local changes
-					self[property].subscribe(function(newValue) {
-						if (socketUpdating) {
-							return;
-						}
+					if (Object.isArray(self[property]())) {
+						var set = self[property];
+						//Publish to service
+						set.subscribeArrayChanged(
+							//Added
+							function(newElement) {
+								if (socketUpdating) {
+									return;
+								}
 
-						var post = newValue;
-						if (typeof post === "string" || typeof post === "number")
-							post = { __data__ : newValue};
-						socketService.post(eventName, post);
-					});
+								socketService.put(eventName, newElement).fail(function(error) {
+									socketUpdating = true;
+									set.remove(newElement);
+									socketUpdating = false;
+									app.log('Error', error);
+									app.showMessage('There was an error adding a ' + setName.singularize() + '. Please record the error and refresh the page.', 'Error');
+								});
+							},
+							//Removed
+							function(oldElement) {
+								if (socketUpdating) {
+									return;
+								}
 
-					//Subscribe to socket changes
-					sockets.push(socket.on(eventName + '|changed', function(newValue) {
-						socketUpdating = true;
-						self[property](newValue);
-						socketUpdating = false;
-					}));
+								socketService.remove(eventName, ko.unwrap(oldElement))
+									.fail(function(error) {
+										socketUpdating = true;
+										set.push(oldElement);
+										socketUpdating = false;
+										app.log('Error', error);
+										app.showMessage('There was an error removing a ' + setName.singularize() + '. Please record the error and refresh the page.', 'Error');
+									});
+							}
+						);
+
+						//Subscribe to socket
+						var add = socket.on(eventName + "|added", function(newElement) {
+							socketUpdating = true;
+							set.push(newElement);
+							socketUpdating = false;
+						});
+
+						var remove = socket.on(eventName + '|removed', function(oldElement) {
+							//We remove the last index because we are generally taking items off the end
+							//We need a better way to handle this for more advanced cases
+							var index = set().lastIndexOf(oldElement);
+
+							socketUpdating = true;
+							set.splice(index, 1);
+							socketUpdating = false;
+						});
+					} else {
+						//Subscribe to local changes
+						self[property].subscribe(function(newValue) {
+							if (socketUpdating) {
+								return;
+							}
+							socketService.post(eventName, post);
+						});
+
+						//Subscribe to socket changes
+						sockets.push(socket.on(eventName + '|changed', function(newValue) {
+							socketUpdating = true;
+							self[property](newValue);
+							socketUpdating = false;
+						}));
+					}					
 				});
 
 				self.unsocket = function() {

@@ -7,6 +7,8 @@ module.exports = function(db, models) {
         gmUsername: String,
         name: String,
         characters: [{ type: db.Schema.Types.ObjectId, ref: 'characters' }]
+
+        , items: [String] //Test data
     });
 
     //Servicebase needs a generic way to determine whether or not to delete

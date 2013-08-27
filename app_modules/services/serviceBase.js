@@ -24,17 +24,15 @@ module.exports = function(app, setName, itemName) {
 		    });
 		},
 		insertChild: function(id, childModel, childItem, callback) {
-			var childCollection = db[childModel],
-				childId = childItem.id;
-
-			var addToParent = function(childDoc) {
+			//If the model has an array field, not a child set
+			if (childModel in collection.schema.paths) {
 				collection.findById(id, function(error, doc) {
 					if (!error) {
-						doc[childModel].push(childId);
+						doc[childModel].push(childItem);
 						
 						doc.save(function(error) {
 							if (!error)
-								callback(null, [setName, id, childModel, 'added'].join(seperator), childDoc);
+								callback(null, [setName, id, childModel, 'added'].join(seperator), childItem);
 							else
 								callback(new app.errors.ServerError('Unable to update '+itemName+'.'));
 						});
@@ -43,23 +41,46 @@ module.exports = function(app, setName, itemName) {
 						callback(new app.errors.ServerError('Unable to load '+itemName+'.'));
 					}
 				});
-			}
 
-			//We need to create the child first if it doesn't exist
-			childCollection.findById(childItem.id, function(error, childCheck) {
-				if (!error)
-					addToParent(childCheck);
-				else {
-					childCollection.create(childItem, function(error, childDoc) {
-				        if (error) {
-				        	callback(new app.errors.ServerError('Unable to add '+itemName+'.'));				        	
-				        } else {
-				        	childId = childDoc.id;
-				        	addToParent(childDoc);
-				        }
-				    });
+			//The model has a child set
+			} else {
+				var childCollection = db[childModel],
+					childId = childItem.id;
+
+				var addToParent = function(childDoc) {
+					collection.findById(id, function(error, doc) {
+						if (!error) {
+							doc[childModel].push(childId);
+							
+							doc.save(function(error) {
+								if (!error)
+									callback(null, [setName, id, childModel, 'added'].join(seperator), childDoc);
+								else
+									callback(new app.errors.ServerError('Unable to update '+itemName+'.'));
+							});
+
+						} else {
+							callback(new app.errors.ServerError('Unable to load '+itemName+'.'));
+						}
+					});
 				}
-			});			
+
+				//We need to create the child first if it doesn't exist
+				childCollection.findById(childItem.id, function(error, childCheck) {
+					if (!error)
+						addToParent(childCheck);
+					else {
+						childCollection.create(childItem, function(error, childDoc) {
+					        if (error) {
+					        	callback(new app.errors.ServerError('Unable to add '+itemName+'.'));				        	
+					        } else {
+					        	childId = childDoc.id;
+					        	addToParent(childDoc);
+					        }
+					    });
+					}
+				});		
+			}	
 		},
 		remove: function(id, callback) {
 			collection.remove({ _id: id}, function(error) {
@@ -72,38 +93,61 @@ module.exports = function(app, setName, itemName) {
 	        });
 		},
 		removeChild: function(id, childModel, childId, callback) {
-			collection.findById(id, function(error, doc) {
+			//Model has an array
+			if (childModel in collection.schema.paths) {
+				collection.findById(id, function(error, doc) {
+					if (!error) {
 
-				if (error) {
-					callback(new app.errors.ServerError('Unable to remove '+ childModel +' from '+itemName+'.'));
-
-				} else {
-					var removeChildFromParent = function() {
-
-						doc[childModel].remove(childId);
-
+						//We remove the last index because we are generally taking items off the end
+						//We need a better way to handle this for more advanced cases
+						var index = doc[childModel].lastIndexOf(childId);
+						doc[childModel].removeAt(index);
+						
 						doc.save(function(error) {
 							if (!error)
 								callback(null, [setName, id, childModel, 'removed'].join(seperator), childId);
 							else
 								callback(new app.errors.ServerError('Unable to update '+itemName+'.'));
-						});	
-					};
+						});
 
-					//If we need to cascade the child delete, the child has to go first
-
-					if (!doc.checkChildRemoveCascade(childModel)) {
-						db[childModel].remove( { _id: childId}, function(error) {
-							if (error)
-								callback(new app.errors.ServerError('Unable to remove '+ childModel +' from '+itemName+'.'));
-							else
-								removeChildFromParent();
-						})
 					} else {
-						removeChildFromParent();
+						callback(new app.errors.ServerError('Unable to load '+itemName+'.'));
 					}
-				}
-			});
+				});
+			//Model has child set
+			} else {
+				collection.findById(id, function(error, doc) {
+					if (error) {
+						callback(new app.errors.ServerError('Unable to remove '+ childModel +' from '+itemName+'.'));
+
+					} else {
+						var removeChildFromParent = function() {
+
+							doc[childModel].remove(childId);
+
+							doc.save(function(error) {
+								if (!error)
+									callback(null, [setName, id, childModel, 'removed'].join(seperator), childId);
+								else
+									callback(new app.errors.ServerError('Unable to update '+itemName+'.'));
+							});	
+						};
+
+						//If we need to cascade the child delete, the child has to go first
+
+						if (!doc.checkChildRemoveCascade(childModel)) {
+							db[childModel].remove( { _id: childId}, function(error) {
+								if (error)
+									callback(new app.errors.ServerError('Unable to remove '+ childModel +' from '+itemName+'.'));
+								else
+									removeChildFromParent();
+							})
+						} else {
+							removeChildFromParent();
+						}
+					}
+				});
+			}
 		},
 		update: function(modelId, property, newValue, callback) {
 			collection.findById(modelId, function(error, doc) {

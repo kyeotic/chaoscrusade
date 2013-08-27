@@ -2,7 +2,9 @@ define(['durandal/app', 'knockout', 'data/dataContext', 'login/login'],
 function(app, ko, dataContext, login) {
 	var self = {};
 
-	self.campaign = dataContext.selectedCampaign;
+	self.campaign = ko.computed(function() {
+		return dataContext.selectedCampaign();
+	});
 
 	self.isGm = ko.computed(function() {
 		return self.campaign().gmId() === login.loggedInUser().id();
@@ -17,6 +19,16 @@ function(app, ko, dataContext, login) {
 		});
 		self.addXpEntry(0);
 	};
+
+
+	self.addItem = function() {
+		var item = ['Test', 'Again', 'More', 'Please'].sample();
+		self.campaign().items.push(item);
+	};
+
+	self.removeItem = function(item){
+		self.campaign().items.remove(item);
+	}
 
 	return self;
 });

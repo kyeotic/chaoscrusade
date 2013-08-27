@@ -23,6 +23,10 @@ module.exports = function(app) {
 		statAdvancements: characterService.statAdvancements
 	};
 
+	var unwrapDoc = function(doc) {
+		return doc.__data__ ? doc.__data__ : doc;
+	}
+
 	var get = function(token, e, callback) {
 		var eventData = e.split("|"),
 			model = eventData[0],
@@ -43,9 +47,9 @@ module.exports = function(app) {
 			childModel = eventData[2];
 
 		if (childModel === undefined) { //Root
-			map[model].insert(token, item, callback);
+			map[model].insert(token, unwrapDoc(item), callback);
 		} else { //Sub
-			map[model].insertChild(token, id, childModel, item, callback);
+			map[model].insertChild(token, id, childModel, unwrapDoc(item), callback);
 		}
 	};
 
@@ -69,10 +73,7 @@ module.exports = function(app) {
 			id = eventData[1],
 			property = eventData[2];
 
-		if (newValue.__data__)
-			newValue = newValue.__data__;
-
-		map[model].update(token, id, property, newValue, callback);
+		map[model].update(token, id, property, unwrapDoc(newValue), callback);
 	};
 
 	return {
