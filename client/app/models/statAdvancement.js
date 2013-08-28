@@ -1,6 +1,9 @@
 define(['durandal/app', 'knockout', 'data/rules'], 
 function(app, ko, rules, require) {
 
+	var maxRank = rules.maxSkillRank,
+		rankFactor = rules.statRankFactor;
+
 	//Stats function very similarly to skills
 	//Changes made here may also apply to skills, especially those related to XP costs
 	return function(data) {
@@ -22,7 +25,7 @@ function(app, ko, rules, require) {
 		self.rankUpCost = ko.computed(function() {
 
 			var rankUp = self.rank() + 1;
-			if (rankUp === 5)
+			if (rankUp === (maxRank + 1))
 				return 0;
 			
 			return {
@@ -39,7 +42,7 @@ function(app, ko, rules, require) {
 
 		//Rank up the skill and add the xp cost of the patron status
 		self.rankUp = function(characterAlignment) {
-			if (self.rank() === 4)
+			if (self.rank() === maxRank)
 				return;
 
 			var patronStatus = rules.getPatronStatus(characterAlignment, self.alignment());
@@ -59,7 +62,7 @@ function(app, ko, rules, require) {
 				self.rank(self.rank() - 1);
 			},
 			canExecute: function() {
-				return self.rank() > 1;
+				return self.rank() > 0; //Stats can go to rank 0
 			}
 		});
 
@@ -74,7 +77,7 @@ function(app, ko, rules, require) {
 		//The value should not be writeable
 		//If you need to change the value, use the baseValue
 		self.value = ko.computed(function() {
-			return self.baseValue().toNumber() + (self.rank().toNumber() * 5);
+			return self.baseValue().toNumber() + (self.rank().toNumber() * rankFactor);
 		});
 	};
 });

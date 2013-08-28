@@ -1,5 +1,8 @@
 define(function() {
-	var self = {};
+	var self = {
+		maxStatRank: 4,
+		maxSkillRank: 4
+	};
 
 	self.alignments = [
 		'Unaligned',
@@ -9,7 +12,7 @@ define(function() {
 		'Slaanesh'		
 	];
 
-	self.characteristics = [
+	self.stats = [
 		'Weapon Skill',
 		'Ballistic Skill',
 		'Strength',

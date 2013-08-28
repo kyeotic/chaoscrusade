@@ -25,7 +25,7 @@ module.exports = function(app, setName, itemName) {
 		},
 		insertChild: function(id, childModel, childItem, callback) {
 			//If the model has an array field, not a child set
-			if (childModel in collection.schema.paths) {
+			if (!collection.schema.paths[childModel].options.type[0].ref) {
 				collection.findById(id, function(error, doc) {
 					if (!error) {
 						doc[childModel].push(childItem);
