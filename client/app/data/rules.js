@@ -1,7 +1,9 @@
 define(function() {
 	var self = {
-		maxStatRank: 4,
-		maxSkillRank: 4
+		alignmentThreshold: 5
+		, maxStatRank: 4
+		, maxSkillRank: 4
+		, statRankFactor: 5
 	};
 
 	self.alignments = [

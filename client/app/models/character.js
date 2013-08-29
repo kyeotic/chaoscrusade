@@ -72,12 +72,32 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 			});
 
 			//5 Higher than 2nd to align
-			return max > (max2 + 4) ? maxPatron : 'Unaligned';
+			return max >= (max2 + rules.alignmentThreshold) ? maxPatron : 'Unaligned';
 		});
 
 		/*
 			Stats
 		*/
+
+		//Create the initial stats collection
+		self.initStats = ko.command({
+			execute: function() {
+				rules.stats.forEach(function(s) {
+					var stat = new StatAdvancement({
+						characterId: self.id(),
+						name: s
+					});
+					self.statAdvancements.push(stat);
+				});
+			},
+			canExecute: function() {
+				return self.statAdvancements().length == 0;
+			}
+		});
+
+		self.canAffordStatUp = function(statAdvancement) {
+			return 
+		};
 
 		/*
 			Skills
@@ -94,7 +114,7 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 			var patronStatus = rules.getPatronStatus(self.alignment(), skill.alignment());
 			var xpCost = skillAdvancement.rankUpCost()[patronStatus];
 
-			if (skillAdvancement.rank() ===4)
+			if (skillAdvancement.rank() === rules.maxSkillRank)
 				return false;
 			if (xpCost === 0)
 				return false;
@@ -127,7 +147,7 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 		};
 
 		self.rankDownSkill = function(skillAdvancement) {
-			
+			skillAdvancement.rankDown();
 		};
 
 		self.removeSkill = function(skillAdvancement) {
