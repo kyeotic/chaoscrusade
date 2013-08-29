@@ -10,9 +10,9 @@ module.exports = function(db, models) {
         characteristic: String
     });
 
-    var childrenToCascade = [];
+    var children = [];
     set.methods.checkChildRemoveCascade = function(property) {
-        return childToCascade.indexOf(property) !== -1;
+        return children.indexOf(property) !== -1;
     };
 
 
@@ -21,4 +21,5 @@ module.exports = function(db, models) {
     
     //add the models to our simplified models collection
     models[setName] = db.model(setName, set);
+    models[setName].children = children;
 };

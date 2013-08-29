@@ -5,12 +5,12 @@
 		<!-- /ko -->
 	<!-- /ko -->
 
-	<!-- ko if: isOwner -->
-		<!-- ko compose: { view: 'characterOwner.html', preserveContext: true } -->
+	<!-- ko if: isPlayer && !isGm -->
+		<!-- ko compose: { view: 'campaign/characterOwner.html', preserveContext: true } -->
 		<!-- /ko -->
 	<!-- /ko -->
 
-	<!-- ko ifnot: isGm || isOwner -->
+	<!-- ko ifnot: isGm || isPlayer -->
 		<!-- ko compose: { view: 'characterStandard.html', preserveContext: true } -->
 		<!-- /ko -->
 	<!-- /ko -->

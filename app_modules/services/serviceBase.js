@@ -83,17 +83,52 @@ module.exports = function(app, setName, itemName) {
 			}	
 		},
 		remove: function(id, callback) {
-			collection.remove({ _id: id}, function(error) {
-	            if (!error) {
-	            	callback(null, [setName, 'removed'].join(seperator), id);
-	            }
-	            else {
-	            	callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
-	            }
-	        });
+			console.log(id, collection.children.length);
+
+			//if we have any cascade children, we need to remove them first
+			//Failing on them means the parent will still be around to try again
+			if (collection.children.length > 0) {
+
+				try {
+					collection.findById(id, function(error, doc) {
+						if (error) {
+		            		callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
+			            }
+			            else {
+			           		collection.children.forEach(function(child) {
+								db[child].find().where('_id').in(doc[child]).remove(function(err) {
+									if (err)
+										throw new Error();
+								});
+							});
+
+							doc.remove(function(err) {
+								if (!err) {
+					            	callback(null, [setName, 'removed'].join(seperator), id);
+					            }
+					            else {
+					            	callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
+					            }
+							});
+			            }
+					});
+				} catch (e) {
+					callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
+				}
+				
+			} else {
+				collection.remove({ _id: id}, function(error) {
+		            if (!error) {
+		            	callback(null, [setName, 'removed'].join(seperator), id);
+		            }
+		            else {
+		            	callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
+		            }
+		        });
+			}			
 		},
 		removeChild: function(id, childModel, childId, callback) {
-			//Model has an array
+			//Model has a simple array propery
 			if (childModel in collection.schema.paths) {
 				collection.findById(id, function(error, doc) {
 					if (!error) {
@@ -110,7 +145,7 @@ module.exports = function(app, setName, itemName) {
 						callback(new app.errors.ServerError('Unable to load '+itemName+'.'));
 					}
 				});
-			//Model has child set
+			//Model has child set property
 			} else {
 				collection.findById(id, function(error, doc) {
 					if (error) {

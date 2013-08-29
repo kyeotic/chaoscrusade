@@ -7,7 +7,7 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 			id: data.id || '',
 			name: data.name || '',
 			campaignId: data.campaignId || '',
-			ownerId: data.ownerId || '',
+			playerId: data.playerId || '',
 			infamy: data.infamy || 0,
 			wounds: data.wounds || 0,
 			woundsRemaining: data.woundsRemaining || 0,
@@ -26,6 +26,7 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 		//Return a promise at that time
 		self.load = function() {
 			self.skillAdvancements.loadSet().done();
+			self.statAdvancements.loadSet().done();
 		};
 
 		self.xpRemaining = ko.computed(function() {
@@ -82,10 +83,10 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 		//Create the initial stats collection
 		self.initStats = ko.command({
 			execute: function() {
-				rules.stats.forEach(function(s) {
+				Object.keys(rules.stats, function(statId) {
 					var stat = new StatAdvancement({
 						characterId: self.id(),
-						name: s
+						statId: statId
 					});
 					self.statAdvancements.push(stat);
 				});

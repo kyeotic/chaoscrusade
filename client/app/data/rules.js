@@ -14,17 +14,17 @@ define(function() {
 		'Slaanesh'		
 	];
 
-	self.stats = [
-		'Weapon Skill',
-		'Ballistic Skill',
-		'Strength',
-		'Toughness',
-		'Agility',
-		'Intelligence',
-		'Perception',
-		'Willpower',
-		'Fellowship'
-	];
+	self.stats = {
+		0: { name: 'Weapon Skill', abbr: 'WS', alignment: 'Unaligned' }
+		, 1: { name: 'Ballistic Skill', abbr: 'BS', alignment: 'Unaligned' }
+		, 2: { name: 'Strength', abbr: 'S', alignment: 'Khorne' }
+		, 3: { name: 'Toughness', abbr: 'T', alignment: 'Nurgle' }
+		, 4: { name: 'Agility', abbr: 'Ag', alignment: 'Unaligned' }
+		, 5: { name: 'Intelligence', abbr: 'Int', alignment: 'Unaligned' }
+		, 6: { name: 'Perception', abbr: 'Per', alignment: 'Unaligned' }
+		, 7: { name: 'Willpower', abbr: 'WP', alignment: 'Tzeentch' }
+		, 8: { name: 'Fellowship', abbr: 'Fel', alignment: 'Slaanesh' }
+	};
 
 	self.getPatronStatus = function(currentAlignment, testingAlignment) {
 		//Ensure the order checks ahead make sense
@@ -70,7 +70,7 @@ define(function() {
 		Opposed: [500, 750, 1000 , 2500]
 	};
 
-	self.getstatCost = function(patronStatus, rank) {
+	self.getStatCost = function(patronStatus, rank) {
 		return statRankCosts[patronStatus][rank - 1];
 	};
 

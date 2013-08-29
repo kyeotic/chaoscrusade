@@ -13,13 +13,25 @@ function(app, ko, rules, require) {
 		var map = {
 			id: data.id || '',
 			characterId: data.characterId || '',
-			name: data.name || '',
+			statId: data.statId || 0,
 			baseValue: data.baseValue || 0,
 			rank: data.rank || 0,
 			xpSpent: data.xpSpent || []
 		};
 
 		ko.socketModel(self, 'statAdvancements', map);
+
+		self.name = ko.computed(function() {
+			return rules.stats[self.statId()].name;
+		});
+
+		self.abbr = ko.computed(function() {
+			return rules.stats[self.statId()].abbr;
+		});
+
+		self.alignment = ko.computed(function() {
+			return rules.stats[self.statId()].alignment;
+		});
 
 		//The cost of ranking up for each patron status
 		self.rankUpCost = ko.computed(function() {
@@ -64,10 +76,6 @@ function(app, ko, rules, require) {
 			canExecute: function() {
 				return self.rank() > 0; //Stats can go to rank 0
 			}
-		});
-
-		self.alignment = ko.computed(function() {
-			return rules.statAlignments[self.name()];
 		});
 
 		self.totalXpCost = ko.computed(function() {

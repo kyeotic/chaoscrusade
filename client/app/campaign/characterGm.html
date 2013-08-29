@@ -6,47 +6,15 @@
 
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
 
-	<!--
+	<!-- ko if: statAdvancements().length === 0 -->
+	<button class="btn" data-bind="command: initStats">Roll Stats</button>
+	<!-- /ko -->
 
-	<div class="character-stats pull-right">
-		<div>
-			<abbr title="Weapon Skill">WS: </abbr>
-			<input type="text" data-bind="value: weaponSkill">
-		</div>
-		<div>
-			<abbr title="Ballistic Skill">BS: </abbr>
-			<input type="text" data-bind="value: ballisticSkill">
-		</div>
-		<div>
-			<abbr title="Strength">S: </abbr>
-			<input type="text" data-bind="value: strength">
-		</div>
-		<div>
-			<abbr title="Toughness">T: </abbr>
-			<input type="text" data-bind="value: toughness">
-		</div>
-		<div>
-			<abbr title="Agility">Ag: </abbr>
-			<input type="text" data-bind="value: agility">
-		</div>
-		<div>
-			<abbr title="Intelligence">Int: </abbr>
-			<input type="text" data-bind="value: intelligence">
-		</div>
-		<div>
-			<abbr title="Perception">Per: </abbr>
-			<input type="text" data-bind="value: perception">
-		</div>
-		<div>
-			<abbr title="Willpower">WP: </abbr>
-			<input type="text" data-bind="value: willpower">
-		</div>
-		<div>
-			<abbr title="Fellowship">Fel: </abbr>
-			<input type="text" data-bind="value: fellowship">
-		</div>
+	<!-- ko ifnot: statAdvancements().length === 0 -->
+	<div class="character-stats pull-right" data-bind="foreach: statAdvancements">
+		<div data-bind="stat: { abbr: abbr, name: name, stat: baseValue }"></div>
 	</div>
-	-->
+	<!-- /ko -->
 
 	<h4 data-bind="text: 'Alignment: ' + alignment()"></h4>
 	
