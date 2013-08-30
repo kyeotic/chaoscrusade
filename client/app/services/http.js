@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout'],
-function (app, ko) {
+define(['durandal/app', 'knockout', 'jquery'],
+function (app, ko, $) {
     
     var authToken = { 'x-auth-token' : null, 'x-socket-id': null };
     
