@@ -72,7 +72,7 @@ module.exports = function(app) {
 			model = eventData[0],
 			id = eventData[1],
 			property = eventData[2];
-
+		
 		map[model].update(token, id, property, unwrapDoc(newValue), callback);
 	};
 

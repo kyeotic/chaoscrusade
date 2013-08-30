@@ -1,7 +1,7 @@
 module.exports = function(app) {
 
 	var skills = new require('./serviceBase')(app, 'skillAdvancements', 'skillAdvancement'),
-		stats = new require('./serviceBase')(app, 'statsAdvancements', 'statAdvancement'),
+		stats = new require('./serviceBase')(app, 'statAdvancements', 'statAdvancement'),
 		characters = new require('./serviceBase')(app, 'characters', 'character');
 
 	//callback(error, eventName, result)
@@ -44,6 +44,6 @@ module.exports = function(app) {
 	return {
 		characters: new Service(characters),
 		skillAdvancements: new Service(skills),
-		statsAdvancements: new Service(stats)
+		statAdvancements: new Service(stats)
 	};
 };
