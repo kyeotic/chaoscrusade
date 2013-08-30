@@ -1,52 +1,20 @@
 <div data-bind="with: character">
 	Name<input data-bind="value: name" type="text" />
 
-	Xp<input data-bind="value: xpGained" type="text" />
+	Xp Gained<input data-bind="value: xpGained" type="text" />
+	Xp Remaining <span data-bind="text: xpRemaining"></span>
 
 	<button data-bind="click: $parent.deleteCharacter" class="btn btn-danger">Delete</button>
 
-	<!-- 
-	<div class="character-stats">
-		<div class="character-stat">
-			<abbr title="Weapon Skill">WS: </abbr>
-			<input type="text" data-bind="value: weaponSkill">
-		</div>
-		<div class="character-stat">
-			<abbr title="Ballistic Skill">BS: </abbr>
-			<input type="text" data-bind="value: ballisticSkill">
-		</div>
-		<div class="character-stat">
-			<abbr title="Strength">S: </abbr>
-			<input type="text" data-bind="value: strength">
-		</div>
-		<div class="character-stat">
-			<abbr title="Toughness">T: </abbr>
-			<input type="text" data-bind="value: toughness">
-		</div>
-		<div class="character-stat">
-			<abbr title="Agility">Ag: </abbr>
-			<input type="text" data-bind="value: agility">
-		</div>
-		<div class="character-stat">
-			<abbr title="Intelligence">Int: </abbr>
-			<input type="text" data-bind="value: intelligence">
-		</div>
-		<div class="character-stat">
-			<abbr title="Perception">Per: </abbr>
-			<input type="text" data-bind="value: perception">
-		</div>
-		<div class="character-stat">
-			<abbr title="Willpower">WP: </abbr>
-			<input type="text" data-bind="value: willpower">
-		</div>
-		<div class="character-stat">
-			<abbr title="Fellowship">Fel: </abbr>
-			<input type="text" data-bind="value: fellowship">
-		</div>
+	<!-- ko if: statAdvancements().length === 0 -->
+	<button class="btn" data-bind="command: initStats">Roll Stats</button>
+	<!-- /ko -->
+
+	<!-- ko ifnot: statAdvancements().length === 0 -->
+	<div class="character-stats pull-right" data-bind="foreach: statAdvancements">
+		<div data-bind="stat: { abbr: abbr, name: name, stat: baseValue }"></div>
 	</div>
-
-	-->
-
+	<!-- /ko -->
 
 	<h4 data-bind="text: 'Alignment: ' + alignment()"></h4>
 	
@@ -55,8 +23,8 @@
 		<span data-bind="text: name"></span>
 		<span data-bind="text: rank"></span>
 		<span data-bind="text: totalXpCost"></span>
-		<button data-bind="click: $parent.rankUpSkill, visible: getRankUpCost($parent.alignment()) > 0, text: 'Rank Up ' + getRankUpCost($parent.alignment()) + 'xp'" class="btn"></button>
-		<button class="btn btn-inverse" data-bind="command: rankDown, visible: rankDown.canExecute()">Rank Down</button>
+		<button data-bind="click: $parent.rankUpSkill, visible: $parent.canAffordSkillUp($data), text: 'Rank Up ' + getRankUpCost($parent.alignment()) + 'xp'" class="btn"></button>
+		<button class="btn btn-inverse" data-bind="click: $parent.rankDownSkill, visible: rank() > 1">Rank Down</button>
 		<button data-bind="click: $parent.removeSkill" class="btn btn-danger btn-small">Remove</button>
 		<!-- <button data-bind="command: $parent.rankUpSkill" class="btn">Rank Up</button> --><br/>
 	</div>

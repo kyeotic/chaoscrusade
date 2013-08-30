@@ -13,9 +13,9 @@ module.exports = function(db, models) {
 
     //Servicebase needs a generic way to determine whether or not to delete
     //The referered document during removal of a child
-    var childToCascade = ['characters'];
+    var children = ['characters'];
     set.methods.checkChildRemoveCascade = function(childModel) {
-        return childToCascade.indexOf(childModel) !== -1;
+        return children.indexOf(childModel) !== -1;
     };
 
     // Ensure virtual fields are serialised.
@@ -23,4 +23,5 @@ module.exports = function(db, models) {
 	    
     //add the models to our simplified models collection
     models[setName] = db.model(setName, set);
+    models[setName].children = children;
 };

@@ -4,7 +4,7 @@ module.exports = function(db, models) {
 	var set = new db.Schema({
 		name: String,
 		campaignId: { type: db.Schema.Types.ObjectId, ref: 'campaigns'},
-		ownerId: { type: db.Schema.Types.ObjectId, ref: 'users'},
+		playerId: { type: db.Schema.Types.ObjectId, ref: 'users'},
 		infamy: Number,
 		wounds: Number,
 		woundsRemaining: Number,
@@ -19,9 +19,9 @@ module.exports = function(db, models) {
 	});
 
 	//Owned reference sets
-    var childrenToCascade = ['skillAdvancements', 'statAdvancements'];
+    var children = ['skillAdvancements', 'statAdvancements'];
     set.methods.checkChildRemoveCascade = function(property) {
-        return childrenToCascade.indexOf(property) !== -1;
+        return children.indexOf(property) !== -1;
     };
 
 	// Ensure virtual fields are serialised.
@@ -29,4 +29,5 @@ module.exports = function(db, models) {
 
 	//add the models to our simplified models collection
     models[setName] = db.model(setName, set);
+    models[setName].children = children;
 };

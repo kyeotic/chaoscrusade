@@ -40,7 +40,7 @@ function(app, ko, dataContext, login, Character, ChatMessage) {
 				var character = new Character({ 
 					name: login.loggedInUser().username(),
 					campaignId: self.campaign().id(),
-					ownerId: login.loggedInUser().id()
+					playerId: login.loggedInUser().id()
 				});
 				self.campaign().characters.push(character);
 			}

@@ -11,9 +11,9 @@ module.exports = function(db, models) {
         role: String
     });
 
-    var childrenToCascade = [];
+    var children = [];
     set.methods.checkChildRemoveCascade = function(childModel) {
-        return childToCascade.indexOf(childModel) !== -1;
+        return children.indexOf(childModel) !== -1;
     };
 
     // Ensure virtual fields are serialised.
@@ -21,4 +21,5 @@ module.exports = function(db, models) {
     
     //add the models to our simplified models collection
     models[setName] = db.model(setName, set);
+    models[setName].children = children;
 };

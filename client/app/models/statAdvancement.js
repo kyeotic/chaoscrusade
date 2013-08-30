@@ -1,6 +1,9 @@
 define(['durandal/app', 'knockout', 'data/rules'], 
 function(app, ko, rules, require) {
 
+	var maxRank = rules.maxSkillRank,
+		rankFactor = rules.statRankFactor;
+
 	//Stats function very similarly to skills
 	//Changes made here may also apply to skills, especially those related to XP costs
 	return function(data) {
@@ -10,7 +13,7 @@ function(app, ko, rules, require) {
 		var map = {
 			id: data.id || '',
 			characterId: data.characterId || '',
-			name: data.name || '',
+			statId: data.statId || 0,
 			baseValue: data.baseValue || 0,
 			rank: data.rank || 0,
 			xpSpent: data.xpSpent || []
@@ -18,11 +21,23 @@ function(app, ko, rules, require) {
 
 		ko.socketModel(self, 'statAdvancements', map);
 
+		self.name = ko.computed(function() {
+			return rules.stats[self.statId()].name;
+		});
+
+		self.abbr = ko.computed(function() {
+			return rules.stats[self.statId()].abbr;
+		});
+
+		self.alignment = ko.computed(function() {
+			return rules.stats[self.statId()].alignment;
+		});
+
 		//The cost of ranking up for each patron status
 		self.rankUpCost = ko.computed(function() {
 
 			var rankUp = self.rank() + 1;
-			if (rankUp === 5)
+			if (rankUp === (maxRank + 1))
 				return 0;
 			
 			return {
@@ -39,7 +54,7 @@ function(app, ko, rules, require) {
 
 		//Rank up the skill and add the xp cost of the patron status
 		self.rankUp = function(characterAlignment) {
-			if (self.rank() === 4)
+			if (self.rank() === maxRank)
 				return;
 
 			var patronStatus = rules.getPatronStatus(characterAlignment, self.alignment());
@@ -59,12 +74,8 @@ function(app, ko, rules, require) {
 				self.rank(self.rank() - 1);
 			},
 			canExecute: function() {
-				return self.rank() > 1;
+				return self.rank() > 0; //Stats can go to rank 0
 			}
-		});
-
-		self.alignment = ko.computed(function() {
-			return rules.statAlignments[self.name()];
 		});
 
 		self.totalXpCost = ko.computed(function() {
@@ -74,7 +85,7 @@ function(app, ko, rules, require) {
 		//The value should not be writeable
 		//If you need to change the value, use the baseValue
 		self.value = ko.computed(function() {
-			return self.baseValue().toNumber() + (self.rank().toNumber() * 5);
+			return self.baseValue().toNumber() + (self.rank().toNumber() * rankFactor);
 		});
 	};
 });

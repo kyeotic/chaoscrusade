@@ -7,7 +7,7 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 			id: data.id || '',
 			name: data.name || '',
 			campaignId: data.campaignId || '',
-			ownerId: data.ownerId || '',
+			playerId: data.playerId || '',
 			infamy: data.infamy || 0,
 			wounds: data.wounds || 0,
 			woundsRemaining: data.woundsRemaining || 0,
@@ -26,6 +26,7 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 		//Return a promise at that time
 		self.load = function() {
 			self.skillAdvancements.loadSet().done();
+			self.statAdvancements.loadSet().done();
 		};
 
 		self.xpRemaining = ko.computed(function() {
@@ -72,12 +73,32 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 			});
 
 			//5 Higher than 2nd to align
-			return max > (max2 + 4) ? maxPatron : 'Unaligned';
+			return max >= (max2 + rules.alignmentThreshold) ? maxPatron : 'Unaligned';
 		});
 
 		/*
 			Stats
 		*/
+
+		//Create the initial stats collection
+		self.initStats = ko.command({
+			execute: function() {
+				Object.keys(rules.stats, function(statId) {
+					var stat = new StatAdvancement({
+						characterId: self.id(),
+						statId: statId
+					});
+					self.statAdvancements.push(stat);
+				});
+			},
+			canExecute: function() {
+				return self.statAdvancements().length == 0;
+			}
+		});
+
+		self.canAffordStatUp = function(statAdvancement) {
+			return 
+		};
 
 		/*
 			Skills
@@ -94,7 +115,7 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 			var patronStatus = rules.getPatronStatus(self.alignment(), skill.alignment());
 			var xpCost = skillAdvancement.rankUpCost()[patronStatus];
 
-			if (skillAdvancement.rank() ===4)
+			if (skillAdvancement.rank() === rules.maxSkillRank)
 				return false;
 			if (xpCost === 0)
 				return false;
@@ -127,7 +148,7 @@ function(ko, app, rules, SkillAdvancement, StatAdvancement){
 		};
 
 		self.rankDownSkill = function(skillAdvancement) {
-			
+			skillAdvancement.rankDown();
 		};
 
 		self.removeSkill = function(skillAdvancement) {

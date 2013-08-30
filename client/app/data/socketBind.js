@@ -235,11 +235,16 @@ function(app, ko, socket, socketService) {
 					//Property
 					} else {
 						//Subscribe to local changes
-						self[property].subscribe(function(newValue) {
+						self[property].subscribeChanged(function(newValue, oldValue) {
 							if (socketUpdating) {
 								return;
 							}
-							socketService.post(eventName, newValue);
+							socketService.post(eventName, newValue).fail(function(error) {
+								app.log('error updating', eventName, error);
+								socketUpdating = true;
+								self[property](oldValue);
+								socketUpdating = false;
+							});
 						});
 
 						//Subscribe to socket changes

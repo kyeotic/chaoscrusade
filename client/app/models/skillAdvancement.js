@@ -1,6 +1,8 @@
 define(['durandal/app', 'knockout', 'data/rules', 'models/skill', 'require', 'data/dataContext'], 
 function(app, ko, rules, Skill, require) {
 
+	var maxRank = rules.maxSkillRank;
+
 	return function(data) {
 		var self = this,
 			data = data || {},
@@ -20,7 +22,7 @@ function(app, ko, rules, Skill, require) {
 		self.rankUpCost = ko.computed(function() {
 
 			var rankUp = self.rank() + 1;
-			if (rankUp === 5)
+			if (rankUp === (maxRank + 1))
 				return 0;
 			
 			return {
@@ -37,7 +39,7 @@ function(app, ko, rules, Skill, require) {
 
 		//Rank up the skill and add the xp cost of the patron status
 		self.rankUp = function(characterAlignment) {
-			if (self.rank() === 4)
+			if (self.rank() === maxRank)
 				return;
 
 			var patronStatus = rules.getPatronStatus(characterAlignment, self.alignment());
