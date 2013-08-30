@@ -26,7 +26,7 @@ function(app, ko, router, dataContext, login, AddSkill) {
 		self.deleteCharacter = ko.command({
 			execute: function() {
 				dataContext.selectedCampaign().characters.remove(self.character);
-				//navigate to campaign home
+				router.navigate('#campaign/' + router.activeInstruction().params[0]);
 			},
 			canExecute: function() {
 				return self.isGm() || self.isOwner();

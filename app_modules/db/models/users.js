@@ -12,7 +12,7 @@ module.exports = function(db, models) {
     });
 
     var children = [];
-    set.methods.checkChildRemoveCascade = function(childModel) {
+    set.methods.shouldDeleteChild = function(childModel) {
         return children.indexOf(childModel) !== -1;
     };
 

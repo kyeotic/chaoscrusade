@@ -14,7 +14,7 @@ module.exports = function(db, models) {
     //Servicebase needs a generic way to determine whether or not to delete
     //The referered document during removal of a child
     var children = ['characters'];
-    set.methods.checkChildRemoveCascade = function(childModel) {
+    set.methods.shouldDeleteChild = function(childModel) {
         return children.indexOf(childModel) !== -1;
     };
 

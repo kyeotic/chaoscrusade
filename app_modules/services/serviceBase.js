@@ -3,6 +3,50 @@ module.exports = function(app, setName, itemName) {
 		db = app.db,
 		collection = db[setName];
 
+	var removeDoc = function(collection, id, callback) {
+		//if we have any cascade children, we need to remove them first
+		//Failing on them means the parent will still be around to try again
+		if (collection.children.length > 0) {
+
+			try {
+				collection.findById(id, function(error, doc) {
+					if (error) {
+	            		callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
+		            }
+		            else {
+		           		collection.children.forEach(function(child) {
+							db[child].find().where('_id').in(doc[child]).remove(function(err) {
+								if (err)
+									throw new Error();
+							});
+						});
+
+						doc.remove(function(err) {
+							if (!err) {
+				            	callback(null, [setName, 'removed'].join(seperator), id);
+				            }
+				            else {
+				            	callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
+				            }
+						});
+		            }
+				});
+			} catch (e) {
+				callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
+			}
+			
+		} else {
+			collection.remove({ _id: id}, function(error) {
+	            if (!error) {
+	            	callback(null, [setName, 'removed'].join(seperator), id);
+	            }
+	            else {
+	            	callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
+	            }
+	        });
+		}	
+	};
+
 	return {
 		get: function(callback) {
 			collection.find().exec(function(error, docs){
@@ -83,53 +127,11 @@ module.exports = function(app, setName, itemName) {
 			}	
 		},
 		remove: function(id, callback) {
-			console.log(id, collection.children.length);
-
-			//if we have any cascade children, we need to remove them first
-			//Failing on them means the parent will still be around to try again
-			if (collection.children.length > 0) {
-
-				try {
-					collection.findById(id, function(error, doc) {
-						if (error) {
-		            		callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
-			            }
-			            else {
-			           		collection.children.forEach(function(child) {
-								db[child].find().where('_id').in(doc[child]).remove(function(err) {
-									if (err)
-										throw new Error();
-								});
-							});
-
-							doc.remove(function(err) {
-								if (!err) {
-					            	callback(null, [setName, 'removed'].join(seperator), id);
-					            }
-					            else {
-					            	callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
-					            }
-							});
-			            }
-					});
-				} catch (e) {
-					callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
-				}
-				
-			} else {
-				collection.remove({ _id: id}, function(error) {
-		            if (!error) {
-		            	callback(null, [setName, 'removed'].join(seperator), id);
-		            }
-		            else {
-		            	callback(new app.errors.ServerError('Unable to delete '+itemName+'.'));
-		            }
-		        });
-			}			
+			removeDoc(collection, id, callback)
 		},
 		removeChild: function(id, childModel, childId, callback) {
 			//Model has a simple array propery
-			if (childModel in collection.schema.paths) {
+			if (!collection.schema.paths[childModel].options.type[0].ref) {
 				collection.findById(id, function(error, doc) {
 					if (!error) {
 						//Child id is the index here
@@ -165,14 +167,13 @@ module.exports = function(app, setName, itemName) {
 						};
 
 						//If we need to cascade the child delete, the child has to go first
-
-						if (!doc.checkChildRemoveCascade(childModel)) {
-							db[childModel].remove( { _id: childId}, function(error) {
+						if (doc.shouldDeleteChild(childModel)) {
+							removeDoc(db[childModel], childId, function(error) {
 								if (error)
 									callback(new app.errors.ServerError('Unable to remove '+ childModel +' from '+itemName+'.'));
 								else
 									removeChildFromParent();
-							})
+							});
 						} else {
 							removeChildFromParent();
 						}

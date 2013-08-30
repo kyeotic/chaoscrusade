@@ -11,7 +11,7 @@ module.exports = function(db, models) {
     });
 
     var children = [];
-    set.methods.checkChildRemoveCascade = function(property) {
+    set.methods.shouldDeleteChild = function(property) {
         return children.indexOf(property) !== -1;
     };
 
