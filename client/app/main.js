@@ -40,9 +40,7 @@ function(system, app, viewLocator) {
         //App plugins
         knockoutExtensions: true,
         knockoutCommands: true,
-        qPatch: {
-            debugMode: false
-        }
+        qPatch: { debugMode: false }
     });
 
     app.title = 'Chaos Crusade';

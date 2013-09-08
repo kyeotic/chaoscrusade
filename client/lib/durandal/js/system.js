@@ -85,10 +85,10 @@ define(['require', 'jquery'], function(require, $) {
     };
 
     var logError = function(error) {
+        log(error)
         if(error instanceof Error){
             throw error;
         }
-
         throw new Error(error);
     };
 
