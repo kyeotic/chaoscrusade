@@ -9,7 +9,6 @@ var express = require("express"),
 	io = require('socket.io').listen(server);
 
 server.listen(port);
-
 app.sockets = require('./app_modules/sockets')(io.sockets);
 app.fs = fs;
 
