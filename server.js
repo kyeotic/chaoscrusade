@@ -13,6 +13,7 @@ server.listen(port);
 app.sockets = require('./app_modules/sockets')(io.sockets);
 app.fs = fs;
 
+
 //Configure
 app.configure(function() {
     app.use(require("./app_modules/security/allowCors"));
