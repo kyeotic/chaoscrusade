@@ -3,7 +3,6 @@ var fs = require('fs'),
     port = process.env.PORT || 3000;
 
 require('sugar');
-require('newrelic');
 
 var express = require("express"),
     app = express(),
