@@ -1,6 +1,7 @@
 var fs = require('fs'),
     dir = __dirname + '/client/',
-    port = process.env.PORT || 3000;
+    port = process.env.PORT || 3000,
+    socketPort = process.env.SOCKET_PORT || port;
 
 require('sugar');
 
@@ -20,7 +21,7 @@ app.configure(function() {
     app.use(require("./app_modules/security/allowCors"));
 
     app.set('views', __dirname + '/views/');
-    app.engine('.html', require("./app_modules/htmlEngine.js")({ port: port}));
+    app.engine('.html', require("./app_modules/htmlEngine.js")({ port: socketPort}));
     app.set('view engine', 'html');
 
     app.use(app.sockets.middleware);
